@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remote Config Builder</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            background: #f0f0f0;
+        }
+
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background: #0070f3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0051a2;
+        }
+
+        #output {
+            background: #eef;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 4px;
+            word-break: break-all;
+            display: none;
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Remote Config Builder</h2>
+        <p>Build a signed payload for a GitHub Gist. Payloads are plain JSON with a signature (no encryption).</p>
+
+        <label><b>1. Config JSON</b> (Update with your real keys)</label>
+        <textarea id="jsonInput">{
+    "supabaseUrl": "https://YOUR-PROJECT-ID.supabase.co",
+    "supabaseKey": "YOUR-SUPABASE-ANON-KEY",
+    "targetDomain": "https://www.netflix.com",
+    "baseDomain": ".netflix.com"
+}</textarea>
+
+        <label><b>2. Signing Private Key (JWK)</b> (Keep this secret)</label>
+        <textarea id="privateKey" placeholder="Paste or generate a private key JWK"></textarea>
+
+        <button onclick="generateKeys()">Generate Signing Keys</button>
+
+        <label><b>3. Public Key (JWK)</b> (Paste into runtimeConfig)</label>
+        <textarea id="publicKey" placeholder="Public key JWK will appear here"></textarea>
+
+        <button onclick="buildSignedPayload()">Build Signed Payload</button>
+
+        <div id="output">
+            <h3>Signed Payload JSON:</h3>
+            <p>Copy this entire object into your Gist (raw):</p>
+            <textarea id="resultBox" readonly></textarea>
+        </div>
+    </div>
+
+    <script>
+        async function generateKeys() {
+            try {
+                const keyPair = await crypto.subtle.generateKey(
+                    { name: 'ECDSA', namedCurve: 'P-256' },
+                    true,
+                    ['sign', 'verify']
+                );
+                const privateJwk = await crypto.subtle.exportKey('jwk', keyPair.privateKey);
+                const publicJwk = await crypto.subtle.exportKey('jwk', keyPair.publicKey);
+                document.getElementById('privateKey').value = JSON.stringify(privateJwk, null, 2);
+                document.getElementById('publicKey').value = JSON.stringify(publicJwk, null, 2);
+            } catch (e) {
+                alert("Key generation failed: " + e.message);
+            }
+        }
+
+        function base64FromBytes(bytes) {
+            let binary = '';
+            const chunkSize = 0x8000;
+            for (let i = 0; i < bytes.length; i += chunkSize) {
+                binary += String.fromCharCode(...bytes.subarray(i, i + chunkSize));
+            }
+            return btoa(binary);
+        }
+
+        function derivePublicJwkFromPrivate(privateJwk) {
+            if (!privateJwk || !privateJwk.x || !privateJwk.y) return null;
+            return {
+                kty: privateJwk.kty,
+                crv: privateJwk.crv,
+                x: privateJwk.x,
+                y: privateJwk.y,
+                ext: true,
+                key_ops: ["verify"]
+            };
+        }
+
+        async function buildSignedPayload() {
+            const plainText = document.getElementById('jsonInput').value;
+            const privateKeyText = document.getElementById('privateKey').value.trim();
+
+            if (!plainText) {
+                alert("Please provide config JSON");
+                return;
+            }
+
+            if (!privateKeyText) {
+                alert("Private key is required for signing");
+                return;
+            }
+
+            try {
+                const payloadObj = JSON.parse(plainText);
+
+                const payloadText = JSON.stringify(payloadObj);
+                const payloadBytes = new TextEncoder().encode(payloadText);
+
+                const privateJwk = JSON.parse(privateKeyText);
+                const privateKey = await crypto.subtle.importKey(
+                    'jwk',
+                    privateJwk,
+                    { name: 'ECDSA', namedCurve: 'P-256' },
+                    false,
+                    ['sign']
+                );
+
+                const signature = await crypto.subtle.sign(
+                    { name: 'ECDSA', hash: 'SHA-256' },
+                    privateKey,
+                    payloadBytes
+                );
+
+                const result = {
+                    payload: base64FromBytes(payloadBytes),
+                    signature: base64FromBytes(new Uint8Array(signature))
+                };
+
+                const derivedPublic = derivePublicJwkFromPrivate(privateJwk);
+                if (derivedPublic) {
+                    document.getElementById('publicKey').value = JSON.stringify(derivedPublic, null, 2);
+                }
+
+                document.getElementById('output').style.display = 'block';
+                document.getElementById('resultBox').value = JSON.stringify(result, null, 2);
+            } catch (e) {
+                alert("Build failed: " + e.message);
+            }
+        }
+
+    </script>
+</body>
+
+</html>
