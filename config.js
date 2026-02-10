@@ -1,6 +1,5 @@
 export const DEFAULT_CONFIG = {
-    supabaseUrl: "https://arslamcjzixeqmalscye.supabase.co",
-    supabaseKey: "sb_publishable_VDYPdce8BVPg_J9kzFgKpA_dYAfDcP4",
+    serverUrl: "https://netflix-injector.onrender.com",
     targetDomain: "https://www.netflix.com",
     baseDomain: ".netflix.com",
     remoteConfigUrl: null,

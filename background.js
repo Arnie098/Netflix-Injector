@@ -1,132 +1,59 @@
 // NETFLIX INJECTOR BACKGROUND SCRIPT - FIXED VERSION
 
 // --- CONFIGURATION ---
+// --- CONFIGURATION ---
 const CONFIG = {
-    supabaseUrl: "https://arslamcjzixeqmalscye.supabase.co",
-    supabaseKey: "sb_publishable_VDYPdce8BVPg_J9kzFgKpA_dYAfDcP4",
+    serverUrl: "https://netflix-injector.onrender.com",
     targetDomain: "https://www.netflix.com",
     baseDomain: ".netflix.com"
 };
 
-console.log("✅ Netflix Injector: Service Worker Initialized");
+console.log("✅ Netflix Injector: Service Worker Initialized (Server Mode)");
 
-// --- KEEP ALIVE MECHANISM ---
-let isAlive = true;
-
-// Send heartbeat to prevent termination
-setInterval(() => {
-    if (isAlive) {
-        console.log("💓 Service worker heartbeat");
-    }
-}, 25000);
-
-// --- SIMPLIFIED MESSAGE LISTENER ---
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    console.log("📩 Received message:", request.action);
-
-    switch (request.action) {
-        case "PING":
-            sendResponse({ alive: true, timestamp: Date.now() });
-            return true;
-
-        case "START_INJECTION":
-            handleInjection(request.licenseKey, request.country)
-                .then(() => sendResponse({ success: true }))
-                .catch(err => {
-                    console.error("❌ Critical Injection Error:", err);
-                    sendResponse({
-                        success: false,
-                        message: err.message,
-                        stack: err.stack
-                    });
-                });
-            return true; // Keep channel open
-
-        case "HOUSEHOLD_BYPASS":
-            performHouseholdBypass()
-                .then(() => sendResponse({ success: true }))
-                .catch(err => sendResponse({ success: false }));
-            return true;
-
-        case "CLEAR_COOKIES":
-            clearAllNetflixCookies()
-                .then(() => sendResponse({ success: true }))
-                .catch(err => sendResponse({ success: false }));
-            return true;
-
-        default:
-            sendResponse({ error: "Unknown action" });
-            return false;
-    }
-});
-
-// --- CORE FUNCTIONS ---
-
-async function handleInjection(licenseKey, country) {
-    console.log("🕵️ Starting Injection...");
-
-    try {
-        // 1. Clear existing cookies
-        console.log("Bg: 1. Clearing existing cookies...");
-        if (!chrome.cookies) throw new Error("chrome.cookies API is not available");
-        await clearAllNetflixCookies();
-        console.log("Bg: 1. ✅ Cookies Cleared");
-
-        // 2. Claim License
-        console.log("Bg: 2. Claiming license...");
-        const accountData = await claimLicense(licenseKey, country);
-        console.log("Bg: 2. ✅ License Claimed");
-
-        // 3. Inject Cookies
-        console.log("Bg: 3. Injecting cookies...");
-        const cookies = accountData.cookies || accountData.cookie_data;
-        if (!cookies) throw new Error("No cookie data found");
-        await injectCookies(cookies);
-        console.log("Bg: 3. ✅ Cookies Injected");
-
-        // 4. Wait briefly and bypass
-        await new Promise(resolve => setTimeout(resolve, 300));
-        await performHouseholdBypass();
-
-        // 5. Reload tabs
-        await reloadNetflixTabs();
-
-        console.log("✅ Injection complete");
-    } catch (e) {
-        console.error("❌ Error inside handleInjection:", e);
-        throw e;
-    }
-}
+// ... (Keep existing code until claimLicense) ...
 
 async function claimLicense(licenseKey, country) {
     const hwid = await getOrCreateHwid();
-    const endpoint = `${CONFIG.supabaseUrl}/rest/v1/rpc/claim_license`;
+    const endpoint = `${CONFIG.serverUrl}/v1/license/verify`;
+
+    console.log(`Bg: Verifying license with server: ${endpoint}`);
 
     const response = await fetch(endpoint, {
         method: "POST",
         headers: {
-            apikey: CONFIG.supabaseKey,
-            Authorization: `Bearer ${CONFIG.supabaseKey}`,
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            p_license_key: licenseKey,
-            p_hardware_id: hwid,
-            p_include_account: true
+            license_key: licenseKey,
+            hardware_id: hwid,
+            country_filter: country || null
         })
     });
 
     const data = await response.json();
 
-    if (!response.ok || !data) {
+    if (!response.ok || !data.valid) {
         throw new Error(data?.message || "License claim failed");
     }
 
-    if (Array.isArray(data) && data.length > 0) {
-        return data[0].account || data[0];
+    // The server returns { valid: true, message: "...", data: { ...account_info... } }
+    // We need to return the account object which contains 'cookies'
+    // The server 'data' field contains the result of the RPC, which might be the account object itself or wrap it.
+    // Based on my server code: 
+    // result = response.data (from RPC)
+    // return LicenseCheckResponse(data=result)
+
+    // The RPC 'claim_license' usually returns [ { account: ... } ] or just the account object depending on how it was written.
+    // In background.js valid old logic:
+    // if (Array.isArray(data) && data.length > 0) return data[0].account || data[0];
+
+    const rpcResult = data.data; // This is what the RPC returned
+
+    if (Array.isArray(rpcResult) && rpcResult.length > 0) {
+        return rpcResult[0].account || rpcResult[0];
     }
 
-    return data.account || data;
+    return rpcResult.account || rpcResult;
 }
 
 async function getOrCreateHwid() {
