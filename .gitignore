@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.env
+.venv
+env/
+venv/
+server/.env
+invalid_cookies.txt
+working_cookies.txt
+newcookies.txt
