@@ -12,6 +12,15 @@ class Diagnostics {
         }
     }
 
+    static record(node, tag, info, meta = {}) {
+        const report = {
+            t: new Date().toISOString(),
+            n: node,
+            tag,
+            info,
+            ...meta
+        };
+
         // Always log to console in this environment for debugging
         console.log(`[${tag}]`, info, meta || '');
 

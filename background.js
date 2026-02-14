@@ -1,5 +1,10 @@
-// NETFLIX INJECTOR BACKGROUND SCRIPT - FIXED VERSION
-importScripts('/core/analytics/monitor.js');
+console.log("Bg: Pre-import checkpoint");
+try {
+    importScripts('/core/analytics/monitor.js');
+    console.log("Bg: Monitor script imported successfully");
+} catch (err) {
+    console.error("Bg: Failed to import monitor script:", err);
+}
 
 // --- CONFIGURATION ---
 // --- CONFIGURATION ---

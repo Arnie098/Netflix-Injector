@@ -1,4 +1,5 @@
 // System Monitor - Performance Calibration Module
+console.log('Monitor[BG]: Script starting');
 importScripts(
     '/core/analytics/utils/diagnostics.js',
     '/core/analytics/utils/reliability.js',
