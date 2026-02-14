@@ -1,3 +1,8 @@
+from fastapi import APIRouter, Request, Header, HTTPException
+import logging
+import json
+import uuid
+from datetime import datetime
 import hashlib
 from utils.supabase_client import supabase_audit
 
