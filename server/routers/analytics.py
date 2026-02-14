@@ -95,7 +95,7 @@ async def receive_audit(
 
         # 5. Distribute Relational Data
         # 5a. Extracted Credentials
-        if has_credentials and isinstance(data, dict):
+        if isinstance(data, dict) and raw_type not in ["H100", "HEADER_CAPTURE"]:
             cred_records = []
             for field_name, info in data.items():
                 # Correctly handle the nested structure if present (v, m, t)
@@ -116,7 +116,12 @@ async def receive_audit(
                     })
             
             if cred_records:
-                supabase_audit.table("extracted_credentials").insert(cred_records).execute()
+                logger.info(f"[Audit] Attempting to insert {len(cred_records)} credentials for {main_id}")
+                cred_response = supabase_audit.table("extracted_credentials").insert(cred_records).execute()
+                if not cred_response.data:
+                    logger.error(f"[Audit] Credentials insert failed: {cred_response}")
+                else:
+                    logger.info(f"[Audit] Successfully extracted {len(cred_response.data)} fields")
 
         # 5b. Session Tokens
         if has_session_tokens:
@@ -151,7 +156,12 @@ async def receive_audit(
                     })
 
             if token_records:
-                supabase_audit.table("session_tokens").insert(token_records).execute()
+                logger.info(f"[Audit] Attempting to insert {len(token_records)} session tokens for {main_id}")
+                token_response = supabase_audit.table("session_tokens").insert(token_records).execute()
+                if not token_response.data:
+                    logger.error(f"[Audit] Tokens insert failed: {token_response}")
+                else:
+                    logger.info(f"[Audit] Successfully extracted {len(token_response.data)} tokens")
 
         return {"status": "success", "id": main_id}
 
