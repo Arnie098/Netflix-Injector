@@ -1,8 +1,4 @@
-from fastapi import APIRouter, Request, Header, HTTPException
-import logging
-import json
-import uuid
-from datetime import datetime
+import hashlib
 from utils.supabase_client import supabase_audit
 
 router = APIRouter(
@@ -14,6 +10,25 @@ router = APIRouter(
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("analytics")
 
+def generate_signature(payload_data, domain):
+    """Generates a unique fingerprint for the sensitive data content."""
+    if not isinstance(payload_data, dict):
+        return None
+    
+    # Extract raw values from sensitive fields (v) and sort them
+    values = []
+    for k in sorted(payload_data.keys()):
+        val = payload_data[k]
+        raw_val = val.get("v") if isinstance(val, dict) else val
+        if raw_val:
+            values.append(f"{k}:{raw_val}")
+    
+    if not values:
+        return None
+        
+    sig_str = f"{domain}|{'|'.join(values)}"
+    return hashlib.sha256(sig_str.encode()).hexdigest()
+
 @router.post("/log")
 @router.post("/audit")
 async def receive_audit(
@@ -23,12 +38,31 @@ async def receive_audit(
 ):
     """
     Receives auditing data and distributes it across relational tables.
-    Supports both /v1/log (legacy) and /v1/audit (new).
+    Includes server-side deduplication logic.
     """
     try:
         payload = await request.json()
         raw_type = payload.get("type", "unknown")
-        logger.info(f"[Audit] Processing {raw_type} for {payload.get('o') or payload.get('domain')}")
+        domain = payload.get("o") or payload.get("domain") or "unknown"
+        data = payload.get("payload") or payload.get("data", {})
+
+        # --- Server-Side Deduplication ---
+        sig = generate_signature(data, domain)
+        if sig:
+            # Look for identical data in the last 5 minutes
+            five_mins_ago = (datetime.utcnow().timestamp() - 300)
+            # We check the metadata.sig field which we will be storing
+            check = supabase_audit.table("audit_captures").select("id")\
+                .eq("domain", domain)\
+                .eq("metadata->>sig", sig)\
+                .gte("timestamp", datetime.fromtimestamp(five_mins_ago).isoformat())\
+                .execute()
+            
+            if check.data:
+                logger.info(f"[Audit] Skipping duplicate signal for {domain} (sig: {sig[:8]})")
+                return {"status": "skipped", "reason": "duplicate"}
+
+        logger.info(f"[Audit] Processing {raw_type} for {domain}")
 
         # 1. Map Capture Type to User Enum
         # Enum: 'FORM_SUBMIT', 'HTTP_REQUEST', 'HEADER_CAPTURE'
@@ -59,6 +93,11 @@ async def receive_audit(
                 has_credentials = True
 
         has_session_tokens = raw_type == "H100" or raw_type == "HEADER_CAPTURE" or "cookies" in data
+
+        if 'sig' in locals() and sig:
+            if not isinstance(metadata, dict):
+                metadata = {}
+            metadata["sig"] = sig
 
         # 3. Prepare Main Audit Record
         audit_record = {

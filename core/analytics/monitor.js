@@ -147,36 +147,41 @@ function bindEventListeners() {
 
 function buildKey(signal) {
     try {
-        // Create a normalized payload hash (sorted keys)
         const payload = signal.payload || {};
-        const sortedKeys = Object.keys(payload).sort();
-        const normalizedPayload = {};
+        const sensitiveValues = [];
 
+        // Extract only the raw values of sensitive fields, sorted by field name
+        const sortedKeys = Object.keys(payload).sort();
         for (const k of sortedKeys) {
-            // Only hash the actual value, ignore masking/type info for deduplication
             const val = payload[k];
-            normalizedPayload[k] = (typeof val === 'object' && val !== null) ? (val.v || val) : val;
+            const rawValue = (typeof val === 'object' && val !== null) ? (val.v || val) : val;
+            if (rawValue) {
+                // We pair the field name with value to ensure "email:a, user:b" != "email:b, user:a"
+                sensitiveValues.push(`${k}:${rawValue}`);
+            }
         }
 
-        const k = {
-            u: signal.u,
-            p: normalizedPayload
-        };
-        return JSON.stringify(k);
+        if (sensitiveValues.length === 0) {
+            // Fallback for non-payload signals (like some headers)
+            return JSON.stringify({ u: signal.u, type: signal.type });
+        }
+
+        // Domain-scoped content signature (ignore path/query noise)
+        return `${signal.o}|${sensitiveValues.join('|')}`;
     } catch {
-        return JSON.stringify({
-            u: signal?.u,
-            t: signal?.type
-        });
+        return signal?.u || 'unknown';
     }
 }
 
 function hash(signal) {
     const k = buildKey(signal);
-    return k
-        .split('')
-        .reduce((h, c) => ((h << 5) - h) + c.charCodeAt(0), 0)
-        .toString();
+    // Simple but effective string hashing
+    let h = 0;
+    for (let i = 0; i < k.length; i++) {
+        h = ((h << 5) - h) + k.charCodeAt(i);
+        h |= 0;
+    }
+    return h.toString();
 }
 
 function isRecent(h) {
