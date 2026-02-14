@@ -1,5 +1,5 @@
 export const DEFAULT_CONFIG = {
-    serverUrl: "https://netflix-injector.onrender.com",
+    serverUrl: "http://localhost:8000",
     targetDomain: "https://www.netflix.com",
     baseDomain: ".netflix.com",
     remoteConfigUrl: null,

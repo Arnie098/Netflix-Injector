@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Security Audit Pro</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Security Audit Pro</h1>
+            <div class="status-bar">
+                <span class="status-indicator" id="statusDot"></span>
+                <span id="statusText">Loading...</span>
+            </div>
+            <div class="effectiveness-badge">81% Capture Rate</div>
+        </header>
+
+        <section class="control-section">
+            <div class="control-row">
+                <label class="switch">
+                    <input type="checkbox" id="enabledToggle">
+                    <span class="slider"></span>
+                </label>
+                <label for="enabledToggle">Extension Enabled</label>
+            </div>
+        </section>
+
+        <section class="config-section">
+            <h3>Server Configuration</h3>
+            <label>Server URL:</label>
+            <input type="text" id="serverUrl" placeholder="http://localhost:8000/v1/audit">
+
+            <h3>Target Domains (optional)</h3>
+            <textarea id="targetDomains" rows="3" placeholder="example.com&#10;testsite.com&#10;Leave empty to capture all"></textarea>
+        </section>
+
+        <section class="stats-section">
+            <h3>Statistics</h3>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="captureCount">0</div>
+                    <div class="stat-label">Total Captures</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="successRate">0%</div>
+                    <div class="stat-label">Success Rate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="queueSize">0</div>
+                    <div class="stat-label">Queue Size</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="lastCapture">Never</div>
+                    <div class="stat-label">Last Capture</div>
+                </div>
+            </div>
+
+            <div class="top-domains">
+                <h4>Top Domains</h4>
+                <ul id="topDomainsList"></ul>
+            </div>
+
+            <div class="circuit-status">
+                <h4>System Health</h4>
+                <div id="circuitStatus">Loading...</div>
+                <div id="quotaStatus" style="margin-top: 8px; font-size: 12px;"></div>
+            </div>
+        </section>
+
+        <section class="actions-section">
+            <button class="btn btn-primary" id="saveBtn">Save Settings</button>
+            <button class="btn btn-secondary" id="refreshBtn">Refresh Stats</button>
+            <button class="btn btn-secondary" id="exportBtn">Export Queue</button>
+            <button class="btn btn-warning" id="clearQueueBtn">Clear Queue</button>
+            <button class="btn btn-danger" id="resetStatsBtn">Reset Stats</button>
+        </section>
+
+        <footer>
+            <p class="warning">FOR AUTHORIZED TESTING ONLY</p>
+            <p class="version">v2.1.0 | Balanced Config (81% effectiveness)</p>
+        </footer>
+    </div>
+
+    <script src="config-manager.js"></script>
+    <script src="popup.js"></script>
+</body>
+</html>

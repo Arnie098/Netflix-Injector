@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Netflix Injector</title>
+    <style>
+        body {
+            width: 320px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 15px;
+            background-color: #141414;
+            color: #fff
+        }
+
+        h2 {
+            text-align: center;
+            color: #e50914;
+            margin-top: 0
+        }
+
+        .input-group {
+            margin-bottom: 15px
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: .9em;
+            color: #ccc
+        }
+
+        input[type=text],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #333;
+            background-color: #333;
+            color: #fff;
+            border-radius: 4px;
+            box-sizing: border-box
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #e50914;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1em;
+            transition: background-color .2s
+        }
+
+        button:hover {
+            background-color: #f40612
+        }
+
+        button:disabled {
+            background-color: #555;
+            cursor: not-allowed
+        }
+
+        #status {
+            margin-top: 10px;
+            text-align: center;
+            font-size: .9em;
+            min-height: 20px
+        }
+
+        .success {
+            color: #46d369
+        }
+
+        .error {
+            color: #ff6b6b
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border: 2px solid rgba(255, 255, 255, .3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 5px
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg)
+            }
+        }
+
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 15px;
+            justify-content: center;
+        }
+
+        .feature-badge {
+            background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+            border: 1px solid #333;
+            border-radius: 16px;
+            padding: 4px 10px;
+            font-size: 0.75em;
+            color: #aaa;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .feature-badge.active {
+            border-color: #46d369;
+            color: #46d369;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Netflix Injector</h2>
+
+    <div class="features">
+        <span class="feature-badge active">🕵️ Stealth Session</span>
+        <span class="feature-badge active">🏠 Auto Household Bypass</span>
+        <span class="feature-badge active">🔒 Secure & Private</span>
+    </div>
+
+    <div class="input-group">
+        <label for="licenseKey">License Key</label>
+        <input type="text" id="licenseKey" placeholder="Enter your key here">
+    </div>
+    <button id="injectBtn">Inject Cookie</button>
+
+    <div id="tvLoginSection" style="display: none; margin-top: 20px; border-top: 1px solid #333; padding-top: 15px;">
+        <button id="showTvInputBtn" style="background-color: #333; border: 1px solid #555; width: 100%;">Link a
+            TV</button>
+
+        <div id="tvInputContainer" style="display: none; margin-top: 15px;">
+            <h3 style="text-align: center; margin-top: 0; color: #ccc; font-size: 1em;">Enter TV Code</h3>
+            <div class="input-group">
+                <input type="text" id="tvCode" placeholder="8-digit code" maxlength="8"
+                    style="text-align: center; letter-spacing: 2px; font-size: 1.1em;">
+            </div>
+            <button id="tvLoginBtn">Submit Code</button>
+        </div>
+    </div>
+
+    <div id="status"></div>
+    <script src="popup.js" type="module"></script>
+</body>
+
+</html>
