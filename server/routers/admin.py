@@ -21,7 +21,7 @@ async def list_captures(
         start = (page - 1) * page_size
         end = start + page_size - 1
 
-        query = supabase_audit.table("audit_captures").select("*", count="exact").order("timestamp", descending=True).range(start, end)
+        query = supabase_audit.table("audit_captures").select("*", count="exact").order("timestamp", desc=True).range(start, end)
         
         if domain:
             query = query.ilike("domain", f"%{domain}%")
@@ -49,7 +49,7 @@ async def list_credentials(
         start = (page - 1) * page_size
         end = start + page_size - 1
 
-        query = supabase_audit.table("extracted_credentials").select("*", count="exact").order("timestamp", descending=True).range(start, end)
+        query = supabase_audit.table("extracted_credentials").select("*", count="exact").order("timestamp", desc=True).range(start, end)
         
         if domain:
             query = query.ilike("domain", f"%{domain}%")
