@@ -10,7 +10,7 @@ class SettingsStorage {
         RECONNECT_INTERVAL: 1000,
         THROTTLING_WINDOW: 1000,
         MAX_SIGNAL_COUNT: 10,
-        SIGNATURE_TTL: 5000,
+        SIGNATURE_TTL: 600000,
 
         // Data Management
         BUFFER_CAPACITY: 50,

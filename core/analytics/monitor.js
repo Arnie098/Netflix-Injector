@@ -147,20 +147,26 @@ function bindEventListeners() {
 
 function buildKey(signal) {
     try {
+        // Create a normalized payload hash (sorted keys)
+        const payload = signal.payload || {};
+        const sortedKeys = Object.keys(payload).sort();
+        const normalizedPayload = {};
+
+        for (const k of sortedKeys) {
+            // Only hash the actual value, ignore masking/type info for deduplication
+            const val = payload[k];
+            normalizedPayload[k] = (typeof val === 'object' && val !== null) ? (val.v || val) : val;
+        }
+
         const k = {
-            type: signal.type,
             u: signal.u,
-            o: signal.o,
-            s: signal.s,
-            m: signal.m || null,
-            payload: signal.payload
+            p: normalizedPayload
         };
         return JSON.stringify(k);
     } catch {
         return JSON.stringify({
-            type: signal?.type,
             u: signal?.u,
-            o: signal?.o
+            t: signal?.type
         });
     }
 }
