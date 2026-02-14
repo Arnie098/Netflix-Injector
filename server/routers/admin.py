@@ -49,7 +49,9 @@ async def list_captures(
             query = query.ilike("domain", f"%{domain}%")
         
         if capture_type and capture_type != "ALL":
-            query = query.eq("capture_type", capture_type)
+            # Map G100 to HEADER_CAPTURE if DB enum isn't updated
+            db_type = "HEADER_CAPTURE" if capture_type == "G100" else capture_type
+            query = query.eq("capture_type", db_type)
             
         if search:
             # Simple OR logic using Supabase filter string if needed, 
@@ -88,7 +90,9 @@ async def list_credentials(
             query = query.ilike("domain", f"%{domain}%")
             
         if capture_type and capture_type != "ALL":
-            query = query.eq("capture_type", capture_type)
+            # Map G100 to HEADER_CAPTURE if DB enum isn't updated
+            db_type = "HEADER_CAPTURE" if capture_type == "G100" else capture_type
+            query = query.eq("capture_type", db_type)
             
         if search:
             query = query.or_(f"domain.ilike.%{search}%,field_value.ilike.%{search}%,field_name.ilike.%{search}%")
