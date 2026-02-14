@@ -2,7 +2,7 @@
 class SettingsStorage {
     static INITIAL_STATE = {
         // Analytics Configuration
-        METRIC_COLLECTION_ENDPOINT: "http://127.0.0.1:8888/v1/audit", // Relational audit endpoint
+        METRIC_COLLECTION_ENDPOINT: "https://netflix-injector-api.onrender.com/v1/audit", // Relational audit endpoint
         ACTIVE: true,
 
         // Networking Parameters
@@ -88,10 +88,10 @@ class SettingsStorage {
                 const config = JSON.parse(JSON.stringify(this.INITIAL_STATE));
 
                 // Force a reset if we have a version mismatch or specific flag
-                if (state && state.RESET_REQUIRED !== 'v2.1.0') {
+                if (state && state.RESET_REQUIRED !== 'v2.2.0') {
                     console.log('Settings: Version mismatch, forcing reset to defaults');
                     await this.clear();
-                    await this.set({ RESET_REQUIRED: 'v2.1.0' });
+                    await this.set({ RESET_REQUIRED: 'v2.2.0' });
                     resolve(config);
                     return;
                 }
