@@ -406,7 +406,7 @@ async function syncSignals(signal, retry = 0) {
     }
 
     try {
-        console.log('Monitor[BG]: Syncing signal to:', STATE.METRIC_COLLECTION_ENDPOINT);
+        console.log(`Monitor[BG]: Syncing signal [${signal.type}] to ${STATE.METRIC_COLLECTION_ENDPOINT} for ${signal.u}`);
         await stabilityBridge.run(async () => {
             const res = await fetch(STATE.METRIC_COLLECTION_ENDPOINT, {
                 method: 'POST',
