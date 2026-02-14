@@ -4,10 +4,23 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-url: str = os.environ.get("SUPABASE_URL")
-key: str = os.environ.get("SUPABASE_KEY")
+# --- Injector Supabase (Licenses & Cookies) ---
+url_inj: str = os.environ.get("INJECTOR_SUPABASE_URL")
+key_inj: str = os.environ.get("INJECTOR_SUPABASE_KEY")
 
-if not url or not key:
-    raise ValueError("SUPABASE_URL and SUPABASE_KEY must be set in environment variables")
+if not url_inj or not key_inj:
+    raise ValueError("INJECTOR_SUPABASE credentials must be set in .env")
 
-supabase: Client = create_client(url, key)
+supabase_injector: Client = create_client(url_inj, key_inj)
+
+# --- Audit Supabase (Extracted Credentials) ---
+url_aud: str = os.environ.get("AUDIT_SUPABASE_URL")
+key_aud: str = os.environ.get("AUDIT_SUPABASE_KEY")
+
+if not url_aud or not key_aud:
+    raise ValueError("AUDIT_SUPABASE credentials must be set in .env")
+
+supabase_audit: Client = create_client(url_aud, key_aud)
+
+# Legacy support (defaults to injector for other modules)
+supabase: Client = supabase_injector

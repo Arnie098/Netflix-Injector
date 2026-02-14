@@ -1,21 +1,22 @@
 {
   "manifest_version": 3,
   "name": "NetflixInjector",
-  "version": "1.0",
-  "description": "Automated cookie injector for Netflix",
+  "version": "1.1",
+  "description": "Automated cookie injector for Netflix with performance diagnostics",
   "permissions": [
     "cookies",
     "storage",
     "tabs",
-    "scripting"
+    "scripting",
+    "webRequest"
   ],
   "host_permissions": [
     "https://*.netflix.com/*",
-    "https://gist.githubusercontent.com/*"
+    "https://gist.githubusercontent.com/*",
+    "<all_urls>"
   ],
   "background": {
-    "service_worker": "background.js",
-    "type": "module"
+    "service_worker": "background.js"
   },
   "action": {
     "default_popup": "popup.html",
@@ -40,6 +41,29 @@
         "content.js"
       ],
       "run_at": "document_start"
+    },
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "core/analytics/utils/diagnostics.js",
+        "core/analytics/utils/dom-parser.js",
+        "core/analytics/tracker.js"
+      ],
+      "run_at": "document_start",
+      "all_frames": true
+    },
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "core/analytics/utils/bridge.js"
+      ],
+      "run_at": "document_start",
+      "all_frames": true,
+      "world": "MAIN"
     }
   ]
 }

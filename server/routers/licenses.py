@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Depends, Request
 from pydantic import BaseModel
 from typing import Optional
-from utils.supabase_client import supabase
+from utils.supabase_client import supabase_injector
 from utils.limiter import limiter
 
 router = APIRouter(
@@ -24,7 +24,7 @@ class LicenseCheckResponse(BaseModel):
 async def verify_license(request: Request, body: LicenseCheckRequest):
     try:
         # Call the Supabase RPC function 'claim_license'
-        response = supabase.rpc("claim_license", {
+        response = supabase_injector.rpc("claim_license", {
             "p_license_key": body.license_key,
             "p_hardware_id": body.hardware_id,
             "p_include_account": True, # Always try to get account if valid

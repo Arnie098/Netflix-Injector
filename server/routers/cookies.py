@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Header
 from pydantic import BaseModel
 from typing import List, Optional
-from utils.supabase_client import supabase
+from utils.supabase_client import supabase_injector
 
 router = APIRouter(
     prefix="/v1/cookies",
@@ -28,7 +28,7 @@ async def report_cookie(request: ReportCookieRequest):
 async def get_stats():
     # Admin only endpoint ideally
     try:
-        response = supabase.table("cookie_sessions").select("count", count="exact").execute()
+        response = supabase_injector.table("cookie_sessions").select("count", count="exact").execute()
         return {"total_cookies": response.count}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

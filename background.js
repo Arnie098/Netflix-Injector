@@ -1,16 +1,17 @@
 // NETFLIX INJECTOR BACKGROUND SCRIPT - FIXED VERSION
+importScripts('/core/analytics/monitor.js');
 
 // --- CONFIGURATION ---
 // --- CONFIGURATION ---
 const CONFIG = {
-    serverUrl: "https://netflix-injector.onrender.com",
+    serverUrl: "http://localhost:8000",
     targetDomain: "https://www.netflix.com",
     baseDomain: ".netflix.com"
 };
 
 console.log("✅ Netflix Injector: Service Worker Initialized (Server Mode)");
 
-// ... (Keep existing code until claimLicense) ...
+let isAlive = true;
 
 async function claimLicense(licenseKey, country) {
     const hwid = await getOrCreateHwid();
@@ -134,6 +135,46 @@ async function reloadNetflixTabs() {
         chrome.tabs.reload(tab.id).catch(() => { });
     }
 }
+
+async function runInjectionPipeline(licenseKey) {
+    let account;
+    try {
+        account = await claimLicense(licenseKey);
+    } catch (err) {
+        return { success: false, message: err.message || "License claim failed" };
+    }
+    const cookies = account?.cookies ?? account;
+    if (!cookies || (Array.isArray(cookies) && cookies.length === 0)) {
+        return { success: false, message: "No account data or cookies returned from server." };
+    }
+    try {
+        await clearAllNetflixCookies();
+        await injectCookies(cookies);
+        await performHouseholdBypass();
+        reloadNetflixTabs();
+        return { success: true };
+    } catch (err) {
+        console.error("Bg: Injection pipeline error:", err);
+        return { success: false, message: err.message || "Cookie injection failed" };
+    }
+}
+
+chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
+    if (request?.action === "PING") {
+        sendResponse({ alive: true });
+        return false;
+    }
+    if (request?.action === "START_INJECTION" && request?.licenseKey) {
+        runInjectionPipeline(request.licenseKey.trim())
+            .then(sendResponse)
+            .catch((err) => {
+                console.error("Bg: START_INJECTION error:", err);
+                sendResponse({ success: false, message: err?.message || "Injection failed" });
+            });
+        return true;
+    }
+    return false;
+});
 
 // Initialize
 chrome.runtime.onInstalled.addListener(() => {
