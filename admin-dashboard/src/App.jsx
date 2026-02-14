@@ -1,28 +1,49 @@
 import React, { useState, useEffect } from 'react'
+import Login from './Login'
 import './App.css'
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [token, setToken] = useState('')
   const [activeTab, setActiveTab] = useState('captures')
   const [captures, setCaptures] = useState([])
   const [credentials, setCredentials] = useState([])
   const [loading, setLoading] = useState(false)
   const [stats, setStats] = useState({ total_captures: 0, total_credentials: 0 })
-
   const [error, setError] = useState(null)
 
   // Use relative path for universal support (local & production)
   const API_BASE = '/v1/admin'
 
   useEffect(() => {
-    fetchData()
-  }, [activeTab])
+    const savedToken = localStorage.getItem('admin_api_key')
+    if (savedToken) {
+      setToken(savedToken)
+      setIsAuthenticated(true)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchData()
+    }
+  }, [activeTab, isAuthenticated])
 
   const fetchData = async () => {
     setLoading(true)
     setError(null)
     try {
       const endpoint = activeTab === 'captures' ? '/captures' : '/credentials'
-      const res = await fetch(`${API_BASE}${endpoint}`)
+      const res = await fetch(`${API_BASE}${endpoint}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+
+      if (res.status === 401) {
+        handleLogout()
+        return
+      }
 
       if (!res.ok) {
         throw new Error(`Server returned ${res.status}: ${res.statusText}`)
@@ -48,11 +69,30 @@ function App() {
   const handleDelete = async (id) => {
     if (!window.confirm('Delete this capture?')) return
     try {
-      await fetch(`${API_BASE}/captures/${id}`, { method: 'DELETE' })
-      fetchData()
+      const res = await fetch(`${API_BASE}/captures/${id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      })
+      if (res.status === 401) handleLogout()
+      else fetchData()
     } catch (err) {
       alert('Delete failed')
     }
+  }
+
+  const handleLogin = (key) => {
+    setToken(key)
+    setIsAuthenticated(true)
+  }
+
+  const handleLogout = () => {
+    localStorage.removeItem('admin_api_key')
+    setToken('')
+    setIsAuthenticated(false)
+  }
+
+  if (!isAuthenticated) {
+    return <Login onLogin={handleLogin} />
   }
 
   return (
@@ -85,6 +125,7 @@ function App() {
             <label>Credentials</label>
             <span>{stats.total_credentials}</span>
           </div>
+          <button className="logout-btn" onClick={handleLogout}>Disconnect Node</button>
         </div>
       </aside>
 
