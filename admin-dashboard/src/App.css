@@ -258,6 +258,50 @@ nav button.active {
   color: white;
 }
 
+/* Bulk Actions */
+.bulk-actions {
+  background: rgba(255, 78, 80, 0.1);
+  border: 1px solid rgba(255, 78, 80, 0.2);
+  padding: 0.8rem 1.2rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.selection-info {
+  color: var(--dim);
+  font-size: 0.9rem;
+}
+
+.bulk-delete-btn {
+  background: rgba(255, 78, 80, 0.8);
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s;
+}
+
+.bulk-delete-btn:hover {
+  background: #ff4e50;
+  box-shadow: 0 0 15px rgba(255, 78, 80, 0.4);
+}
+
+.row-selected {
+  background: rgba(255, 255, 255, 0.03) !important;
+}
+
+input[type="checkbox"] {
+  accent-color: var(--electric);
+  width: 1.1rem;
+  height: 1.1rem;
+  cursor: pointer;
+}
+
 /* Grid Styles */
 .creds-grid {
   display: grid;

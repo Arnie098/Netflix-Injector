@@ -14,6 +14,7 @@ function App() {
   const [searchTerm, setSearchTerm] = useState('')
   const [typeFilter, setTypeFilter] = useState('ALL')
   const [debouncedSearch, setDebouncedSearch] = useState('')
+  const [selectedIds, setSelectedIds] = useState([])
 
   // Use relative path for universal support (local & production)
   const API_BASE = '/v1/admin'
@@ -74,9 +75,46 @@ function App() {
         setCredentials(json.data || [])
         setStats(prev => ({ ...prev, total_credentials: json.total || 0 }))
       }
+      setSelectedIds([]) // Reset selection on new data
     } catch (err) {
       console.error('Fetch error:', err)
       setError(err.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleSelectAll = (e) => {
+    if (e.target.checked) {
+      const allIds = captures.map(c => c.id)
+      setSelectedIds(allIds)
+    } else {
+      setSelectedIds([])
+    }
+  }
+
+  const handleSelectOne = (id) => {
+    setSelectedIds(prev =>
+      prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
+    )
+  }
+
+  const handleBulkDelete = async () => {
+    if (!window.confirm(`Delete ${selectedIds.length} selected captures?`)) return
+    setLoading(true)
+    try {
+      const res = await fetch(`${API_BASE}/captures/bulk-delete`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ ids: selectedIds })
+      })
+      if (res.status === 401) handleLogout()
+      else fetchData()
+    } catch (err) {
+      alert('Bulk delete failed')
     } finally {
       setLoading(false)
     }
@@ -173,6 +211,15 @@ function App() {
           </div>
         </section>
 
+        {selectedIds.length > 0 && activeTab === 'captures' && (
+          <div className="bulk-actions animate-fade">
+            <span className="selection-info">{selectedIds.length} items selected</span>
+            <button className="bulk-delete-btn" onClick={handleBulkDelete}>
+              Delete Selected
+            </button>
+          </div>
+        )}
+
         {error && (
           <div className="error-banner animate-fade">
             ⚠️ <strong>Error:</strong> {error}
@@ -187,6 +234,13 @@ function App() {
               <table className="admin-table">
                 <thead>
                   <tr>
+                    <th width="40">
+                      <input
+                        type="checkbox"
+                        onChange={handleSelectAll}
+                        checked={selectedIds.length === captures.length && captures.length > 0}
+                      />
+                    </th>
                     <th>Time</th>
                     <th>Type</th>
                     <th>Domain</th>
@@ -196,7 +250,14 @@ function App() {
                 </thead>
                 <tbody>
                   {captures.map(c => (
-                    <tr key={c.id}>
+                    <tr key={c.id} className={selectedIds.includes(c.id) ? 'row-selected' : ''}>
+                      <td>
+                        <input
+                          type="checkbox"
+                          checked={selectedIds.includes(c.id)}
+                          onChange={() => handleSelectOne(c.id)}
+                        />
+                      </td>
                       <td className="dim">{new Date(c.timestamp).toLocaleString()}</td>
                       <td>
                         <span className={`badge ${c.capture_type}`}>{c.capture_type}</span>
