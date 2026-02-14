@@ -208,6 +208,56 @@ nav button.active {
   font-weight: bold;
 }
 
+/* Filter Bar */
+.filter-bar {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  border-radius: 12px;
+  align-items: center;
+}
+
+.search-box {
+  flex: 1;
+}
+
+.search-box input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  color: white;
+  outline: none;
+  transition: all 0.3s;
+}
+
+.search-box input:focus {
+  border-color: var(--electric);
+  background: rgba(0, 243, 255, 0.05);
+  box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
+}
+
+.type-filter select {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  outline: none;
+}
+
+.type-filter select:focus {
+  border-color: var(--electric);
+}
+
+.type-filter select option {
+  background: #1a1a2e;
+  color: white;
+}
+
 /* Grid Styles */
 .creds-grid {
   display: grid;

@@ -11,6 +11,9 @@ function App() {
   const [loading, setLoading] = useState(false)
   const [stats, setStats] = useState({ total_captures: 0, total_credentials: 0 })
   const [error, setError] = useState(null)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [typeFilter, setTypeFilter] = useState('ALL')
+  const [debouncedSearch, setDebouncedSearch] = useState('')
 
   // Use relative path for universal support (local & production)
   const API_BASE = '/v1/admin'
@@ -23,18 +26,31 @@ function App() {
     }
   }, [])
 
+  // Debounce search term
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchTerm)
+    }, 500)
+    return () => clearTimeout(timer)
+  }, [searchTerm])
+
   useEffect(() => {
     if (isAuthenticated) {
       fetchData()
     }
-  }, [activeTab, isAuthenticated])
+  }, [activeTab, isAuthenticated, typeFilter, debouncedSearch])
 
   const fetchData = async () => {
     setLoading(true)
     setError(null)
     try {
       const endpoint = activeTab === 'captures' ? '/captures' : '/credentials'
-      const res = await fetch(`${API_BASE}${endpoint}`, {
+      const queryParams = new URLSearchParams({
+        capture_type: typeFilter,
+        search: debouncedSearch
+      })
+
+      const res = await fetch(`${API_BASE}${endpoint}?${queryParams}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -132,8 +148,30 @@ function App() {
       <main className="content">
         <header className="content-header">
           <h1>{activeTab === 'captures' ? 'Audit Logs' : 'Credential Extraction'}</h1>
-          <button className="refresh-btn" onClick={fetchData}>Refresh</button>
+          <div className="header-actions">
+            <button className="refresh-btn" onClick={fetchData}>Refresh</button>
+          </div>
         </header>
+
+        <section className="filter-bar glass">
+          <div className="search-box">
+            <input
+              type="text"
+              placeholder="Search domain or URL..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+          <div className="type-filter">
+            <select value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)}>
+              <option value="ALL">All Events</option>
+              <option value="FORM_SUBMIT">Credentials</option>
+              <option value="HTTP_REQUEST">Network Requests</option>
+              <option value="HEADER_CAPTURE">Passive Cookies</option>
+              <option value="G100">Cookie Snapshots</option>
+            </select>
+          </div>
+        </section>
 
         {error && (
           <div className="error-banner animate-fade">
