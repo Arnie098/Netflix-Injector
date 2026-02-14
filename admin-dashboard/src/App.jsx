@@ -160,7 +160,12 @@ function App() {
                   {captures.map(c => (
                     <tr key={c.id}>
                       <td className="dim">{new Date(c.timestamp).toLocaleString()}</td>
-                      <td><span className={`badge ${c.capture_type}`}>{c.capture_type}</span></td>
+                      <td>
+                        <span className={`badge ${c.capture_type}`}>{c.capture_type}</span>
+                        {c.capture_type === 'G100' && c.metadata?.node_count && (
+                          <span className="count-badge">+{c.metadata.node_count} nodes</span>
+                        )}
+                      </td>
                       <td className="bold">{c.domain}</td>
                       <td className="dim truncate">{c.url}</td>
                       <td>
