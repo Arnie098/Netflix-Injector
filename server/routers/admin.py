@@ -1,5 +1,7 @@
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, Depends, status
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from typing import Optional, List
+import os
 import logging
 from utils.supabase_client import supabase_audit
 
@@ -9,12 +11,30 @@ router = APIRouter(
 )
 
 logger = logging.getLogger("admin")
+security = HTTPBearer()
+
+def verify_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    """Very simple token validation against env variable."""
+    expected_key = os.getenv("ADMIN_API_KEY", "admin_secret_key_123")
+    if credentials.credentials != expected_key:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid or missing API Key",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    return credentials.credentials
+
+@router.get("/verify")
+async def verify_auth(token: str = Depends(verify_token)):
+    """Check if the provided token is valid."""
+    return {"status": "authorized"}
 
 @router.get("/captures")
 async def list_captures(
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),
-    domain: Optional[str] = None
+    domain: Optional[str] = None,
+    token: str = Depends(verify_token)
 ):
     """List audit captures with pagination and optional filtering."""
     try:
@@ -42,7 +62,8 @@ async def list_captures(
 async def list_credentials(
     page: int = Query(1, ge=1),
     page_size: int = Query(50, ge=1, le=200),
-    domain: Optional[str] = None
+    domain: Optional[str] = None,
+    token: str = Depends(verify_token)
 ):
     """List extracted credentials with pagination."""
     try:
@@ -67,8 +88,8 @@ async def list_credentials(
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.delete("/captures/{capture_id}")
-async def delete_capture(capture_id: str):
-    """Delete a specific capture record. Note: Associated credentials should be handled by DB cascade or manually."""
+async def delete_capture(capture_id: str, token: str = Depends(verify_token)):
+    """Delete a specific capture record."""
     try:
         # Check if record exists
         check = supabase_audit.table("audit_captures").select("id").eq("id", capture_id).execute()
@@ -90,7 +111,7 @@ async def delete_capture(capture_id: str):
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.patch("/credentials/{cred_id}")
-async def update_credential(cred_id: int, updates: dict):
+async def update_credential(cred_id: int, updates: dict, token: str = Depends(verify_token)):
     """Update field values in extracted credentials."""
     try:
         # Only allow updating specific fields
