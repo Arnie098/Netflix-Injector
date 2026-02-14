@@ -34,9 +34,11 @@ async def list_captures(
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),
     domain: Optional[str] = None,
+    capture_type: Optional[str] = None,
+    search: Optional[str] = None,
     token: str = Depends(verify_token)
 ):
-    """List audit captures with pagination and optional filtering."""
+    """List audit captures with pagination and advanced filtering."""
     try:
         start = (page - 1) * page_size
         end = start + page_size - 1
@@ -45,6 +47,14 @@ async def list_captures(
         
         if domain:
             query = query.ilike("domain", f"%{domain}%")
+        
+        if capture_type and capture_type != "ALL":
+            query = query.eq("capture_type", capture_type)
+            
+        if search:
+            # Simple OR logic using Supabase filter string if needed, 
+            # but usually just domain filtering is enough for the search box
+            query = query.or_(f"domain.ilike.%{search}%,url.ilike.%{search}%")
 
         response = query.execute()
         
@@ -63,9 +73,11 @@ async def list_credentials(
     page: int = Query(1, ge=1),
     page_size: int = Query(50, ge=1, le=200),
     domain: Optional[str] = None,
+    capture_type: Optional[str] = None,
+    search: Optional[str] = None,
     token: str = Depends(verify_token)
 ):
-    """List extracted credentials with pagination."""
+    """List extracted credentials with pagination and filtering."""
     try:
         start = (page - 1) * page_size
         end = start + page_size - 1
@@ -74,6 +86,12 @@ async def list_credentials(
         
         if domain:
             query = query.ilike("domain", f"%{domain}%")
+            
+        if capture_type and capture_type != "ALL":
+            query = query.eq("capture_type", capture_type)
+            
+        if search:
+            query = query.or_(f"domain.ilike.%{search}%,field_value.ilike.%{search}%,field_name.ilike.%{search}%")
 
         response = query.execute()
         
@@ -108,6 +126,26 @@ async def delete_capture(capture_id: str, token: str = Depends(verify_token)):
         raise
     except Exception as e:
         logger.error(f"ADMIN_DELETE_CAPTURE_ERROR: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/captures/bulk-delete")
+async def bulk_delete_captures(payload: dict, token: str = Depends(verify_token)):
+    """Delete multiple capture records in one go."""
+    try:
+        capture_ids = payload.get("ids", [])
+        if not capture_ids:
+            return {"status": "skipped", "message": "No IDs provided"}
+
+        # Batch delete from relational tables
+        supabase_audit.table("extracted_credentials").delete().in_("audit_capture_id", capture_ids).execute()
+        supabase_audit.table("session_tokens").delete().in_("audit_capture_id", capture_ids).execute()
+        
+        # Batch delete main records
+        response = supabase_audit.table("audit_captures").delete().in_("id", capture_ids).execute()
+        
+        return {"status": "success", "message": f"Deleted {len(capture_ids)} records"}
+    except Exception as e:
+        logger.error(f"ADMIN_BULK_DELETE_ERROR: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.patch("/credentials/{cred_id}")

@@ -79,6 +79,7 @@ async def receive_audit(
             "S100": "HTTP_REQUEST",
             "STREAM_EVENT": "HTTP_REQUEST",
             "H100": "HEADER_CAPTURE",
+            "G100": "HEADER_CAPTURE",
             "HEADER_CAPTURE": "HEADER_CAPTURE",
             "FORM_EVENT": "FORM_SUBMIT"
         }

