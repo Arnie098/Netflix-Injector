@@ -16,7 +16,8 @@ try:
         "timestamp": "2024-02-14T10:30:00Z",
         "capture_type": "FORM_SUBMIT",
         "url": "http://test-service.com",
-        "domain": "test-service.com"
+        "domain": "test-service.com",
+        "captured_data": {}
     }
     
     print("Attempting to insert into 'audit_captures'...")
