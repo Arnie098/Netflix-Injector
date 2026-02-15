@@ -119,7 +119,7 @@ async def list_accounts(
 ):
     """
     Correlates extracted fields into actionable accounts.
-    Groups fields by audit_capture_id and identifies user/pass pairs.
+    Groups fields by domain + user + password to provide a unique account list.
     """
     try:
         # 1. Fetch credentials with base filters
@@ -130,69 +130,69 @@ async def list_accounts(
         if search:
             query = query.or_(f"domain.ilike.%{search}%,field_value.ilike.%{search}%")
             
-        # For simplicity in this specialized view, we fetch a larger window and aggregate in memory
-        # since SQL grouping for pivoting is complex in Supabase-py without raw RPCs.
         response = query.execute()
         
         if not response.data:
             return {"data": [], "total": 0}
 
-        # 2. Correlate fields by capture_id
-        grouped = {}
+        # 2. First pass: Group by capture_id to get raw field sets
+        capture_groups = {}
         for cred in response.data:
             cid = cred["audit_capture_id"]
-            if cid not in grouped:
-                grouped[cid] = {
-                    "id": cid,
+            if cid not in capture_groups:
+                capture_groups[cid] = {
                     "domain": cred["domain"],
                     "timestamp": cred["timestamp"],
                     "url": cred["url"],
-                    "fields": {},
-                    "is_account": False
+                    "fields": {}
                 }
-            
-            name = cred["field_name"].lower()
-            val = cred["field_value"]
-            grouped[cid]["fields"][name] = val
-            
-            # Heuristic for identifying "accounts"
-            user_keys = ['user', 'email', 'login', 'id', 'account', 'phone']
-            pass_keys = ['pass', 'pwd', 'secret']
-            
-            # If we haven't confirmed it's an account yet, check if this field looks like a password
-            if not grouped[cid]["is_account"]:
-                has_pass = any(pk in name for pk in pass_keys)
-                has_user = any(uk in name for uk in user_keys)
-                if has_pass:
-                    grouped[cid]["is_account"] = True
+            capture_groups[cid]["fields"][cred["field_name"].lower()] = cred["field_value"]
 
-        # 3. Flatten and filter for display
-        accounts = []
-        for cid, data in grouped.items():
-            # Only include if it has at least one field (and ideally is an "account")
-            # We can expose all grouped data but prioritize user/pass identification
-            
-            # Simple heuristic for "user" and "pass" identification for the list view
-            display_user = "Unknown"
-            display_pass = "********"
-            
+        # 3. Second pass: Deduplicate by domain + user + pass
+        unique_accounts = {}
+        user_keys = ['user', 'email', 'login', 'id', 'account', 'phone']
+        pass_keys = ['pass', 'pwd', 'secret']
+
+        for cid, data in capture_groups.items():
+            # Extract user/pass identifiers
+            user = "Unknown"
+            password = "Unknown"
             for k, v in data["fields"].items():
-                if any(pk in k for pk in ['pass', 'pwd']):
-                    display_pass = v
-                elif any(uk in k for uk in ['user', 'email', 'login']):
-                    display_user = v
+                if any(pk in k for pk in pass_keys):
+                    password = v
+                elif any(uk in k for uk in user_keys):
+                    user = v
+            
+            # Create a unique key for deduplication
+            # We normalize the domain and identifiers
+            account_key = f"{data['domain'].lower()}|{user.lower()}|{password}"
+            
+                unique_accounts[account_key] = {
+                    "domain": data["domain"],
+                    "user": user,
+                    "password": password,
+                    "all_fields": data["fields"],
+                    "capture_count": 1,
+                    "last_seen": data["timestamp"],
+                    "latest_url": data["url"],
+                    "is_high_confidence": (user != "Unknown" and password != "Unknown"),
+                    "id": cid # Use the latest capture ID as reference
+                }
+            else:
+                unique_accounts[account_key]["capture_count"] += 1
+                unique_accounts[account_key]["all_fields"].update(data["fields"])
+                unique_accounts[account_key]["is_high_confidence"] = \
+                    unique_accounts[account_key]["is_high_confidence"] or (user != "Unknown" and password != "Unknown")
+                # Keep the latest timestamp
+                if data["timestamp"] > unique_accounts[account_key]["last_seen"]:
+                    unique_accounts[account_key]["last_seen"] = data["timestamp"]
+                    unique_accounts[account_key]["latest_url"] = data["url"]
 
-            accounts.append({
-                "capture_id": data["id"],
-                "domain": data["domain"],
-                "timestamp": data["timestamp"],
-                "url": data["url"],
-                "user": display_user,
-                "password": display_pass,
-                "all_fields": data["fields"]
-            })
+        # 4. Convert to list and sort by last_seen
+        accounts = list(unique_accounts.values())
+        accounts.sort(key=lambda x: x["last_seen"], reverse=True)
 
-        # 4. Handle pagination for the aggregated list
+        # 5. Handle pagination
         start = (page - 1) * page_size
         end = start + page_size
         paginated_accounts = accounts[start:end]

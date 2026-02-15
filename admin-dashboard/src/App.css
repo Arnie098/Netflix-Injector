@@ -603,6 +603,45 @@ input[type="checkbox"] {
   font-family: 'JetBrains Mono', monospace;
 }
 
+.domain-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.conf-badge {
+  background: rgba(0, 243, 255, 0.1);
+  color: var(--electric);
+  border: 1px solid rgba(0, 243, 255, 0.3);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  width: fit-content;
+}
+
+.account-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.capture-count {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.high-confidence {
+  border-left: 4px solid var(--accent-color) !important;
+}
+
 .logout-btn {
   margin-top: 12px;
   padding: 10px;

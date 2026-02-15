@@ -358,10 +358,16 @@ function App() {
             ) : (
               <div className="accounts-grid">
                 {accounts.map(acc => (
-                  <div key={acc.capture_id} className="account-card glass animate-fade">
+                  <div key={acc.capture_id} className={`account-card glass animate-fade ${acc.is_high_confidence ? 'high-confidence' : ''}`}>
                     <div className="account-header">
-                      <span className="account-domain">{acc.domain}</span>
-                      <span className="account-time">{new Date(acc.timestamp).toLocaleDateString()}</span>
+                      <div className="domain-stack">
+                        <span className="account-domain">{acc.domain}</span>
+                        {acc.is_high_confidence && <span className="conf-badge">Verified Pair</span>}
+                      </div>
+                      <div className="account-meta">
+                        <span className="capture-count">Captured {acc.capture_count}x</span>
+                        <span className="account-time">Last: {new Date(acc.last_seen).toLocaleDateString()}</span>
+                      </div>
                     </div>
                     <div className="account-combo">
                       <div className="combo-strip">
