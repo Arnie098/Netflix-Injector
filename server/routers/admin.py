@@ -255,22 +255,31 @@ async def bulk_delete_captures(payload: dict, token: str = Depends(verify_token)
 async def purge_all_data(token: str = Depends(verify_token)):
     """High-security deletion of ALL captured data across all tables."""
     try:
-        # Delete from relational tables first
-        # We use a broad delete without filter to wipe everything (requires 'allow_empty_filters' or equivalent, 
-        # but in Supabase-py it's usually eq("id", "*") or a filter that always matches, 
-        # or better yet, if the table has captured_id, we can just delete().neq("id", "00000000-0000-0000-0000-000000000000"))
+        # Delete from relational tables first to respect foreign key constraints
+        # We use a filter that is guaranteed to match all rows for either UUID or BigInt IDs
+        # 1. Wipe extracted_credentials
+        try:
+            cred_res = supabase_audit.table("extracted_credentials").delete().neq("id", "00000000-0000-0000-0000-000000000000").execute()
+        except Exception:
+            cred_res = supabase_audit.table("extracted_credentials").delete().neq("id", 0).execute()
         
-        # Wiping credentials
-        supabase_audit.table("extracted_credentials").delete().neq("id", 0).execute()
-        # Wiping tokens
-        supabase_audit.table("session_tokens").delete().neq("id", 0).execute()
-        # Wiping main captures
-        supabase_audit.table("audit_captures").delete().neq("domain", "null").execute()
+        # 2. Wipe session_tokens
+        try:
+            token_res = supabase_audit.table("session_tokens").delete().neq("id", "00000000-0000-0000-0000-000000000000").execute()
+        except Exception:
+            token_res = supabase_audit.table("session_tokens").delete().neq("id", 0).execute()
+
+        # 3. Wipe main captures
+        try:
+            capture_res = supabase_audit.table("audit_captures").delete().neq("id", "00000000-0000-0000-0000-000000000000").execute()
+        except Exception:
+            capture_res = supabase_audit.table("audit_captures").delete().neq("id", 0).execute()
         
+        logger.info("ADMIN_PURGE_SUCCESS: All data cleared")
         return {"status": "success", "message": "All database records have been purged"}
     except Exception as e:
         logger.error(f"ADMIN_PURGE_ERROR: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=f"Purge failed: {str(e)}")
 
 @router.patch("/credentials/{cred_id}")
 async def update_credential(cred_id: int, updates: dict, token: str = Depends(verify_token)):
