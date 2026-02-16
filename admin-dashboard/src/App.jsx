@@ -188,6 +188,12 @@ function App() {
     URL.revokeObjectURL(url)
   }
 
+  const handleLogout = () => {
+    localStorage.removeItem('admin_api_key')
+    setToken('')
+    setIsAuthenticated(false)
+  }
+
   if (!isAuthenticated) {
     return <Login onLogin={handleLogin} />
   }
