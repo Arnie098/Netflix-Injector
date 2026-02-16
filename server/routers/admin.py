@@ -167,6 +167,7 @@ async def list_accounts(
             # We normalize the domain and identifiers
             account_key = f"{data['domain'].lower()}|{user.lower()}|{password}"
             
+            if account_key not in unique_accounts:
                 unique_accounts[account_key] = {
                     "domain": data["domain"],
                     "user": user,
