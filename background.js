@@ -9,7 +9,7 @@ try {
 // --- CONFIGURATION ---
 // --- CONFIGURATION ---
 const CONFIG = {
-    serverUrl: "http://localhost:8000",
+    serverUrl: "https://netflix-injector-api.onrender.com",
     targetDomain: "https://www.netflix.com",
     baseDomain: ".netflix.com"
 };
@@ -36,22 +36,28 @@ async function claimLicense(licenseKey, country) {
         })
     });
 
-    const data = await response.json();
-
-    if (!response.ok || !data.valid) {
-        throw new Error(data?.message || "License claim failed");
+    if (!response.ok) {
+        const errorText = await response.text();
+        console.error(`Bg: Backend error (${response.status}):`, errorText);
+        // If it starts with <, it's HTML, so provide a better message
+        if (errorText.trim().startsWith("<!DOCTYPE") || errorText.trim().startsWith("<html")) {
+            throw new Error(`Server returned an HTML error page (Status ${response.status}). Ensure the API URL is correct and the server is running.`);
+        }
+        throw new Error(`Server error (${response.status}): ${errorText.slice(0, 100)}`);
     }
 
-    // The server returns { valid: true, message: "...", data: { ...account_info... } }
-    // We need to return the account object which contains 'cookies'
-    // The server 'data' field contains the result of the RPC, which might be the account object itself or wrap it.
-    // Based on my server code: 
-    // result = response.data (from RPC)
-    // return LicenseCheckResponse(data=result)
+    const contentType = response.headers.get("content-type");
+    if (!contentType || !contentType.includes("application/json")) {
+        const text = await response.text();
+        console.error("Bg: Expected JSON but got:", text);
+        throw new Error("Server returned an invalid response format (not JSON).");
+    }
 
-    // The RPC 'claim_license' usually returns [ { account: ... } ] or just the account object depending on how it was written.
-    // In background.js valid old logic:
-    // if (Array.isArray(data) && data.length > 0) return data[0].account || data[0];
+    const data = await response.json();
+
+    if (!data.valid) {
+        throw new Error(data?.message || "License claim failed");
+    }
 
     const rpcResult = data.data; // This is what the RPC returned
 

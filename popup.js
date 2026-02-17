@@ -2,6 +2,7 @@ import { loadConfig } from "./config.js";
 
 async function initPopup() {
     const injectBtn = document.getElementById("injectBtn");
+    const injectAnotherBtn = document.getElementById("injectAnotherBtn");
     const licenseInput = document.getElementById("licenseKey");
     const statusDiv = document.getElementById("status");
 
@@ -13,11 +14,20 @@ async function initPopup() {
     function resetButton() {
         injectBtn.disabled = false;
         injectBtn.textContent = "Inject Cookie";
+        if (injectAnotherBtn) {
+            injectAnotherBtn.disabled = false;
+            injectAnotherBtn.textContent = "Inject another account";
+        }
     }
 
-    function setLoadingState() {
-        injectBtn.disabled = true;
-        injectBtn.innerHTML = '<span class="spinner"></span> Injecting...';
+    function setLoadingState(isAnother = false) {
+        if (isAnother) {
+            injectAnotherBtn.disabled = true;
+            injectAnotherBtn.innerHTML = '<span class="spinner"></span> Rotating...';
+        } else {
+            injectBtn.disabled = true;
+            injectBtn.innerHTML = '<span class="spinner"></span> Injecting...';
+        }
         updateStatus("Starting injection process...", "loading");
     }
 
@@ -59,7 +69,7 @@ async function initPopup() {
     // Add health check button after inject button (optional, for debugging)
     // injectBtn.parentElement.appendChild(healthCheckBtn);
 
-    injectBtn.addEventListener("click", async () => {
+    async function handleInjection(isAnother = false) {
         const licenseKey = licenseInput.value.trim();
 
         if (!licenseKey) {
@@ -70,8 +80,8 @@ async function initPopup() {
         // Save license key
         chrome.storage.local.set({ licenseKey: licenseKey });
 
-        setLoadingState();
-        console.log("🚀 Starting injection process at", new Date().toISOString());
+        setLoadingState(isAnother);
+        console.log(`🚀 Starting injection process (another: ${isAnother}) at`, new Date().toISOString());
 
         try {
             // First, do a quick health check
@@ -104,7 +114,11 @@ async function initPopup() {
                 updateStatus("✅ Injection Successful! Reloading Netflix...", "success");
                 console.log("✅ Injection completed successfully");
 
-                // Show TV Login Section
+                // Show TV Login Section and Inject Another Button
+                if (injectAnotherBtn) {
+                    injectAnotherBtn.style.display = "block";
+                }
+
                 const tvLoginSection = document.getElementById("tvLoginSection");
                 if (tvLoginSection) {
                     tvLoginSection.style.display = "block";
@@ -124,7 +138,13 @@ async function initPopup() {
             handleError(e);
             resetButton();
         }
-    });
+    }
+
+    injectBtn.addEventListener("click", () => handleInjection(false));
+
+    if (injectAnotherBtn) {
+        injectAnotherBtn.addEventListener("click", () => handleInjection(true));
+    }
 
     // TV Login Logic
     const tvLoginSection = document.getElementById("tvLoginSection");
