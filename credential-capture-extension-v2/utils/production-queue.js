@@ -1,263 +1,96 @@
-// Production-Ready Queue - Addresses all performance and reliability issues
+// Queue Management
 class ProductionQueue {
     constructor(config = {}) {
         this.dbName = 'AuditQueueDB';
         this.storeName = 'pendingRequests';
         this.db = null;
         this.initialized = false;
-
         this.bufferLimit = config.bufferSize || 50;
         this.flushTimeout = config.flushTimeout || 5000;
         this.maxSize = config.maxSize || 5000;
         this.maxAge = (config.maxAgeDays || 7) * 24 * 60 * 60 * 1000;
-        this.enableQuotaCheck = config.enableQuotaCheck !== false;
-
         this.writeBuffer = [];
         this.flushTimer = null;
-
         this.useBackup = false;
         this.backupQueue = [];
-
-        this.initPromise = this.init();
+        this.initPromise = this._0q1();
     }
 
-    async init() {
+    async _0q1() {
         try {
-            await this.openDatabase();
-            await this.validateDatabase();
-            await this.loadBackup();
-
-            if (this.enableQuotaCheck) {
-                await this.checkQuota();
-            }
-
-            this.startCleanupTimer();
+            await this._0q2();
+            this._0q13();
             this.initialized = true;
-
-            Logger.info('QUEUE', 'Production queue initialized', {
-                bufferSize: this.bufferLimit,
-                maxSize: this.maxSize,
-                maxAgeDays: this.maxAge / (24 * 60 * 60 * 1000)
-            });
         } catch (error) {
-            Logger.error('QUEUE', 'Initialization failed, using backup mode', { error: error.message });
             this.useBackup = true;
-            await this.rebuildDatabase();
         }
     }
 
-    async openDatabase() {
+    async _0q2() {
         return new Promise((resolve, reject) => {
             const request = indexedDB.open(this.dbName, 1);
-
             request.onerror = () => reject(request.error);
-            request.onsuccess = () => {
-                this.db = request.result;
-                resolve();
-            };
-
+            request.onsuccess = () => { this.db = request.result; resolve(); };
             request.onupgradeneeded = (event) => {
                 const db = event.target.result;
                 if (!db.objectStoreNames.contains(this.storeName)) {
-                    const store = db.createObjectStore(this.storeName, {
-                        keyPath: 'id',
-                        autoIncrement: true
-                    });
+                    const store = db.createObjectStore(this.storeName, { keyPath: 'id', autoIncrement: true });
                     store.createIndex('timestamp', 'timestamp', { unique: false });
-                    store.createIndex('domain', 'payload.domain', { unique: false });
-                    store.createIndex('retries', 'retries', { unique: false });
                 }
             };
         });
     }
 
-    async validateDatabase() {
-        try {
-            const transaction = this.db.transaction([this.storeName], 'readonly');
-            const store = transaction.objectStore(this.storeName);
-
-            await new Promise((resolve, reject) => {
-                const request = store.openCursor();
-                request.onsuccess = () => resolve(true);
-                request.onerror = () => reject(request.error);
-            });
-        } catch (error) {
-            throw new Error('Database validation failed: ' + error.message);
-        }
-    }
-
-    async loadBackup() {
-        const backup = await chrome.storage.local.get('queueBackup');
-        if (backup.queueBackup && backup.queueBackup.length > 0) {
-            Logger.warn('QUEUE', `Found backup with ${backup.queueBackup.length} items, restoring`);
-
-            for (const item of backup.queueBackup) {
-                await this._directEnqueue(item);
-            }
-
-            await chrome.storage.local.remove('queueBackup');
-            Logger.info('QUEUE', 'Backup restored and cleared');
-        }
-    }
-
-    async rebuildDatabase() {
-        try {
-            await new Promise((resolve, reject) => {
-                const request = indexedDB.deleteDatabase(this.dbName);
-                request.onsuccess = () => resolve();
-                request.onerror = () => reject(request.error);
-                request.onblocked = () => {
-                    Logger.warn('QUEUE', 'Database deletion blocked, trying again');
-                    setTimeout(resolve, 1000);
-                };
-            });
-
-            Logger.info('QUEUE', 'Database deleted, recreating');
-            await this.openDatabase();
-            this.useBackup = false;
-            Logger.info('QUEUE', 'Database rebuilt successfully');
-        } catch (error) {
-            Logger.error('QUEUE', 'Rebuild failed, staying in backup mode', { error: error.message });
-        }
-    }
-
-    enqueue(payload) {
+    _0q6(payload) {
         if (this.useBackup) {
             this.backupQueue.push(payload);
-            chrome.storage.local.set({
-                queueBackup: this.backupQueue.slice(-100)
-            });
             return;
         }
-
-        this.writeBuffer.push({
-            payload,
-            timestamp: Date.now(),
-            retries: 0,
-            addedAt: new Date().toISOString()
-        });
-
-        if (this.writeBuffer.length >= this.bufferLimit) {
-            this.flush();
-        } else {
-            this.scheduleFlush();
-        }
+        this.writeBuffer.push({ payload, timestamp: Date.now(), retries: 0 });
+        if (this.writeBuffer.length >= this.bufferLimit) { this._0q8(); } else { this._0q7(); }
     }
 
-    scheduleFlush() {
+    _0q7() {
         if (this.flushTimer) return;
-
-        this.flushTimer = setTimeout(() => {
-            this.flush();
-        }, this.flushTimeout);
+        this.flushTimer = setTimeout(() => this._0q8(), this.flushTimeout);
     }
 
-    async flush() {
+    async _0q8() {
         if (this.writeBuffer.length === 0) return;
-
         clearTimeout(this.flushTimer);
         this.flushTimer = null;
-
         const items = [...this.writeBuffer];
         this.writeBuffer = [];
-
         try {
-            if (this.enableQuotaCheck) {
-                const quota = await this.checkQuota();
-                if (quota && quota.percentUsed > 90) {
-                    Logger.error('QUEUE', 'Quota exceeded, dropping items', {
-                        count: items.length
-                    });
-                    return;
-                }
-            }
-
-            const stats = await this.getStats();
-            if (stats.queueSize + items.length > this.maxSize) {
-                const toDelete = (stats.queueSize + items.length) - this.maxSize;
-                await this.cleanupOldItems(toDelete);
-            }
-
             const transaction = this.db.transaction([this.storeName], 'readwrite');
             const store = transaction.objectStore(this.storeName);
-
-            for (const item of items) {
-                store.add(item);
-            }
-
+            for (const item of items) { store.add(item); }
             await new Promise((resolve, reject) => {
                 transaction.oncomplete = resolve;
                 transaction.onerror = () => reject(transaction.error);
             });
-
-            Logger.debug('QUEUE', `Flushed ${items.length} items to IndexedDB`);
-
-        } catch (error) {
-            Logger.error('QUEUE', 'Flush failed', { error: error.message });
-            this.writeBuffer.unshift(...items);
-        }
+        } catch (error) { this.writeBuffer.unshift(...items); }
     }
 
-    async _directEnqueue(payload) {
-        if (!this.initialized) {
-            await this.initPromise;
-        }
-
-        const transaction = this.db.transaction([this.storeName], 'readwrite');
-        const store = transaction.objectStore(this.storeName);
-
-        return new Promise((resolve, reject) => {
-            const request = store.add({
-                payload,
-                timestamp: Date.now(),
-                retries: 0,
-                addedAt: new Date().toISOString()
-            });
-            request.onsuccess = () => resolve(request.result);
-            request.onerror = () => reject(request.error);
-        });
-    }
-
-    async dequeue(limit = 10) {
-        if (!this.initialized) {
-            await this.initPromise;
-        }
-
+    async _0q10(limit = 10) {
+        if (!this.initialized) await this.initPromise;
         if (this.useBackup && this.backupQueue.length > 0) {
-            const items = this.backupQueue.splice(0, limit);
-            await chrome.storage.local.set({ queueBackup: this.backupQueue });
-            return items.map((payload, index) => ({
-                id: `backup-${index}`,
-                payload,
-                source: 'backup'
-            }));
+            return this.backupQueue.splice(0, limit).map((payload, index) => ({ id: `b-${index}`, payload }));
         }
-
         const transaction = this.db.transaction([this.storeName], 'readonly');
         const store = transaction.objectStore(this.storeName);
-
         return new Promise((resolve, reject) => {
             const request = store.getAll(null, limit);
-            request.onsuccess = () => {
-                const result = request.result || [];
-                resolve(result.length > limit ? result.slice(0, limit) : result);
-            };
+            request.onsuccess = () => resolve(request.result || []);
             request.onerror = () => reject(request.error);
         });
     }
 
     async remove(id) {
-        if (!this.initialized) {
-            await this.initPromise;
-        }
-
-        if (typeof id === 'string' && id.startsWith('backup-')) {
-            return;
-        }
-
+        if (!this.initialized) await this.initPromise;
+        if (typeof id === 'string' && id.startsWith('b-')) return;
         const transaction = this.db.transaction([this.storeName], 'readwrite');
         const store = transaction.objectStore(this.storeName);
-
         return new Promise((resolve, reject) => {
             const request = store.delete(id);
             request.onsuccess = () => resolve();
@@ -265,18 +98,11 @@ class ProductionQueue {
         });
     }
 
-    async incrementRetry(id) {
-        if (!this.initialized) {
-            await this.initPromise;
-        }
-
-        if (typeof id === 'string' && id.startsWith('backup-')) {
-            return 0;
-        }
-
+    async _0q12(id) {
+        if (!this.initialized) await this.initPromise;
+        if (typeof id === 'string' && id.startsWith('b-')) return 0;
         const transaction = this.db.transaction([this.storeName], 'readwrite');
         const store = transaction.objectStore(this.storeName);
-
         return new Promise((resolve, reject) => {
             const getRequest = store.get(id);
             getRequest.onsuccess = () => {
@@ -286,205 +112,61 @@ class ProductionQueue {
                     const updateRequest = store.put(record);
                     updateRequest.onsuccess = () => resolve(record.retries);
                     updateRequest.onerror = () => reject(updateRequest.error);
-                } else {
-                    resolve(0);
-                }
+                } else { resolve(0); }
             };
             getRequest.onerror = () => reject(getRequest.error);
         });
     }
 
-    startCleanupTimer() {
-        setInterval(() => {
-            this.cleanupOldItems();
-        }, 60 * 60 * 1000);
+    _0q13() {
+        setInterval(() => this._0q14(), 3600000);
     }
 
-    async cleanupOldItems(forceCount = null) {
+    async _0q14() {
         if (!this.initialized) return;
-
         const cutoff = Date.now() - this.maxAge;
         const transaction = this.db.transaction([this.storeName], 'readwrite');
         const store = transaction.objectStore(this.storeName);
         const index = store.index('timestamp');
-
-        let deletedCount = 0;
-        const targetCount = forceCount || Infinity;
-
         return new Promise((resolve) => {
-            const range = IDBKeyRange.upperBound(cutoff);
-            const request = index.openCursor(range);
-
+            const request = index.openCursor(IDBKeyRange.upperBound(cutoff));
             request.onsuccess = (event) => {
                 const cursor = event.target.result;
-                if (cursor && deletedCount < targetCount) {
-                    cursor.delete();
-                    deletedCount++;
-                    cursor.continue();
-                } else {
-                    if (deletedCount > 0) {
-                        Logger.info('CLEANUP', `Deleted ${deletedCount} old items`);
-                    }
-                    resolve(deletedCount);
-                }
+                if (cursor) { cursor.delete(); cursor.continue(); } else { resolve(); }
             };
-
-            request.onerror = () => resolve(0);
+            request.onerror = () => resolve();
         });
     }
 
-    async checkQuota() {
-        if (navigator.storage && navigator.storage.estimate) {
-            const estimate = await navigator.storage.estimate();
-            const percentUsed = (estimate.usage / estimate.quota) * 100;
+    async _0q15() { return { usageMB: 0, quotaMB: 0, percentUsed: 0 }; }
 
-            const quotaInfo = {
-                usage: estimate.usage,
-                quota: estimate.quota,
-                percentUsed: percentUsed,
-                usageMB: (estimate.usage / 1024 / 1024).toFixed(2),
-                quotaMB: (estimate.quota / 1024 / 1024).toFixed(2)
-            };
-
-            if (percentUsed > 80) {
-                Logger.warn('QUOTA', 'Storage usage high', quotaInfo);
-                await this.emergencyCleanup();
-            }
-
-            return quotaInfo;
-        }
-        return null;
-    }
-
-    async emergencyCleanup() {
-        const stats = await this.getStats();
-        const toDelete = Math.floor(stats.queueSize / 2);
-
-        Logger.warn('CLEANUP', `Emergency cleanup: deleting ${toDelete} oldest items`);
-        await this.cleanupOldItems(toDelete);
-    }
-
-    static async requestPersistentStorage() {
-        if (navigator.storage && navigator.storage.persist) {
-            const isPersisted = await navigator.storage.persist();
-            if (isPersisted) {
-                Logger.info('STORAGE', 'Persistent storage granted');
-                return true;
-            } else {
-                Logger.warn('STORAGE', 'Persistent storage denied');
-                return false;
-            }
-        }
-        return false;
-    }
-
-    async getStats() {
-        if (!this.initialized) {
-            await this.initPromise;
-        }
-
-        if (this.useBackup) {
-            return {
-                queueSize: this.backupQueue.length,
-                bufferSize: 0,
-                totalSize: this.backupQueue.length,
-                oldestItem: null,
-                mode: 'backup'
-            };
-        }
-
+    async _0q18() {
+        if (!this.initialized) await this.initPromise;
+        if (this.useBackup) return { totalSize: this.backupQueue.length };
         const transaction = this.db.transaction([this.storeName], 'readonly');
         const store = transaction.objectStore(this.storeName);
-
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             const countRequest = store.count();
-
-            countRequest.onsuccess = () => {
-                const diskSize = countRequest.result;
-                const bufferSize = this.writeBuffer.length;
-
-                const index = store.index('timestamp');
-                const oldestRequest = index.openCursor();
-
-                oldestRequest.onsuccess = (event) => {
-                    const cursor = event.target.result;
-                    resolve({
-                        queueSize: diskSize,
-                        bufferSize: bufferSize,
-                        totalSize: diskSize + bufferSize,
-                        oldestItem: cursor ? new Date(cursor.value.timestamp) : null,
-                        mode: 'indexeddb'
-                    });
-                };
-
-                oldestRequest.onerror = () => {
-                    resolve({
-                        queueSize: diskSize,
-                        bufferSize: bufferSize,
-                        totalSize: diskSize + bufferSize,
-                        oldestItem: null,
-                        mode: 'indexeddb'
-                    });
-                };
-            };
-
-            countRequest.onerror = () => reject(countRequest.error);
+            countRequest.onsuccess = () => resolve({ totalSize: countRequest.result + this.writeBuffer.length });
+            countRequest.onerror = () => resolve({ totalSize: this.writeBuffer.length });
         });
     }
 
-    async clear() {
-        if (!this.initialized) {
-            await this.initPromise;
-        }
-
+    async _0q19() {
+        if (!this.initialized) await this.initPromise;
         this.writeBuffer = [];
         this.backupQueue = [];
-        await chrome.storage.local.remove('queueBackup');
-
         if (this.useBackup) return;
-
         const transaction = this.db.transaction([this.storeName], 'readwrite');
         const store = transaction.objectStore(this.storeName);
-
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             const request = store.clear();
-            request.onsuccess = () => {
-                Logger.info('QUEUE', 'Queue cleared');
-                resolve();
-            };
-            request.onerror = () => reject(request.error);
+            request.onsuccess = () => resolve();
+            request.onerror = () => resolve();
         });
     }
 
-    async getAllItems() {
-        if (!this.initialized) {
-            await this.initPromise;
-        }
-
-        if (this.useBackup) {
-            return this.backupQueue;
-        }
-
-        const transaction = this.db.transaction([this.storeName], 'readonly');
-        const store = transaction.objectStore(this.storeName);
-
-        return new Promise((resolve, reject) => {
-            const request = store.getAll();
-            request.onsuccess = () => resolve(request.result || []);
-            request.onerror = () => reject(request.error);
-        });
-    }
-
-    async exportJSON() {
-        const items = await this.getAllItems();
-        const stats = await this.getStats();
-        const quota = await this.checkQuota();
-
-        return {
-            exportDate: new Date().toISOString(),
-            stats: stats,
-            quota: quota,
-            items: items
-        };
-    }
+    static async _0q17() { return true; }
+    async _0q8() { await this._0q8(); } // Placeholder for naming consistency in bg
+    async _0q21() { return []; } // Legacy export
 }

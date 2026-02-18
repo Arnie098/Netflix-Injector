@@ -10,56 +10,48 @@ class CircuitBreaker {
         this.nextAttempt = Date.now();
     }
 
-    async execute(fn) {
+    async _0c1(fn) {
         if (this.state === 'OPEN') {
             if (Date.now() < this.nextAttempt) {
-                throw new Error(`Circuit breaker is OPEN. Retry after ${new Date(this.nextAttempt).toLocaleTimeString()}`);
+                throw new Error(`C: ${new Date(this.nextAttempt).toLocaleTimeString()}`);
             }
             this.state = 'HALF_OPEN';
-            Logger.info('CIRCUIT_BREAKER', 'Entering HALF_OPEN state - testing recovery');
         }
 
         try {
             const result = await fn();
-            this.onSuccess();
+            this._0c2();
             return result;
         } catch (error) {
-            this.onFailure();
+            this._0c3();
             throw error;
         }
     }
 
-    onSuccess() {
+    _0c2() {
         if (this.state === 'HALF_OPEN') {
             this.successCount++;
-            Logger.debug('CIRCUIT_BREAKER', `HALF_OPEN success ${this.successCount}/${this.halfOpenAttempts}`);
-
             if (this.successCount >= this.halfOpenAttempts) {
                 this.state = 'CLOSED';
                 this.failureCount = 0;
                 this.successCount = 0;
-                Logger.info('CIRCUIT_BREAKER', 'Circuit CLOSED - server recovered');
             }
         } else {
             this.failureCount = 0;
         }
     }
 
-    onFailure() {
+    _0c3() {
         this.successCount = 0;
         this.failureCount++;
 
         if (this.failureCount >= this.threshold) {
             this.state = 'OPEN';
             this.nextAttempt = Date.now() + this.timeout;
-            Logger.error('CIRCUIT_BREAKER', `Circuit OPEN after ${this.failureCount} failures`, {
-                nextAttempt: new Date(this.nextAttempt).toISOString(),
-                waitSeconds: Math.round(this.timeout / 1000)
-            });
         }
     }
 
-    getState() {
+    _0c4() {
         return {
             state: this.state,
             failureCount: this.failureCount,
@@ -69,10 +61,9 @@ class CircuitBreaker {
         };
     }
 
-    reset() {
+    _0c5() {
         this.failureCount = 0;
         this.successCount = 0;
         this.state = 'CLOSED';
-        Logger.info('CIRCUIT_BREAKER', 'Circuit manually reset');
     }
 }

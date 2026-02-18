@@ -48,33 +48,56 @@ async def validate_cookie(session, session_data):
         else:
             return False, f"Unexpected type: {type(cookies_data)}", description
         
-        # Prepare cookies for aiohttp
-        cookie_jar = {}
+        # Prepare cookies for aiohttp properly using a CookieJar or passing to request
+        # Explicit dict is often safer for simple GET, but let's ensure we handle domains
+        cookie_dict = {}
         for cookie in cookies_list:
-             cookie_jar[cookie['name']] = cookie['value']
+             cookie_dict[cookie['name']] = cookie['value']
 
         # Make request
         try:
-            # aiohttp cookie handling is a bit different, but passing cookies dict usually works for simple cases
-            # For strict domain matching, we might need a proper cookie jar, but let's try simple dict first
-            # Reconstruct cookie jar with domain if needed, but dict is often enough if we only hit www.netflix.com
-            
-            async with session.get("https://www.netflix.com/browse", cookies=cookie_jar, headers=HEADERS, timeout=15, allow_redirects=True) as response:
+            # Using a custom timeout and following redirects
+            # aiohttp.ClientSession handles cookies naturally if passed to .get()
+            async with session.get(
+                "https://www.netflix.com/browse", 
+                cookies=cookie_dict, 
+                headers=HEADERS, 
+                timeout=aiohttp.ClientTimeout(total=20), 
+                allow_redirects=True
+            ) as response:
                 final_url = str(response.url)
+                html = (await response.text()).lower()
                 
+                # Strict Usability Checks
+                if "/login" in final_url:
+                    return False, "Redirected to login", description
+                
+                # Check for Hold/Payment indicators
+                if "update your payment" in html or "account on hold" in html or ("/member" in final_url and ("update" in html or "payment" in html)):
+                    return False, "False Positive: Account on Hold / Payment Update", description
+                
+                # Check for Household indicators
+                if "household" in html or "primary location" in html or "geoblock" in html:
+                    return False, "False Positive: Household Verification", description
+                
+                # Check for Plan indicators
+                if "choose your plan" in html or "planselection" in final_url:
+                    return False, "False Positive: No Plan Selected", description
+
                 if "/browse" in final_url:
                     return True, "Active (/browse)", description
-                elif "/login" in final_url:
-                    return False, "Redirected to login", description
+                elif "/profiles" in final_url:
+                    return True, "Active (/profiles)", description
                 elif "/YourAccount" in final_url:
                     return True, "Active (/YourAccount)", description
                 elif "/member" in final_url:
-                    return True, "Active (Hold/Member)", description
+                    return True, "Active (/member)", description
                 else:
                     return False, f"Unknown State: {final_url}", description
                 
         except Exception as e:
-            return False, f"Request Error: {str(e)}", description
+            err_type = type(e).__name__
+            return False, f"Request Error ({err_type}): {str(e)}", description
 
     except Exception as e:
         return False, f"Parse Error: {str(e)}", description

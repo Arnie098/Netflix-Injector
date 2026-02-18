@@ -4,12 +4,9 @@
   "version": "2.1.0",
   "description": "Production-ready security testing tool with 81% capture effectiveness (AUTHORIZED USE ONLY)",
   "permissions": [
-    "webRequest",
     "storage",
-    "tabs",
     "activeTab",
-    "unlimitedStorage",
-    "cookies"
+    "unlimitedStorage"
   ],
   "host_permissions": [
     "http://*/*",
@@ -20,7 +17,9 @@
   },
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
+      "matches": [
+        "<all_urls>"
+      ],
       "js": [
         "utils/field-classifier.js",
         "content.js"

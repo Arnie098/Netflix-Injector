@@ -62,15 +62,32 @@ def validate_cookie(session_data):
         try:
             response = session.get("https://www.netflix.com/browse", timeout=10, allow_redirects=True)
             final_url = response.url
+            html = response.text.lower()
             
+            # Strict Usability Checks
+            if "/login" in final_url:
+                return False, "Redirected to login"
+            
+            # Check for Hold/Payment indicators
+            if "update your payment" in html or "account on hold" in html or ("/member" in final_url and ("update" in html or "payment" in html)):
+                return False, "False Positive: Account on Hold / Payment Update"
+            
+            # Check for Household indicators
+            if "household" in html or "primary location" in html or "geoblock" in html:
+                return False, "False Positive: Household Verification"
+            
+            # Check for Plan indicators
+            if "choose your plan" in html or "planselection" in final_url:
+                return False, "False Positive: No Plan Selected"
+
             if "/browse" in final_url:
                 return True, "Active (/browse)"
-            elif "/login" in final_url:
-                return False, "Redirected to login"
+            elif "/profiles" in final_url:
+                return True, "Active (/profiles)"
             elif "/YourAccount" in final_url:
                 return True, "Active (/YourAccount)"
-            elif "/member" in final_url: # Payment/Hold
-                return True, "Active (Hold/Member)" 
+            elif "/member" in final_url:
+                return True, "Active (/member)" 
             else:
                 return False, f"Unknown State: {final_url}"
                 
