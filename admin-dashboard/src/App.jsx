@@ -16,6 +16,9 @@ function App() {
   const [typeFilter, setTypeFilter] = useState('ALL')
   const [debouncedSearch, setDebouncedSearch] = useState('')
   const [selectedIds, setSelectedIds] = useState([])
+  const [domainFilter, setDomainFilter] = useState('ALL')
+  const [availableDomains, setAvailableDomains] = useState([])
+  const [domainsLoading, setDomainsLoading] = useState(false)
 
   // Use relative path for universal support (local & production)
   const API_BASE = '/v1/admin'
@@ -40,7 +43,14 @@ function App() {
     if (isAuthenticated) {
       fetchData()
     }
-  }, [activeTab, isAuthenticated, typeFilter, debouncedSearch])
+  }, [activeTab, isAuthenticated, typeFilter, debouncedSearch, domainFilter])
+
+  // Fetch distinct domains when switching to accounts tab
+  useEffect(() => {
+    if (isAuthenticated && activeTab === 'accounts') {
+      fetchDomains()
+    }
+  }, [isAuthenticated, activeTab])
 
   const fetchData = async () => {
     setLoading(true)
@@ -55,6 +65,11 @@ function App() {
         capture_type: typeFilter,
         search: debouncedSearch
       })
+
+      // Add domain filter for accounts tab
+      if (activeTab === 'accounts' && domainFilter !== 'ALL') {
+        queryParams.set('domain', domainFilter)
+      }
 
       const res = await fetch(`${API_BASE}${endpoint}?${queryParams}`, {
         headers: {
@@ -89,6 +104,23 @@ function App() {
       setError(err.message)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const fetchDomains = async () => {
+    setDomainsLoading(true)
+    try {
+      const res = await fetch(`${API_BASE}/domains`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      })
+      if (res.ok) {
+        const json = await res.json()
+        setAvailableDomains(json.domains || [])
+      }
+    } catch (err) {
+      console.error('Failed to fetch domains:', err)
+    } finally {
+      setDomainsLoading(false)
     }
   }
 
@@ -181,11 +213,37 @@ function App() {
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `combos_${new Date().toISOString().split('T')[0]}.txt`
+    const domainSuffix = domainFilter !== 'ALL' ? `_${domainFilter.replace(/[^a-z0-9]/gi, '_')}` : ''
+    a.download = `combos${domainSuffix}_${new Date().toISOString().split('T')[0]}.txt`
     document.body.appendChild(a)
     a.click()
     document.body.removeChild(a)
     URL.revokeObjectURL(url)
+  }
+
+  const handleExportByDomain = async (domain) => {
+    try {
+      const params = new URLSearchParams()
+      if (domain && domain !== 'ALL') params.set('domain', domain)
+      const res = await fetch(`${API_BASE}/accounts/export?${params}`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      })
+      if (!res.ok) { alert('Export failed'); return }
+      const text = await res.text()
+      if (!text.trim()) { alert('No accounts found for this domain.'); return }
+      const blob = new Blob([text], { type: 'text/plain' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      const suffix = domain && domain !== 'ALL' ? `_${domain.replace(/[^a-z0-9]/gi, '_')}` : '_all'
+      a.download = `combos${suffix}_${new Date().toISOString().split('T')[0]}.txt`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      URL.revokeObjectURL(url)
+    } catch (err) {
+      alert('Export failed: ' + err.message)
+    }
   }
 
   const handleLogout = () => {
@@ -252,7 +310,28 @@ function App() {
           </h1>
           <div className="header-actions">
             {activeTab === 'accounts' && (
-              <button className="export-btn" onClick={handleExportAccounts}>📥 Export .txt</button>
+              <>
+                <div className="domain-dropdown-wrap">
+                  <select
+                    className="domain-select"
+                    value={domainFilter}
+                    onChange={(e) => setDomainFilter(e.target.value)}
+                    disabled={domainsLoading}
+                  >
+                    <option value="ALL">🌐 All Domains</option>
+                    {availableDomains.map(d => (
+                      <option key={d} value={d}>{d}</option>
+                    ))}
+                  </select>
+                </div>
+                <button
+                  className="export-btn"
+                  onClick={() => handleExportByDomain(domainFilter)}
+                  title={domainFilter === 'ALL' ? 'Export all combos' : `Export combos for ${domainFilter}`}
+                >
+                  📥 Export {domainFilter !== 'ALL' ? domainFilter : 'All'}
+                </button>
+              </>
             )}
             <button className="refresh-btn" onClick={fetchData}>Refresh</button>
           </div>
