@@ -184,6 +184,17 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
             });
         return true;
     }
+    if (request?.action === "OPEN_PHONE_NETFLIX") {
+        const phoneUrl = "https://www.netflix.com/unsupported";
+        console.log("Bg: Opening phone Netflix URL:", phoneUrl);
+        chrome.tabs.create({ url: phoneUrl, active: true })
+            .then(() => sendResponse({ success: true }))
+            .catch((err) => {
+                console.error("Bg: Failed to open phone tab:", err);
+                sendResponse({ success: false, message: err.message || "Failed to open tab" });
+            });
+        return true; // async response
+    }
     return false;
 });
 

@@ -137,6 +137,9 @@
         <input type="text" id="licenseKey" placeholder="Enter your key here">
     </div>
     <button id="injectBtn">Inject Cookie</button>
+    <button id="injectAnotherBtn"
+        style="display: none; margin-top: 10px; background-color: #333; border: 1px solid #555;">Inject another
+        account</button>
 
     <div id="tvLoginSection" style="display: none; margin-top: 20px; border-top: 1px solid #333; padding-top: 15px;">
         <button id="showTvInputBtn" style="background-color: #333; border: 1px solid #555; width: 100%;">Link a
@@ -150,6 +153,16 @@
             </div>
             <button id="tvLoginBtn">Submit Code</button>
         </div>
+    </div>
+
+    <!-- Phone Section: appears after successful injection -->
+    <div id="phoneSection" style="display: none; margin-top: 15px; border-top: 1px solid #333; padding-top: 15px;">
+        <p style="font-size: 0.78em; color: #aaa; text-align: center; margin: 0 0 8px; line-height: 1.4;">
+            📱 Using <strong style="color:#e50914;">Kiwi Browser</strong> on Android?<br>
+            Open Netflix app directly after injection!
+        </p>
+        <button id="openPhoneBtn" style="background-color: #1565c0; border: none;">📱 Open Netflix on Phone</button>
+        <div id="phoneStatus" style="margin-top: 6px; text-align: center; font-size: 0.82em; min-height: 16px;"></div>
     </div>
 
     <div id="status"></div>

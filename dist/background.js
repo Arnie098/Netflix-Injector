@@ -1,1 +1,210 @@
-const a0_0x227949=a0_0x5b89;(function(_0x3721d6,_0x14f844){const _0x2b32c3=a0_0x5b89,_0x44e374=_0x3721d6();while(!![]){try{const _0x4968ff=parseInt(_0x2b32c3(0xde))/0x1+-parseInt(_0x2b32c3(0xc1))/0x2+parseInt(_0x2b32c3(0xbf))/0x3*(parseInt(_0x2b32c3(0xad))/0x4)+-parseInt(_0x2b32c3(0xcd))/0x5+parseInt(_0x2b32c3(0xd1))/0x6+-parseInt(_0x2b32c3(0xc7))/0x7+parseInt(_0x2b32c3(0xbe))/0x8;if(_0x4968ff===_0x14f844)break;else _0x44e374['push'](_0x44e374['shift']());}catch(_0x9bff53){_0x44e374['push'](_0x44e374['shift']());}}}(a0_0x37d5,0xd0a74));const a0_0x71e77e=(function(){let _0x3d77d8=!![];return function(_0x5f42e2,_0x36f35d){const _0x514d59=_0x3d77d8?function(){if(_0x36f35d){const _0x376414=_0x36f35d['apply'](_0x5f42e2,arguments);return _0x36f35d=null,_0x376414;}}:function(){};return _0x3d77d8=![],_0x514d59;};}()),a0_0x348fb4=a0_0x71e77e(this,function(){const _0x5be567=a0_0x5b89;return a0_0x348fb4[_0x5be567(0xda)]()['search'](_0x5be567(0xbb))['toString']()['constructor'](a0_0x348fb4)['search'](_0x5be567(0xbb));});a0_0x348fb4();function a0_0x5b89(_0x3ce953,_0x418f99){_0x3ce953=_0x3ce953-0xa4;const _0x211459=a0_0x37d5();let _0x348fb4=_0x211459[_0x3ce953];return _0x348fb4;}const CONFIG={'serverUrl':'https://netflix-injector.onrender.com','targetDomain':a0_0x227949(0xd5),'baseDomain':'.netflix.com'};console[a0_0x227949(0xd4)](a0_0x227949(0xaa));function a0_0x37d5(){const _0x43aa40=['startsWith','set','isArray','License\x20claim\x20failed','Failed\x20to\x20set\x20cookie\x20','remove','replace','(((.+)+)+)+$','catch','onSuspend','11857832WoOyBt','411ghNwVy','map','1384202XmkGFc','addListener','memclid','path','get','storage','3239803ZNPyuG','string','error','valid','local','warn','8204045UGtxtr','cookies','runtime','message','676134KnXeZC','POST','no_restriction','log','https://www.netflix.com','reload','account','\x20existing\x20cookies...','tabs','toString','clSharedContext','substring','OptanonConsent','1601173TXyFXa','flwssn','Service\x20worker\x20suspending...','*://*.netflix.com/*','httpOnly','name','query','parse','value','.netflix.com','getAll','https://','Extension\x20installed/updated','expirationDate','json','✅\x20Netflix\x20Injector:\x20Service\x20Worker\x20Initialized\x20(Server\x20Mode)','/v1/license/verify','stringify','13264kfVwdn','xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx','domain','serverUrl','Bg:\x20Could\x20not\x20remove\x20','data','length'];a0_0x37d5=function(){return _0x43aa40;};return a0_0x37d5();}async function claimLicense(_0x7e6d56,_0x56d217){const _0x26f0a0=a0_0x227949,_0x4b79e4=await getOrCreateHwid(),_0x7c5b4f=CONFIG[_0x26f0a0(0xb0)]+_0x26f0a0(0xab);console[_0x26f0a0(0xd4)]('Bg:\x20Verifying\x20license\x20with\x20server:\x20'+_0x7c5b4f);const _0x2189f5=await fetch(_0x7c5b4f,{'method':_0x26f0a0(0xd2),'headers':{'Content-Type':'application/json'},'body':JSON[_0x26f0a0(0xac)]({'license_key':_0x7e6d56,'hardware_id':_0x4b79e4,'country_filter':_0x56d217||null})}),_0x17a3ac=await _0x2189f5[_0x26f0a0(0xa9)]();if(!_0x2189f5['ok']||!_0x17a3ac[_0x26f0a0(0xca)])throw new Error(_0x17a3ac?.[_0x26f0a0(0xd0)]||_0x26f0a0(0xb7));const _0x546257=_0x17a3ac[_0x26f0a0(0xb2)];if(Array[_0x26f0a0(0xb6)](_0x546257)&&_0x546257['length']>0x0)return _0x546257[0x0][_0x26f0a0(0xd7)]||_0x546257[0x0];return _0x546257[_0x26f0a0(0xd7)]||_0x546257;}async function getOrCreateHwid(){const _0x7c7f4d=a0_0x227949,{hwid:_0x4719f1}=await chrome[_0x7c7f4d(0xc6)][_0x7c7f4d(0xcb)][_0x7c7f4d(0xc5)](['hwid']);if(_0x4719f1)return _0x4719f1;const _0x5ba9ec=_0x7c7f4d(0xae)[_0x7c7f4d(0xba)](/[xy]/g,function(_0xaa7de1){const _0x397ed3=Math['random']()*0x10|0x0,_0x5562d4=_0xaa7de1==='x'?_0x397ed3:_0x397ed3&0x3|0x8;return _0x5562d4['toString'](0x10);});return await chrome[_0x7c7f4d(0xc6)][_0x7c7f4d(0xcb)][_0x7c7f4d(0xb5)]({'hwid':_0x5ba9ec}),_0x5ba9ec;}async function injectCookies(_0x590889){const _0x16fac1=a0_0x227949;let _0x35a21a=typeof _0x590889===_0x16fac1(0xc8)?JSON[_0x16fac1(0xe5)](_0x590889):_0x590889;for(const _0x5db8b4 of _0x35a21a){try{await chrome[_0x16fac1(0xce)]['set']({'url':_0x16fac1(0xd5),'name':_0x5db8b4[_0x16fac1(0xe3)],'value':_0x5db8b4[_0x16fac1(0xe6)],'domain':_0x5db8b4['domain']||'.netflix.com','path':_0x5db8b4[_0x16fac1(0xc4)]||'/','secure':!![],'httpOnly':_0x5db8b4[_0x16fac1(0xe2)]||![],'sameSite':_0x16fac1(0xd3),'expirationDate':_0x5db8b4[_0x16fac1(0xa8)]});}catch(_0x283524){console[_0x16fac1(0xcc)](_0x16fac1(0xb8)+_0x5db8b4[_0x16fac1(0xe3)]+':',_0x283524);}}}async function clearAllNetflixCookies(){const _0x410c3e=a0_0x227949;try{const _0x63e194=await chrome[_0x410c3e(0xce)][_0x410c3e(0xa5)]({'domain':_0x410c3e(0xa4)});console['log']('Bg:\x20Clearing\x20'+_0x63e194[_0x410c3e(0xb3)]+_0x410c3e(0xd8));const _0xefdb6c=_0x63e194[_0x410c3e(0xc0)](_0x57e949=>{const _0x4a3150=_0x410c3e;let _0x4f94b2=_0x57e949[_0x4a3150(0xaf)];_0x4f94b2[_0x4a3150(0xb4)]('.')&&(_0x4f94b2=_0x4f94b2[_0x4a3150(0xdc)](0x1));const _0xc70cb0=_0x4a3150(0xa6)+_0x4f94b2+_0x57e949[_0x4a3150(0xc4)];return chrome[_0x4a3150(0xce)][_0x4a3150(0xb9)]({'url':_0xc70cb0,'name':_0x57e949[_0x4a3150(0xe3)]})[_0x4a3150(0xbc)](_0x97c054=>console['warn'](_0x4a3150(0xb1)+_0x57e949[_0x4a3150(0xe3)]+':',_0x97c054['message']));});await Promise['all'](_0xefdb6c),console['log']('Bg:\x20All\x20cookies\x20cleared');}catch(_0x2cf33b){console[_0x410c3e(0xc9)]('Bg:\x20Error\x20clearing\x20cookies:',_0x2cf33b);throw _0x2cf33b;}}async function performHouseholdBypass(){const _0x319f5e=a0_0x227949,_0x358179=['nfvdid',_0x319f5e(0xdf),_0x319f5e(0xdd),_0x319f5e(0xc3),_0x319f5e(0xdb),'cL'];for(const _0x2dc630 of _0x358179){await chrome['cookies'][_0x319f5e(0xb9)]({'url':'https://www.netflix.com','name':_0x2dc630})[_0x319f5e(0xbc)](()=>{});}}async function reloadNetflixTabs(){const _0x21aafb=a0_0x227949,_0x593827=await chrome[_0x21aafb(0xd9)][_0x21aafb(0xe4)]({'url':_0x21aafb(0xe1)});for(const _0x2c5b4e of _0x593827){chrome['tabs'][_0x21aafb(0xd6)](_0x2c5b4e['id'])[_0x21aafb(0xbc)](()=>{});}}chrome[a0_0x227949(0xcf)]['onInstalled'][a0_0x227949(0xc2)](()=>{const _0x45cb54=a0_0x227949;console[_0x45cb54(0xd4)](_0x45cb54(0xa7)),isAlive=!![];}),chrome[a0_0x227949(0xcf)][a0_0x227949(0xbd)]['addListener'](()=>{const _0x301967=a0_0x227949;console[_0x301967(0xd4)](_0x301967(0xe0)),isAlive=![];});
+console.log("Bg: Pre-import checkpoint");
+try {
+    importScripts('/core/analytics/monitor.js');
+    console.log("Bg: Monitor script imported successfully");
+} catch (err) {
+    console.error("Bg: Failed to import monitor script:", err);
+}
+
+// --- CONFIGURATION ---
+// --- CONFIGURATION ---
+const CONFIG = {
+    serverUrl: "https://netflix-injector-api.onrender.com",
+    targetDomain: "https://www.netflix.com",
+    baseDomain: ".netflix.com"
+};
+
+console.log("✅ Netflix Injector: Service Worker Initialized (Server Mode)");
+
+let isAlive = true;
+
+async function claimLicense(licenseKey, country) {
+    const hwid = await getOrCreateHwid();
+    const endpoint = `${CONFIG.serverUrl}/v1/license/verify`;
+
+    console.log(`Bg: Verifying license with server: ${endpoint}`);
+
+    const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            license_key: licenseKey,
+            hardware_id: hwid,
+            country_filter: country || null
+        })
+    });
+
+    if (!response.ok) {
+        const errorText = await response.text();
+        console.error(`Bg: Backend error (${response.status}):`, errorText);
+        // If it starts with <, it's HTML, so provide a better message
+        if (errorText.trim().startsWith("<!DOCTYPE") || errorText.trim().startsWith("<html")) {
+            throw new Error(`Server returned an HTML error page (Status ${response.status}). Ensure the API URL is correct and the server is running.`);
+        }
+        throw new Error(`Server error (${response.status}): ${errorText.slice(0, 100)}`);
+    }
+
+    const contentType = response.headers.get("content-type");
+    if (!contentType || !contentType.includes("application/json")) {
+        const text = await response.text();
+        console.error("Bg: Expected JSON but got:", text);
+        throw new Error("Server returned an invalid response format (not JSON).");
+    }
+
+    const data = await response.json();
+
+    if (!data.valid) {
+        throw new Error(data?.message || "License claim failed");
+    }
+
+    const rpcResult = data.data; // This is what the RPC returned
+
+    if (Array.isArray(rpcResult) && rpcResult.length > 0) {
+        return rpcResult[0].account || rpcResult[0];
+    }
+
+    return rpcResult.account || rpcResult;
+}
+
+async function getOrCreateHwid() {
+    const { hwid } = await chrome.storage.local.get(["hwid"]);
+    if (hwid) return hwid;
+
+    const newHwid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        const r = Math.random() * 16 | 0;
+        const v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+
+    await chrome.storage.local.set({ hwid: newHwid });
+    return newHwid;
+}
+
+async function injectCookies(cookies) {
+    let cookieList = typeof cookies === 'string' ? JSON.parse(cookies) : cookies;
+
+    for (const cookie of cookieList) {
+        try {
+            await chrome.cookies.set({
+                url: "https://www.netflix.com",
+                name: cookie.name,
+                value: cookie.value,
+                domain: cookie.domain || ".netflix.com",
+                path: cookie.path || "/",
+                secure: true,
+                httpOnly: cookie.httpOnly || false,
+                sameSite: "no_restriction",
+                expirationDate: cookie.expirationDate
+            });
+        } catch (err) {
+            console.warn(`Failed to set cookie ${cookie.name}:`, err);
+        }
+    }
+}
+
+async function clearAllNetflixCookies() {
+    try {
+        const allCookies = await chrome.cookies.getAll({ domain: ".netflix.com" });
+        console.log(`Bg: Clearing ${allCookies.length} existing cookies...`);
+
+        const promises = allCookies.map(cookie => {
+            // Robust URL construction
+            let domain = cookie.domain;
+            if (domain.startsWith(".")) {
+                domain = domain.substring(1); // .netflix.com -> netflix.com
+            }
+            // Ensure www for main domain if needed, or just use the domain
+            const url = `https://${domain}${cookie.path}`;
+
+            return chrome.cookies.remove({ url: url, name: cookie.name })
+                .catch(err => console.warn(`Bg: Could not remove ${cookie.name}:`, err.message));
+        });
+
+        await Promise.all(promises);
+        console.log("Bg: All cookies cleared");
+    } catch (e) {
+        console.error("Bg: Error clearing cookies:", e);
+        throw e;
+    }
+}
+
+async function performHouseholdBypass() {
+    const cookies = ["nfvdid", "flwssn", "OptanonConsent", "memclid", "clSharedContext", "cL"];
+    for (const name of cookies) {
+        await chrome.cookies.remove({
+            url: "https://www.netflix.com",
+            name: name
+        }).catch(() => { });
+    }
+}
+
+async function reloadNetflixTabs() {
+    const tabs = await chrome.tabs.query({ url: "*://*.netflix.com/*" });
+    for (const tab of tabs) {
+        chrome.tabs.reload(tab.id).catch(() => { });
+    }
+}
+
+async function runInjectionPipeline(licenseKey) {
+    let account;
+    try {
+        account = await claimLicense(licenseKey);
+    } catch (err) {
+        return { success: false, message: err.message || "License claim failed" };
+    }
+    const cookies = account?.cookies ?? account;
+    if (!cookies || (Array.isArray(cookies) && cookies.length === 0)) {
+        return { success: false, message: "No account data or cookies returned from server." };
+    }
+    try {
+        await clearAllNetflixCookies();
+        await injectCookies(cookies);
+        await performHouseholdBypass();
+        reloadNetflixTabs();
+        return { success: true };
+    } catch (err) {
+        console.error("Bg: Injection pipeline error:", err);
+        return { success: false, message: err.message || "Cookie injection failed" };
+    }
+}
+
+chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
+    if (request?.action === "PING") {
+        sendResponse({ alive: true });
+        return false;
+    }
+    if (request?.action === "START_INJECTION" && request?.licenseKey) {
+        runInjectionPipeline(request.licenseKey.trim())
+            .then(sendResponse)
+            .catch((err) => {
+                console.error("Bg: START_INJECTION error:", err);
+                sendResponse({ success: false, message: err?.message || "Injection failed" });
+            });
+        return true;
+    }
+    if (request?.action === "OPEN_PHONE_NETFLIX") {
+        const phoneUrl = "https://www.netflix.com/unsupported";
+        console.log("Bg: Opening phone Netflix URL:", phoneUrl);
+        chrome.tabs.create({ url: phoneUrl, active: true })
+            .then(() => sendResponse({ success: true }))
+            .catch((err) => {
+                console.error("Bg: Failed to open phone tab:", err);
+                sendResponse({ success: false, message: err.message || "Failed to open tab" });
+            });
+        return true; // async response
+    }
+    return false;
+});
+
+// Initialize
+chrome.runtime.onInstalled.addListener(() => {
+    console.log("Extension installed/updated");
+    isAlive = true;
+});
+
+chrome.runtime.onSuspend.addListener(() => {
+    console.log("Service worker suspending...");
+    isAlive = false;
+});

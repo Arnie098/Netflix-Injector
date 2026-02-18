@@ -4,7 +4,7 @@ import string
 import json
 
 SUPABASE_URL = "https://arslamcjzixeqmalscye.supabase.co"
-SUPABASE_KEY = "sb_publishable_VDYPdce8BVPg_J9kzFgKpA_dYAfDcP4"
+SUPABASE_KEY = "sb_publishable_VDYPdce8BVPg_J9kzFgKpA_dYAfPcP4"
 
 def generate_key(prefix="PHC"):
     # Generate a random string of 16 characters (4 blocks of 4)
