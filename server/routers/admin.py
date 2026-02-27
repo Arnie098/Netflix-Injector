@@ -314,15 +314,34 @@ async def update_credential(cred_id: int, updates: dict, token: str = Depends(ve
 
 @router.get("/domains")
 async def list_domains(token: str = Depends(verify_token)):
-    """Return a sorted list of distinct domains present in extracted_credentials."""
+    """Return a sorted list of distinct domains present in the database."""
     try:
-        response = supabase_audit.table("extracted_credentials").select("domain").execute()
-        if not response.data:
-            return {"domains": []}
-        domains = sorted(set(row["domain"] for row in response.data if row.get("domain")))
-        return {"domains": domains}
+        page_size = 1000
+        start = 0
+        domains_set = set()
+        
+        while True:
+            end = start + page_size - 1
+            # We use audit_captures primarily, as every credential stems from a capture.
+            # And it prevents hitting larger row size limits in extracted_credentials.
+            response = supabase_audit.table("audit_captures").select("domain").range(start, end).execute()
+            
+            if not response.data:
+                break
+                
+            for row in response.data:
+                if row.get("domain"):
+                    domains_set.add(row["domain"])
+            
+            if len(response.data) < page_size:
+                break
+                
+            start += page_size
+            
+        return {"domains": sorted(list(domains_set))}
     except Exception as e:
         logger.error(f"ADMIN_GET_DOMAINS_ERROR: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
         raise HTTPException(status_code=500, detail=str(e))
 
 
