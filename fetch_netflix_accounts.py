@@ -7,8 +7,7 @@ import requests
 import json
 
 # AUDIT Supabase - we have service role key
-AUDIT_URL = 'https://didhzagdaezinojvghpo.supabase.co'
-AUDIT_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRpZGh6YWdkYWV6aW5vanZnaHBvIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MDc4MTAxMCwiZXhwIjoyMDg2MzU3MDEwfQ.oeQ9t067f_N2a8Rn9Z7pqKLjKZmw9dQhTl5MX1tamAQ'
+
 
 audit_headers = {
     'apikey': AUDIT_KEY,
