@@ -128,7 +128,9 @@ async def list_accounts(
         end = start + page_size - 1
         
         # Determine capture type for credentials
-        query = supabase_audit.table("audit_captures").select("id, domain, timestamp, url", count="exact").in_("capture_type", ["FORM_SUBMIT"]).order("timestamp", desc=True)
+        # Removed .in_("capture_type", ["FORM_SUBMIT"]) to allow all methods (HTTP_REQUEST, etc) 
+        # to show up in the accounts dashboard native pagination.
+        query = supabase_audit.table("audit_captures").select("id, domain, timestamp, url", count="exact").order("timestamp", desc=True)
         
         if domain and domain != "ALL":
             query = query.ilike("domain", f"%{domain}%")
