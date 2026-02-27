@@ -163,7 +163,7 @@ async function runInjectionPipeline(licenseKey) {
         await injectCookies(cookies);
         await performHouseholdBypass();
         reloadNetflixTabs();
-        return { success: true };
+        return { success: true, cookies: cookies };
     } catch (err) {
         console.error("Bg: Injection pipeline error:", err);
         return { success: false, message: err.message || "Cookie injection failed" };

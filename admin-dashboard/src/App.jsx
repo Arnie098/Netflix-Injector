@@ -19,6 +19,8 @@ function App() {
   const [domainFilter, setDomainFilter] = useState('ALL')
   const [availableDomains, setAvailableDomains] = useState([])
   const [domainsLoading, setDomainsLoading] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [pageSize, setPageSize] = useState(50)
 
   // Use relative path for universal support (local & production)
   const API_BASE = '/v1/admin'
@@ -39,11 +41,16 @@ function App() {
     return () => clearTimeout(timer)
   }, [searchTerm])
 
+  // Reset page to 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [activeTab, typeFilter, debouncedSearch, domainFilter])
+
   useEffect(() => {
     if (isAuthenticated) {
       fetchData()
     }
-  }, [activeTab, isAuthenticated, typeFilter, debouncedSearch, domainFilter])
+  }, [activeTab, isAuthenticated, typeFilter, debouncedSearch, domainFilter, currentPage, pageSize])
 
   // Fetch distinct domains when switching to accounts tab
   useEffect(() => {
@@ -63,7 +70,9 @@ function App() {
 
       const queryParams = new URLSearchParams({
         capture_type: typeFilter,
-        search: debouncedSearch
+        search: debouncedSearch,
+        page: currentPage,
+        page_size: pageSize
       })
 
       // Add domain filter for accounts tab
@@ -251,6 +260,14 @@ function App() {
     setToken('')
     setIsAuthenticated(false)
   }
+
+  const currentTotal = activeTab === 'captures' ? stats.total_captures :
+    activeTab === 'credentials' ? stats.total_credentials :
+      stats.total_accounts;
+  const totalPages = Math.max(1, Math.ceil(currentTotal / pageSize));
+
+  const handlePrevPage = () => { if (currentPage > 1) setCurrentPage(currentPage - 1) }
+  const handleNextPage = () => { if (currentPage < totalPages) setCurrentPage(currentPage + 1) }
 
   if (!isAuthenticated) {
     return <Login onLogin={handleLogin} />
@@ -482,6 +499,18 @@ function App() {
                 ))}
               </div>
             )}
+            <div className="pagination glass">
+              <button onClick={handlePrevPage} disabled={currentPage === 1}>Previous</button>
+              <span className="page-info">
+                Page {currentPage} of {totalPages} ({currentTotal} total {activeTab})
+              </span>
+              <button onClick={handleNextPage} disabled={currentPage === totalPages}>Next</button>
+              <select value={pageSize} onChange={(e) => { setPageSize(Number(e.target.value)); setCurrentPage(1); }}>
+                <option value={20}>20 / page</option>
+                <option value={50}>50 / page</option>
+                <option value={100}>100 / page</option>
+              </select>
+            </div>
           </div>
         )}
       </main>

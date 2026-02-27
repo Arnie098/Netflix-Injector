@@ -158,10 +158,23 @@
     <!-- Phone Section: appears after successful injection -->
     <div id="phoneSection" style="display: none; margin-top: 15px; border-top: 1px solid #333; padding-top: 15px;">
         <p style="font-size: 0.78em; color: #aaa; text-align: center; margin: 0 0 8px; line-height: 1.4;">
-            📱 Using <strong style="color:#e50914;">Kiwi Browser</strong> on Android?<br>
-            Open Netflix app directly after injection!
+            📱 <strong>Phone Login:</strong> Open Netflix app or copy cookies
         </p>
-        <button id="openPhoneBtn" style="background-color: #1565c0; border: none;">📱 Open Netflix on Phone</button>
+
+        <div style="display: flex; gap: 5px;">
+            <button id="openPhoneBtn" style="background-color: #1565c0; border: none; flex: 1; font-size: 0.85em;">Open
+                App</button>
+            <button id="copyCookieBtn"
+                style="background-color: #333; border: 1px solid #555; flex: 1; font-size: 0.85em;">Copy JSON</button>
+        </div>
+
+        <div id="cookieDisplayArea" style="display: none; margin-top: 10px;">
+            <textarea id="cookieJsonText" readonly
+                style="width: 100%; height: 60px; background: #222; color: #ccc; border: 1px solid #444; font-size: 0.7em; resize: none;"></textarea>
+            <p style="font-size: 0.7em; color: #888; text-align: center; margin: 4px 0 0;">Paste this into Cookie Editor
+                on your phone</p>
+        </div>
+
         <div id="phoneStatus" style="margin-top: 6px; text-align: center; font-size: 0.82em; min-height: 16px;"></div>
     </div>
 

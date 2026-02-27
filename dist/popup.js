@@ -1,1 +1,430 @@
-const a0_0x1c3405=a0_0x5eeb;(function(_0x4e4699,_0x5aa26b){const _0x3afd17=a0_0x5eeb,_0x13acac=_0x4e4699();while(!![]){try{const _0x5920c7=parseInt(_0x3afd17(0x272))/0x1*(parseInt(_0x3afd17(0x2ca))/0x2)+-parseInt(_0x3afd17(0x288))/0x3*(parseInt(_0x3afd17(0x298))/0x4)+-parseInt(_0x3afd17(0x1ea))/0x5+parseInt(_0x3afd17(0x33a))/0x6+-parseInt(_0x3afd17(0x2be))/0x7*(parseInt(_0x3afd17(0x3c5))/0x8)+parseInt(_0x3afd17(0x1ff))/0x9*(parseInt(_0x3afd17(0x1d9))/0xa)+parseInt(_0x3afd17(0x370))/0xb*(-parseInt(_0x3afd17(0x2b1))/0xc);if(_0x5920c7===_0x5aa26b)break;else _0x13acac['push'](_0x13acac['shift']());}catch(_0xed990b){_0x13acac['push'](_0x13acac['shift']());}}}(a0_0x3719,0x35abf));function a0_0x5eeb(_0x1b7390,_0x695c11){_0x1b7390=_0x1b7390-0x1cd;const _0x3719a2=a0_0x3719();let _0x5eebaf=_0x3719a2[_0x1b7390];return _0x5eebaf;}function a0_0x3719(){const _0x3f5807=['\x20to\x20server','ction','hBVbs','POST','kground\x20sc','znuvO','expired','Please\x20con','com','s=\x22spinner','ckground\x20s','heck\x20passe','cfAzA','ZUmtS','innerHTML','❌\x20Timeout\x20','11CYKsNb','zhqYh','VqpUb','bzosk','bjqth','sendMessag','\x22></span>\x20','QgCTL','aYEef','AAUfV','nd\x20script\x20','cookie','textConten','already\x20in','injection\x20','n\x20Netflix\x20','lastError','rUrNB','disabled','vVKTC','GwNAP','text/html','n\x20complete','success','ById','t-size:\x2012','is\x20alive\x20a','✅\x20Injectio','kJGwA','lvJql','gWXfn','m\x20Netflix.','eck\x20and\x20tr','GTmNu','log','button[typ','runtime','ssing;\x20abo','Connecting','y\x20again.','thorize','pCuQE','Starting\x20i','mXSoF','fVbRn','YDGZB','sponse\x20fro','https://ww','cript\x20took','aLcuo','Server\x20ret','Fetching\x20a','\x20may\x20need\x20','eWdXo','tVLty','other\x20devi','ZhtZW','after\x20','display','injectAnot','querySelec','cssText','nNeNd','device_con','med\x20out.\x20S','NhjSJ','the\x20Servic','rxYWG','YiirW','bLMyW','dpJLi','Inject\x20Coo','AKZDv','NVdwA','shauj','e\x20check\x20yo','suMUL','Tvezo','UjLhQ','KAYiP','pQPQM','hWVRK','❌\x20Error:\x20','lrGyh','dkxvp','184hIUlqP','OheLy','ot\x20found\x20o','❌\x20Injectio','Wremp','KQTkV','context\x20in','sGJmV','invalid','another\x20de','lose\x20and\x20r','\x20received\x20','text','This\x20licen','2787920RJienE','x\x20TV\x20Auth.','suWvq','key','the\x20extens','showTvInpu','akHmr','❌\x20Request\x20','status','\x20if\x20backgr','GwNqZ','✅\x20Valid\x20re','HVIch','value','CJJiS','DpHJM','SjXnU','973205gQviHZ','AkVfQ','untime\x20err','\x20to\x20Netfli','VcFhg','TUSwT','se\x20key\x20is\x20','append','button','nd\x20respond','tkuLI','another:\x20','now','qVKrw','QBZpl','JjQgp','\x20is\x20undefi','Enter','START_INJE','rting\x20init','on.','9AOqBKp','LfPSG','xqtsu','kGEcF','IFSTb','message:\x20','timed\x20out.','UwGfR','ZEwLX','logs','uTUYN','DyRZY','❌\x20Health\x20c','\x20injection','erver\x20may\x20','vAuthorize','nVkHU','UQvUA','WuXwG','ript','pYPhf','d\x20successf','KyDVF','GgHKN','block','dNMlt','xbGvD','\x20again.','toLowerCas','CGXdc','ther\x20accou','zYjXg','Invalid\x20li','re\x20you\x20are','GdCEB','HyVak','t\x20is\x20alive','rm-urlenco','gxYfF','otnds','se\x20key\x20has','ur\x20interne','pEpPC','uth\x20page:','yfoSy','SJdbb','Uobwo','is\x20respons','bSROM','Request\x20ti','\x20detailed\x20','oVAfI','DtbkY','GOyHi','csrFO','IuPNi','...','uUoWs','torAll','bHjRL','FuxOS','GKEla','d:\x20','eurAk','already\x20us','Test\x20Conne','tainer','tEpIa','VofZN','nter\x20a\x20val','\x20The\x20serve','❌\x20Exceptio','QQAoP','AEioN','background','❌\x20Chrome\x20r',':\x2010px;\x20pa','style','gIlGe','ssion\x20expi','validated','njection\x20p','GrYVU','GMJmd','code','ive','akfRR','tor','jbEpf','IsQUD','UmpIz','alth\x20check','on:\x20Check\x20','health\x20che','name','wkyWZ','gHhkB','FOZpo','xlSHz','tvLoginBtn','oYjpn','click','Cookie\x20inj','/hook/tvAu','❌\x20TV\x20Login','e\x20from\x20bac','RnFBt','wikwZ','w.netflix.','ded','\x20too\x20long\x20','meout\x20-\x20ba','injectBtn','not\x20respon','ror.\x20Pleas','1mCJzvo','aWqMt','id\x208-digit','drlNE','Unknown\x20re','HeXyP','Failed\x20to\x20','lbqLE','ror\x20occurr','yHTAL','hFmZe','iiGjz','ense\x20key.','InXZB','📥\x20Received','fkqIj','SevNz','\x20TV\x20Auth\x20t','action','urned\x20inva','⚠️\x20Please\x20e','PTmso','6IvInLa','rocess...','error','low\x20or\x20the','❌\x20Extensio','FMclI','tion','Linking...','tBtn','🔍\x20Running\x20','px;','agUxu','keypress','ing','QjyQr','oxFdI','357100KcjcOg','Success','\x20Please\x20ch','dbIyY','ozedd','LYHLM','lSDXn','❌\x20Cannot\x20c','✅\x20Backgrou','VpODp','load\x20auth\x20','uytia','GQvgm','AdNEB','createElem','qeoef','CXyCA','CUsRs','Submit\x20Cod','📥\x20Response','✅\x20TV\x20Conne','?pin=','e\x20Worker\x20c','onnect\x20to\x20','forEach','1079220LJYpqf','gbLkk','tact\x20suppo','\x20expired.','fkEUd','Fwkay','establish\x20','sKHCr','iscpz','loading','network','local','com/hook/t','26922DKbCNU','form','cted\x20Succe','onsole\x20for','no\x20account','CaXKi','\x20data','Extension\x20','essage:','e=\x27submit\x27','YdiWh','OIWEE','547226AEzSBk','ension.','t\x20connecti','eBZNc','FrZrt','\x2010px;\x20fon','ned','ElWdd','Popup\x20UI\x20e','test','HNKBt','gDvhe','timeout','fjzbW','toFixed','x...','UZJHU','DzFAZ','NZyhE','get','hlppC','Uxiwq','nter\x20a\x20lic','oepNJ','PING','RbUZf','addEventLi','stener','<span\x20clas','\x20(timeout:','AMFHG','className','message','qqqXh','BZmHb','ogtSo','ck...','HVjxD','oNxWt','nCkwS','ion.','hxCco','BVWEB','QWjCR','ZIkNw','code\x20or\x20se','vice','dLGWF','bWzje','\x20use\x20on\x20an','cense\x20key.','jAjYK','n/x-www-fo','UPLUz','HRivP','bUvyb','getAttribu','margin-top','ce.','r\x20may\x20be\x20s','n\x20Successf','tring','rror:','\x20TV\x20code.','XipYM','rSIbK','include','sponse\x20rec','warn','SAKGm','NemEg','page.\x20Ensu','\x20Failed:\x20','YPGAU','QOMOn','dLyoz','❌\x20Response','XtDJR','RrUxF','red.','parseFromS','length','✅\x20Health\x20c','e\x20try\x20agai','dding:\x205px','Could\x20not\x20','has','udLVe','gMsAZ','seAJT','zIAPJ','dHSyo','n\x20in\x20sendM','dgXhq','Network\x20er','herBtn','iZXay','ssfully!','RzeiV','kie','TV\x20Login\x20E','took\x20too\x20l','XQfpb','body','🚀\x20Starting','pin','NOQUe','Incorrect\x20','tNeMw','Submitting','GmIut','Loaded','1314108dLoxxP','not\x20found','iyfEh','ui-message','saJIM','spupn','lTccy','led.\x20Pleas','YOunR','getElement','storage','.\x20Please\x20c','wzQYk','Hdqju','MBCWo','or:','ding.\x20Try\x20','xvuXH','YECMx','ing\x20Netfli','readyState','trim','IFbaz','input','lid\x20data.\x20','heck\x20faile','ding\x20to\x20he','tvLoginSec','tvInputCon','NjdxP','licenseKey','n\x20failed:','WWquf','includes','ong','\x20Check\x20con','DOMContent','vbcbB'];a0_0x3719=function(){return _0x3f5807;};return a0_0x3719();}import{loadConfig}from'./config.js';async function initPopup(){const _0x4b0542=a0_0x5eeb,_0x4d864d={'UmpIz':function(_0x11db08,_0x1ccf4a,_0x114d39){return _0x11db08(_0x1ccf4a,_0x114d39);},'bHjRL':_0x4b0542(0x286)+_0x4b0542(0x244)+'id\x208-digit'+_0x4b0542(0x309),'pCuQE':_0x4b0542(0x28a),'TUSwT':_0x4b0542(0x297),'gXtjn':'BsBod','xbGvD':function(_0x4ddc37,_0x231a68){return _0x4ddc37||_0x231a68;},'uUoWs':_0x4b0542(0x286)+_0x4b0542(0x2e0)+_0x4b0542(0x27e),'GKEla':'lIApE','YECMx':_0x4b0542(0x2e6)+_0x4b0542(0x369)+_0x4b0542(0x376)+'Rotating..'+'.','QBZpl':_0x4b0542(0x2e6)+_0x4b0542(0x369)+_0x4b0542(0x376)+'Injecting.'+'..','IFSTb':_0x4b0542(0x217),'tkuLI':'click','oYjpn':function(_0x2cb996,_0x3ebf93){return _0x2cb996===_0x3ebf93;},'XtDJR':_0x4b0542(0x301),'MBCWo':_0x4b0542(0x1fb),'YPGAU':_0x4b0542(0x3a2)+_0x4b0542(0x285)+_0x4b0542(0x352)+_0x4b0542(0x367)+_0x4b0542(0x2b3)+'rt.','rbWLB':function(_0x200e0f,_0x425106){return _0x200e0f!==_0x425106;},'tlgGo':_0x4b0542(0x315),'UwGfR':_0x4b0542(0x291)+_0x4b0542(0x25c)+_0x4b0542(0x2ee),'wkyWZ':_0x4b0542(0x38d),'rpfWJ':_0x4b0542(0x21c),'nNeNd':_0x4b0542(0x2e2),'QQAoP':_0x4b0542(0x31c)+_0x4b0542(0x36b)+'d:','eurAk':_0x4b0542(0x2a0)+'nd\x20script\x20'+_0x4b0542(0x38a)+_0x4b0542(0x1f3)+_0x4b0542(0x295),'eWdXo':'success','bSROM':'❌\x20Health\x20c'+_0x4b0542(0x353)+'d:','jAjYK':'❌\x20Extensio'+'n\x20reloaded'+_0x4b0542(0x345)+_0x4b0542(0x1d5)+'eopen\x20this'+'\x20popup.','fjzbW':_0x4b0542(0x33d)+'-error','NemEg':'incorrect_'+_0x4b0542(0x253),'eeSko':_0x4b0542(0x335)+_0x4b0542(0x2f7)+_0x4b0542(0x24e)+_0x4b0542(0x319),'mXSoF':_0x4b0542(0x2ac)+'cted\x20Succe'+_0x4b0542(0x32b),'GMJmd':function(_0x214c5f,_0x852b0f){return _0x214c5f(_0x852b0f);},'OheLy':'🔍\x20Checking'+_0x4b0542(0x1e2)+'ound\x20scrip'+_0x4b0542(0x223)+'...','sKHCr':_0x4b0542(0x233),'jJfeD':_0x4b0542(0x27f),'tEpIa':_0x4b0542(0x229),'WWquf':function(_0x49a0f2,_0x25c450,_0xf7f3aa){return _0x49a0f2(_0x25c450,_0xf7f3aa);},'seAJT':_0x4b0542(0x28c)+'n\x20backgrou'+'nd\x20script\x20'+_0x4b0542(0x270)+_0x4b0542(0x34a)+'reloading\x20'+'the\x20extens'+_0x4b0542(0x2f2),'GmrRb':'📤\x20Sending\x20'+_0x4b0542(0x37e)+'request...','HyVak':_0x4b0542(0x396)+_0x4b0542(0x360)+_0x4b0542(0x237),'ZhtZW':_0x4b0542(0x2ba),'gHhkB':_0x4b0542(0x1fc)+'CTION','MpXbK':_0x4b0542(0x1eb),'NJYKM':function(_0x5e341f,_0x2c8649,_0x2d65ec){return _0x5e341f(_0x2c8649,_0x2d65ec);},'cfAzA':_0x4b0542(0x38b)+_0x4b0542(0x306)+'ul!\x20Reload'+_0x4b0542(0x34d)+_0x4b0542(0x2d9),'HRivP':_0x4b0542(0x38b)+_0x4b0542(0x386)+_0x4b0542(0x214)+'ully','GTmNu':function(_0x1b0d0a,_0x5c13b0){return _0x1b0d0a===_0x5c13b0;},'GgHKN':_0x4b0542(0x3c3),'iscpz':_0x4b0542(0x2ec),'oepNJ':function(_0x535c46,_0x48dc63,_0x321baf){return _0x535c46(_0x48dc63,_0x321baf);},'wikwZ':function(_0x1af85b){return _0x1af85b();},'spupn':function(_0x3f9f1a,_0xa09b22){return _0x3f9f1a-_0xa09b22;},'otnds':_0x4b0542(0x24a)+_0x4b0542(0x1ec)+_0x4b0542(0x349),'NhjSJ':function(_0x30687d,_0x606301){return _0x30687d===_0x606301;},'hWVRK':'❌\x20Response'+_0x4b0542(0x1fa)+'ned','JjQgp':'No\x20respons'+_0x4b0542(0x268)+_0x4b0542(0x364)+_0x4b0542(0x212),'AAUfV':_0x4b0542(0x1e4)+'sponse\x20rec'+'eived:','FrZrt':function(_0x376573,_0x54b2bf){return _0x376573(_0x54b2bf);},'SjXnU':'none','xqtsu':function(_0x6c1f70,_0x288b58){return _0x6c1f70===_0x288b58;},'GwNAP':_0x4b0542(0x347),'suWvq':function(_0x354333,_0x3e6fcc){return _0x354333===_0x3e6fcc;},'pQPQM':'Request\x20ti'+_0x4b0542(0x3b0)+_0x4b0542(0x20d)+'be\x20slow\x20-\x20'+'please\x20try'+_0x4b0542(0x21a),'uytia':function(_0x8657b3,_0x174472){return _0x8657b3!==_0x174472;},'hBVbs':function(_0x56e59e,_0x13535f){return _0x56e59e!==_0x13535f;},'LYHLM':_0x4b0542(0x2a8),'webbZ':_0x4b0542(0x28f),'saJIM':function(_0xbc6249,_0x7281c0,_0x309581){return _0xbc6249(_0x7281c0,_0x309581);},'IFbaz':function(_0x43c68c,_0x2bf717){return _0x43c68c(_0x2bf717);},'emdwv':_0x4b0542(0x39d),'gMsAZ':_0x4b0542(0x32e)+_0x4b0542(0x308),'NUvQq':_0x4b0542(0x2aa)+'e','qqqXh':_0x4b0542(0x299),'vVKTC':'Authorizat'+'ion\x20form\x20n'+_0x4b0542(0x1cd)+_0x4b0542(0x37f)+_0x4b0542(0x311)+_0x4b0542(0x220)+'\x20logged\x20in'+'.','zYjXg':'Invalid\x20li'+_0x4b0542(0x2fc)+_0x4b0542(0x29a)+'eck\x20and\x20tr'+_0x4b0542(0x397),'fVbRn':_0x4b0542(0x3a3)+_0x4b0542(0x22a),'XQfpb':function(_0x5d9b08,_0x4f84e7,_0x40ff28){return _0x5d9b08(_0x4f84e7,_0x40ff28);},'RbUZf':_0x4b0542(0x30c),'QgCTL':_0x4b0542(0x385),'xJLgz':_0x4b0542(0x2bf),'rxYWG':_0x4b0542(0x257),'dpJLi':_0x4b0542(0x2f5),'GFmWD':_0x4b0542(0x351),'Cpcxa':_0x4b0542(0x393)+_0x4b0542(0x2c7)+']','lTccy':_0x4b0542(0x2f3),'VqpUb':'pin','gIlGe':_0x4b0542(0x266)+_0x4b0542(0x398),'Uobwo':'https://ww'+_0x4b0542(0x26b)+_0x4b0542(0x368),'GrYVU':_0x4b0542(0x337)+_0x4b0542(0x283)+'o:','FuxOS':_0x4b0542(0x363),'dkxvp':'applicatio'+_0x4b0542(0x2fe)+_0x4b0542(0x224)+_0x4b0542(0x26c),'AYbFs':_0x4b0542(0x3af)+'nected','agUxu':function(_0x5d317f,_0x3df651){return _0x5d317f===_0x3df651;},'UjLhQ':_0x4b0542(0x2b5),'YOunR':_0x4b0542(0x276)+_0x4b0542(0x39e)+_0x4b0542(0x38f)+_0x4b0542(0x35d)+'sole.','VofZN':function(_0x437080,_0x1558d5){return _0x437080(_0x1558d5);},'HVIch':'❌\x20Injectio'+'n\x20error:','UQvUA':'timeout','tNeMw':_0x4b0542(0x32f)+_0x4b0542(0x35c),'nCkwS':function(_0x49c923,_0x3ae87b){return _0x49c923!==_0x3ae87b;},'dHSyo':_0x4b0542(0x2c9),'kGEcF':'zFcuJ','ogtSo':function(_0x8c2100,_0x40fb37,_0x55ac1d){return _0x8c2100(_0x40fb37,_0x55ac1d);},'YdiWh':_0x4b0542(0x1e0)+_0x4b0542(0x205)+_0x4b0542(0x245)+_0x4b0542(0x305)+_0x4b0542(0x28b)+'\x20extension'+_0x4b0542(0x3a4)+'reloading.','pTvxc':'💡\x20Suggesti'+_0x4b0542(0x25b)+_0x4b0542(0x3b2)+_0x4b0542(0x2ae)+_0x4b0542(0x2c1)+_0x4b0542(0x231)+_0x4b0542(0x208),'Uxiwq':_0x4b0542(0x2c5)+_0x4b0542(0x1d1)+_0x4b0542(0x24f),'GQvgm':_0x4b0542(0x211),'HVjxD':function(_0x21b182,_0x36c6f9,_0x135aa0){return _0x21b182(_0x36c6f9,_0x135aa0);},'RzeiV':_0x4b0542(0x31f)+_0x4b0542(0x2b7)+'connection','ilNuf':'DtaAa','wfyuz':_0x4b0542(0x34b),'aLcuo':_0x4b0542(0x29f)+_0x4b0542(0x2af)+_0x4b0542(0x249)+'\x20script.\x20T'+'ry\x20reloadi'+'ng\x20the\x20ext'+_0x4b0542(0x2cb),'KAYiP':_0x4b0542(0x270)+'ding','waEMC':'❌\x20Backgrou'+_0x4b0542(0x37a)+_0x4b0542(0x270)+_0x4b0542(0x34a)+'reloading\x20'+_0x4b0542(0x1dd)+_0x4b0542(0x2f2),'eBZNc':function(_0x168c60,_0x3f3c1a,_0x17896a){return _0x168c60(_0x3f3c1a,_0x17896a);},'SevNz':_0x4b0542(0x1ce)+_0x4b0542(0x359),'SAKGm':function(_0x4ffba2,_0x1a8678){return _0x4ffba2!==_0x1a8678;},'csrFO':_0x4b0542(0x1ee),'FMclI':'Unknown\x20er'+_0x4b0542(0x27a)+'ed','ysFTX':_0x4b0542(0x23f)+'ed\x20on\x20anot'+'her\x20device','xlSHz':_0x4b0542(0x1d8)+_0x4b0542(0x1f0)+_0x4b0542(0x37d)+_0x4b0542(0x2fb)+_0x4b0542(0x3a7)+_0x4b0542(0x304),'oNxWt':_0x4b0542(0x33b),'hFmZe':_0x4b0542(0x366),'UMtep':_0x4b0542(0x1d8)+_0x4b0542(0x227)+_0x4b0542(0x2b4),'kJGwA':_0x4b0542(0x2bb),'jNCkR':'connection','rRmxD':'Network\x20er'+_0x4b0542(0x271)+_0x4b0542(0x3bb)+_0x4b0542(0x228)+_0x4b0542(0x2cc)+_0x4b0542(0x1fe),'akHmr':_0x4b0542(0x20f),'dbIyY':_0x4b0542(0x213),'HeXyP':_0x4b0542(0x37b),'RrUxF':_0x4b0542(0x265)+'ection\x20fai'+_0x4b0542(0x341)+_0x4b0542(0x31d)+'n.','qVKrw':_0x4b0542(0x2c2)+_0x4b0542(0x2c4),'tVLty':_0x4b0542(0x30b),'KpbuX':function(_0x3b329b,_0x416274){return _0x3b329b(_0x416274);},'IsQUD':function(_0x37a7a5,_0x11bb70){return _0x37a7a5/_0x11bb70;},'udLVe':function(_0x252f09,_0x4e50f5){return _0x252f09-_0x4e50f5;},'rUrNB':function(_0x121019,_0x21df7d){return _0x121019(_0x21df7d);},'hlppC':function(_0x5412b3,_0x5ac115){return _0x5412b3(_0x5ac115);},'GOyHi':_0x4b0542(0x3b5),'nigFD':_0x4b0542(0x371),'CJJiS':_0x4b0542(0x260),'UZJHU':_0x4b0542(0x1cf),'JRQKc':_0x4b0542(0x246)+_0x4b0542(0x326)+_0x4b0542(0x2c6),'lSDXn':function(_0x153491,_0x321b58){return _0x153491(_0x321b58);},'AKZDv':_0x4b0542(0x373),'zWdIA':'zohpC','ElWdd':_0x4b0542(0x26f),'iTtFR':_0x4b0542(0x3ab)+_0x4b0542(0x329),'JNEtQ':_0x4b0542(0x1e1),'ZIkNw':_0x4b0542(0x2d2)+'lements\x20mi'+_0x4b0542(0x395)+_0x4b0542(0x1fd)+'.','aYEef':_0x4b0542(0x358),'sGJmV':_0x4b0542(0x1f2),'BVWEB':_0x4b0542(0x240)+_0x4b0542(0x361),'iZXay':_0x4b0542(0x303)+_0x4b0542(0x24b)+_0x4b0542(0x31e)+_0x4b0542(0x2cf)+_0x4b0542(0x389)+_0x4b0542(0x292),'GmIut':_0x4b0542(0x248),'bjqth':_0x4b0542(0x1de)+_0x4b0542(0x290),'QjyQr':_0x4b0542(0x356)+_0x4b0542(0x241),'uTUYN':_0x4b0542(0x262),'znuvO':function(_0x4d8dab,_0x5aeb70){return _0x4d8dab&&_0x5aeb70;},'oVAfI':function(_0x30c614,_0x4446e7){return _0x30c614!==_0x4446e7;},'ZEwLX':_0x4b0542(0x1e8),'cAmoI':_0x4b0542(0x33c)},_0x415ea7=document[_0x4b0542(0x343)+'ById'](_0x4d864d[_0x4b0542(0x2d1)]),_0x3f8ca0=document[_0x4b0542(0x343)+_0x4b0542(0x388)](_0x4d864d['iTtFR']),_0x4e2004=document[_0x4b0542(0x343)+'ById'](_0x4b0542(0x358)),_0x177101=document['getElement'+_0x4b0542(0x388)](_0x4d864d['JNEtQ']);function _0x5639e9(_0x38b641,_0x31ca13){const _0x2111c1=_0x4b0542;if(_0x4d864d[_0x2111c1(0x1ef)]!==_0x4d864d['gXtjn'])_0x177101[_0x2111c1(0x37c)+'t']=_0x38b641,_0x177101[_0x2111c1(0x2e9)]=_0x4d864d[_0x2111c1(0x219)](_0x31ca13,'');else{_0x4d864d[_0x2111c1(0x259)](_0x55f880,_0x4d864d[_0x2111c1(0x23a)],_0x4d864d['pCuQE']);return;}}function _0x176145(){const _0x15932a=_0x4b0542,_0xf84174={'HNKBt':function(_0x34ea93,_0x1f9878,_0x5e6e3b){const _0x2bf5a3=a0_0x5eeb;return _0x4d864d[_0x2bf5a3(0x259)](_0x34ea93,_0x1f9878,_0x5e6e3b);},'PXEXZ':_0x4d864d[_0x15932a(0x238)]};if(_0x4d864d[_0x15932a(0x23c)]===_0x15932a(0x2e8)){_0xf84174[_0x15932a(0x2d4)](_0x50e8ec,_0xf84174['PXEXZ'],_0x15932a(0x28a));return;}else _0x415ea7[_0x15932a(0x382)]=![],_0x415ea7['textConten'+'t']=_0x15932a(0x3b7)+_0x15932a(0x32d),_0x3f8ca0&&(_0x3f8ca0['disabled']=![],_0x3f8ca0[_0x15932a(0x37c)+'t']='Inject\x20ano'+_0x15932a(0x21d)+'nt');}function _0x489582(_0x1cab7f=![]){const _0xb58c67=_0x4b0542,_0x6b3d91={'DzFAZ':function(_0x865be,_0x5db1d5,_0x22f242){return _0x865be(_0x5db1d5,_0x22f242);},'dgXhq':_0x4d864d['pCuQE']};_0x1cab7f?(_0x3f8ca0[_0xb58c67(0x382)]=!![],_0x3f8ca0['innerHTML']=_0x4d864d['YECMx']):_0xb58c67(0x281)!=='fkqIj'?(_0x142d9c[_0xb58c67(0x28a)](_0xb58c67(0x32e)+_0xb58c67(0x308),_0x22f508),_0x6b3d91[_0xb58c67(0x2db)](_0x411fd0,_0xb58c67(0x267)+_0xb58c67(0x312)+_0x50d665[_0xb58c67(0x2ea)],_0x6b3d91[_0xb58c67(0x327)])):(_0x415ea7['disabled']=!![],_0x415ea7[_0xb58c67(0x36e)]=_0x4d864d[_0xb58c67(0x1f8)]),_0x5639e9(_0xb58c67(0x39a)+_0xb58c67(0x250)+_0xb58c67(0x289),_0xb58c67(0x2ba));}if(!_0x415ea7||!_0x4e2004||!_0x177101){console[_0x4b0542(0x30e)](_0x4d864d[_0x4b0542(0x2f6)]);return;}chrome['storage'][_0x4b0542(0x2bc)][_0x4b0542(0x2dd)]([_0x4d864d[_0x4b0542(0x378)]],_0x558137=>{const _0x24652c=_0x4b0542;if(_0x558137[_0x24652c(0x358)]){if(_0x4d864d[_0x24652c(0x263)](_0x4d864d[_0x24652c(0x317)],_0x4d864d['XtDJR']))_0x4e2004[_0x24652c(0x1e6)]=_0x558137[_0x24652c(0x358)];else{const _0x4a7937={'WKdVd':_0x4d864d[_0x24652c(0x203)]};_0x2cc40f[_0x24652c(0x2e4)+'stener'](_0x4d864d[_0x24652c(0x1f4)],()=>{const _0x310df2=_0x24652c;_0x3e3a2a[_0x310df2(0x24c)][_0x310df2(0x3aa)]='none',_0x592bdc[_0x310df2(0x24c)][_0x310df2(0x3aa)]=_0x4a7937['WKdVd'];});}}}),_0x4e2004[_0x4b0542(0x2e4)+_0x4b0542(0x2e5)](_0x4b0542(0x294),_0x1748c4=>{const _0x536962=_0x4b0542;_0x1748c4['key']===_0x4d864d['MBCWo']&&!_0x415ea7[_0x536962(0x382)]&&_0x415ea7[_0x536962(0x264)]();});const _0x224e9f=document[_0x4b0542(0x2a6)+'ent'](_0x4d864d[_0x4b0542(0x1d2)]);_0x224e9f[_0x4b0542(0x37c)+'t']=_0x4d864d[_0x4b0542(0x2f4)],_0x224e9f[_0x4b0542(0x24c)][_0x4b0542(0x3ad)]=_0x4d864d[_0x4b0542(0x32a)],_0x224e9f[_0x4b0542(0x2e4)+_0x4b0542(0x2e5)](_0x4d864d['tkuLI'],async()=>{const _0x31dc82=_0x4b0542,_0x290b74={'bUBAV':_0x4d864d[_0x31dc82(0x313)],'Tvezo':_0x4d864d[_0x31dc82(0x34c)],'SJdbb':_0x4d864d[_0x31dc82(0x1f8)],'vbcbB':function(_0x195c51,_0x26fb1a,_0x1a3129){return _0x195c51(_0x26fb1a,_0x1a3129);},'suMUL':_0x31dc82(0x2ba)};if(_0x4d864d['rbWLB'](_0x31dc82(0x2d5),_0x4d864d['tlgGo'])){console['log'](_0x4d864d[_0x31dc82(0x206)]);try{if(_0x4d864d[_0x31dc82(0x263)](_0x4d864d[_0x31dc82(0x25e)],_0x4d864d['rpfWJ']))return _0x290b74['bUBAV'];else{const _0x2bf01b=await _0x515916({'action':_0x4d864d[_0x31dc82(0x3ae)]},0x1388);console[_0x31dc82(0x392)](_0x4d864d[_0x31dc82(0x247)],_0x2bf01b),_0x4d864d[_0x31dc82(0x259)](_0x5639e9,_0x4d864d[_0x31dc82(0x23e)],_0x4d864d[_0x31dc82(0x3a5)]);}}catch(_0x32ae00){console[_0x31dc82(0x28a)](_0x4d864d[_0x31dc82(0x22f)],_0x32ae00),_0x5639e9(_0x31dc82(0x20b)+'heck\x20faile'+_0x31dc82(0x23d)+_0x32ae00['message'],_0x4d864d['pCuQE']);}}else _0x5966f2?(_0x5e24f9[_0x31dc82(0x382)]=!![],_0x2af2fe[_0x31dc82(0x36e)]=BijTMJ[_0x31dc82(0x3bd)]):(_0x555e4d['disabled']=!![],_0x2e34ed[_0x31dc82(0x36e)]=BijTMJ[_0x31dc82(0x22c)]),BijTMJ[_0x31dc82(0x35f)](_0x5a93ec,'Starting\x20i'+_0x31dc82(0x250)+_0x31dc82(0x289),BijTMJ[_0x31dc82(0x3bc)]);});async function _0x13321e(_0x2254a8=![]){const _0x2d3fb7=_0x4b0542,_0x21dc9f={'yHTAL':_0x4d864d['fjzbW'],'cuZIm':_0x4d864d[_0x2d3fb7(0x310)],'QOMOn':_0x4d864d['eeSko'],'ZUmtS':function(_0x4378cf,_0x4ccbe1,_0x150094){return _0x4d864d['UmpIz'](_0x4378cf,_0x4ccbe1,_0x150094);},'dLGWF':_0x4d864d[_0x2d3fb7(0x39b)],'GdCEB':_0x4d864d[_0x2d3fb7(0x3a5)],'lbqLE':function(_0x5caed0,_0x12ad9b){return _0x5caed0(_0x12ad9b);},'bWzje':_0x2d3fb7(0x246)+_0x2d3fb7(0x326)+'essage:','PTmso':function(_0x44cb11,_0x2b53fc){const _0x3da1b7=_0x2d3fb7;return _0x4d864d[_0x3da1b7(0x252)](_0x44cb11,_0x2b53fc);}},_0x2463c0=_0x4e2004['value']['trim']();if(!_0x2463c0){_0x5639e9(_0x4d864d[_0x2d3fb7(0x238)],_0x4d864d[_0x2d3fb7(0x399)]);return;}chrome[_0x2d3fb7(0x344)][_0x2d3fb7(0x2bc)]['set']({'licenseKey':_0x2463c0}),_0x489582(_0x2254a8),console[_0x2d3fb7(0x392)](_0x2d3fb7(0x332)+_0x2d3fb7(0x20c)+'\x20process\x20('+_0x2d3fb7(0x1f5)+_0x2254a8+')\x20at',new Date()['toISOStrin'+'g']());try{console[_0x2d3fb7(0x392)](_0x4d864d[_0x2d3fb7(0x3c6)]);try{_0x4d864d[_0x2d3fb7(0x2b8)]!==_0x4d864d['jJfeD']?(await _0x515916({'action':_0x4d864d[_0x2d3fb7(0x3ae)]},0xbb8),console[_0x2d3fb7(0x392)](_0x2d3fb7(0x2a0)+_0x2d3fb7(0x37a)+_0x2d3fb7(0x22e)+_0x2d3fb7(0x254))):(_0x2e835d[_0x2d3fb7(0x37c)+'t']=_0x45c167,_0x295f71[_0x2d3fb7(0x2e9)]=_0x4d864d['xbGvD'](_0x31d0f4,''));}catch(_0x1ad052){if(_0x4d864d[_0x2d3fb7(0x263)](_0x4d864d[_0x2d3fb7(0x242)],_0x2d3fb7(0x2b2))){if(_0x3967c7[_0x2d3fb7(0x35b)](_0x21dc9f[_0x2d3fb7(0x27b)])||_0x592eaa[_0x2d3fb7(0x35b)](_0x21dc9f['cuZIm']))throw new _0x4f656e(_0x21dc9f[_0x2d3fb7(0x314)]);_0x21dc9f[_0x2d3fb7(0x36d)](_0x1b68a3,_0x21dc9f[_0x2d3fb7(0x2f9)],_0x21dc9f[_0x2d3fb7(0x221)]),_0x14396c['value']='';}else{console[_0x2d3fb7(0x28a)]('❌\x20Backgrou'+_0x2d3fb7(0x37a)+_0x2d3fb7(0x270)+_0x2d3fb7(0x354)+_0x2d3fb7(0x25a)+':',_0x1ad052),_0x4d864d['WWquf'](_0x5639e9,_0x4d864d[_0x2d3fb7(0x323)],_0x4d864d['pCuQE']),_0x176145();return;}}console[_0x2d3fb7(0x392)](_0x4d864d['GmrRb']),_0x4d864d[_0x2d3fb7(0x35a)](_0x5639e9,_0x4d864d[_0x2d3fb7(0x222)],_0x4d864d[_0x2d3fb7(0x3a8)]);const _0x1fc811=await _0x4d864d[_0x2d3fb7(0x35a)](_0x515916,{'action':_0x4d864d[_0x2d3fb7(0x25f)],'licenseKey':_0x2463c0},0xafc8);console[_0x2d3fb7(0x392)](_0x2d3fb7(0x280)+'\x20response:',_0x1fc811);if(_0x1fc811&&_0x1fc811[_0x2d3fb7(0x387)]){if(_0x2d3fb7(0x255)===_0x4d864d['MpXbK'])_0x21dc9f[_0x2d3fb7(0x279)](_0x540362,_0x35a2ce),_0x332dbe[_0x2d3fb7(0x28a)](_0x21dc9f[_0x2d3fb7(0x2fa)],_0x227507),_0x21dc9f[_0x2d3fb7(0x287)](_0x3aca5e,_0x328a59);else{_0x4d864d['NJYKM'](_0x5639e9,_0x4d864d[_0x2d3fb7(0x36c)],_0x2d3fb7(0x387)),console['log'](_0x4d864d[_0x2d3fb7(0x300)]);_0x3f8ca0&&(_0x4d864d[_0x2d3fb7(0x391)](_0x2d3fb7(0x20a),_0x4d864d[_0x2d3fb7(0x216)])?_0x4c9bc4(_0x4d864d['jAjYK'],_0x2d3fb7(0x28a)):_0x3f8ca0[_0x2d3fb7(0x24c)][_0x2d3fb7(0x3aa)]=_0x4d864d[_0x2d3fb7(0x203)]);const _0x5a0238=document['getElement'+_0x2d3fb7(0x388)](_0x2d3fb7(0x355)+_0x2d3fb7(0x28e));_0x5a0238&&(_0x4d864d[_0x2d3fb7(0x2b9)]!==_0x2d3fb7(0x2ec)?_0x357e9c['style'][_0x2d3fb7(0x3aa)]=_0x4d864d[_0x2d3fb7(0x203)]:_0x5a0238['style'][_0x2d3fb7(0x3aa)]=_0x4d864d[_0x2d3fb7(0x203)]),setTimeout(()=>{_0x176145();},0x7d0);}}else{const _0x3b6f59=_0x4d864d[_0x2d3fb7(0x252)](_0x2519e4,_0x1fc811?.[_0x2d3fb7(0x2ea)]);_0x4d864d[_0x2d3fb7(0x2e1)](_0x5639e9,_0x2d3fb7(0x3c2)+_0x3b6f59,_0x4d864d[_0x2d3fb7(0x399)]),console[_0x2d3fb7(0x28a)](_0x2d3fb7(0x1ce)+_0x2d3fb7(0x359),_0x1fc811),_0x176145();}}catch(_0x35683f){_0x4d864d[_0x2d3fb7(0x252)](_0x16b348,_0x35683f),_0x4d864d[_0x2d3fb7(0x26a)](_0x176145);}}_0x415ea7[_0x4b0542(0x2e4)+_0x4b0542(0x2e5)](_0x4d864d[_0x4b0542(0x1f4)],()=>_0x13321e(![]));if(_0x3f8ca0){if(_0x4d864d[_0x4b0542(0x338)]===_0x4d864d[_0x4b0542(0x338)])_0x3f8ca0[_0x4b0542(0x2e4)+'stener'](_0x4d864d[_0x4b0542(0x1f4)],()=>_0x13321e(!![]));else{_0x4d864d[_0x4b0542(0x252)](_0x4a4894,_0x2624ab);const _0x2dbefe=(_0x4d864d[_0x4b0542(0x33f)](_0x1f6186[_0x4b0542(0x1f6)](),_0xf523aa)/0x3e8)[_0x4b0542(0x2d8)](0x1);_0x140135['log'](_0x4b0542(0x2ab)+'\x20received\x20'+_0x4b0542(0x3a9)+_0x2dbefe+'s');if(_0x24556c['runtime'][_0x4b0542(0x380)]){_0x4e36ae[_0x4b0542(0x28a)](_0x4d864d['otnds'],_0x365cb0[_0x4b0542(0x394)]['lastError']),_0x4d864d[_0x4b0542(0x252)](_0x3a3907,new _0x2eaf38(_0x268f5a[_0x4b0542(0x394)][_0x4b0542(0x380)][_0x4b0542(0x2ea)]));return;}if(_0x4d864d[_0x4b0542(0x3b1)](_0x78a99,_0x163128)){_0x68bfc5[_0x4b0542(0x28a)](_0x4d864d[_0x4b0542(0x3c1)]),_0x4d864d['GMJmd'](_0x34e27a,new _0x2db8a2(_0x4d864d[_0x4b0542(0x1f9)]));return;}_0x2d0604[_0x4b0542(0x392)](_0x4d864d[_0x4b0542(0x379)],_0x5d7501),_0x4d864d[_0x4b0542(0x2ce)](_0x10ce72,_0x5b0b9f);}}const _0x2b479a=document['getElement'+_0x4b0542(0x388)](_0x4b0542(0x355)+_0x4b0542(0x28e)),_0x483209=document['getElement'+'ById'](_0x4d864d[_0x4b0542(0x374)]),_0x30eed7=document['getElement'+_0x4b0542(0x388)](_0x4d864d[_0x4b0542(0x296)]),_0x2bf08f=document['getElement'+_0x4b0542(0x388)](_0x4d864d[_0x4b0542(0x209)]),_0x5adb77=document[_0x4b0542(0x343)+_0x4b0542(0x388)]('tvCode');_0x4d864d[_0x4b0542(0x365)](_0x483209,_0x30eed7)&&_0x483209[_0x4b0542(0x2e4)+_0x4b0542(0x2e5)](_0x4d864d['tkuLI'],()=>{const _0x53a7bf=_0x4b0542,_0x56a4f4={'gWXfn':_0x4d864d['SjXnU'],'JpHwG':_0x4d864d[_0x53a7bf(0x203)]};_0x4d864d['xqtsu'](_0x4d864d[_0x53a7bf(0x384)],_0x4d864d['GwNAP'])?(_0x483209[_0x53a7bf(0x24c)][_0x53a7bf(0x3aa)]=_0x4d864d[_0x53a7bf(0x1e9)],_0x30eed7[_0x53a7bf(0x24c)][_0x53a7bf(0x3aa)]='block'):(_0x41c5a2[_0x53a7bf(0x24c)][_0x53a7bf(0x3aa)]=_0x56a4f4[_0x53a7bf(0x38e)],_0x345e96[_0x53a7bf(0x24c)][_0x53a7bf(0x3aa)]=_0x56a4f4['JpHwG']);});_0x2bf08f&&_0x5adb77&&(_0x4d864d[_0x4b0542(0x232)](_0x4d864d[_0x4b0542(0x207)],_0x4d864d['cAmoI'])?_0x2bf08f['addEventLi'+_0x4b0542(0x2e5)](_0x4d864d[_0x4b0542(0x1f4)],async()=>{const _0x3392fc=_0x4b0542,_0x15aca1={'NOQUe':_0x4d864d['pQPQM']},_0x13c725=_0x5adb77[_0x3392fc(0x1e6)][_0x3392fc(0x34f)]();if(!_0x13c725||_0x4d864d[_0x3392fc(0x2a3)](_0x13c725[_0x3392fc(0x31b)],0x8)||!/^\d+$/[_0x3392fc(0x2d3)](_0x13c725)){if(_0x4d864d[_0x3392fc(0x362)](_0x4d864d[_0x3392fc(0x29d)],_0x4d864d['LYHLM']))_0x4d864d[_0x3392fc(0x1db)](_0x5e2d7a[_0x3392fc(0x1dc)],_0x4d864d[_0x3392fc(0x348)])&&!_0x5a984f[_0x3392fc(0x382)]&&_0x20eee1[_0x3392fc(0x264)]();else{_0x5639e9(_0x3392fc(0x286)+_0x3392fc(0x244)+_0x3392fc(0x274)+'\x20TV\x20code.',_0x3392fc(0x28a));return;}}_0x2bf08f[_0x3392fc(0x382)]=!![],_0x2bf08f['textConten'+'t']=_0x4d864d['webbZ'],_0x4d864d[_0x3392fc(0x33e)](_0x5639e9,'Connecting'+_0x3392fc(0x1ed)+_0x3392fc(0x1da)+'..',_0x4d864d[_0x3392fc(0x3a8)]);try{await _0x4d864d[_0x3392fc(0x350)](_0x272f30,_0x13c725);}catch(_0x2af492){if(_0x4d864d[_0x3392fc(0x201)](_0x3392fc(0x27d),_0x4d864d['emdwv']))return _0x15aca1[_0x3392fc(0x334)];else console[_0x3392fc(0x28a)](_0x4d864d[_0x3392fc(0x322)],_0x2af492),_0x5639e9(_0x3392fc(0x267)+_0x3392fc(0x312)+_0x2af492[_0x3392fc(0x2ea)],_0x3392fc(0x28a));}finally{_0x2bf08f['disabled']=![],_0x2bf08f[_0x3392fc(0x37c)+'t']=_0x4d864d['NUvQq'];}}):_0x288554['value']=_0x4d914a[_0x4b0542(0x358)]);async function _0x272f30(_0x24c039){const _0x1bcc0e=_0x4b0542,_0xb5dc15={'UPLUz':_0x4d864d[_0x1bcc0e(0x21e)]},_0x4ac8b5=_0x1bcc0e(0x39f)+_0x1bcc0e(0x26b)+_0x1bcc0e(0x2bd)+_0x1bcc0e(0x20e)+_0x1bcc0e(0x2ad)+_0x24c039;console['log'](_0x4d864d[_0x1bcc0e(0x39c)],_0x4ac8b5);const _0x5abbd6=await _0x4d864d[_0x1bcc0e(0x330)](fetch,_0x4ac8b5,{'credentials':_0x4d864d[_0x1bcc0e(0x2e3)]});if(!_0x5abbd6['ok'])throw new Error(_0x1bcc0e(0x278)+_0x1bcc0e(0x2a2)+'page\x20(Stat'+'us:\x20'+_0x5abbd6[_0x1bcc0e(0x1e1)]+')');const _0x46e9b8=await _0x5abbd6['text'](),_0x1eca95=new DOMParser(),_0x284104=_0x1eca95[_0x1bcc0e(0x31a)+_0x1bcc0e(0x307)](_0x46e9b8,_0x4d864d[_0x1bcc0e(0x377)]),_0x1be9f2=_0x284104['querySelec'+'tor'](_0x4d864d['xJLgz']);if(!_0x1be9f2){if(_0x4d864d['uytia'](_0x4d864d[_0x1bcc0e(0x3b3)],_0x4d864d[_0x1bcc0e(0x3b3)]))return _0xb5dc15[_0x1bcc0e(0x2ff)];else{if(_0x284104[_0x1bcc0e(0x331)][_0x1bcc0e(0x37c)+'t'][_0x1bcc0e(0x35b)]('Success')){if(_0x1bcc0e(0x2f5)===_0x4d864d[_0x1bcc0e(0x3b6)]){_0x4d864d[_0x1bcc0e(0x35a)](_0x5639e9,_0x1bcc0e(0x2ac)+_0x1bcc0e(0x2c0)+'ssfully!',_0x1bcc0e(0x387));return;}else{if(_0x162b38['body'][_0x1bcc0e(0x37c)+'t'][_0x1bcc0e(0x35b)](_0x4d864d[_0x1bcc0e(0x2eb)])){_0x8e58ec(_0x4d864d[_0x1bcc0e(0x39b)],'success');return;}throw new _0x1a35b6(_0x4d864d[_0x1bcc0e(0x383)]);}}throw new Error(_0x4d864d[_0x1bcc0e(0x383)]);}}const _0x15b1e1=new URLSearchParams(),_0x2f3f07=_0x1be9f2[_0x1bcc0e(0x3ac)+_0x1bcc0e(0x239)](_0x4d864d['GFmWD']);_0x2f3f07[_0x1bcc0e(0x2b0)](_0x5f4198=>{const _0x2c2a43=_0x1bcc0e;_0x15b1e1['append'](_0x5f4198[_0x2c2a43(0x25d)],_0x5f4198[_0x2c2a43(0x1e6)]);});const _0x1c6121=_0x1be9f2[_0x1bcc0e(0x3ac)+_0x1bcc0e(0x256)](_0x4d864d['Cpcxa']);_0x1c6121&&_0x1c6121[_0x1bcc0e(0x25d)]&&(_0x4d864d[_0x1bcc0e(0x340)]===_0x4d864d['lTccy']?_0x15b1e1['append'](_0x1c6121[_0x1bcc0e(0x25d)],_0x1c6121['value']||''):_0x89a0cd[_0x1bcc0e(0x264)]());!_0x15b1e1[_0x1bcc0e(0x320)](_0x4d864d[_0x1bcc0e(0x372)])&&_0x15b1e1[_0x1bcc0e(0x1f1)](_0x4d864d[_0x1bcc0e(0x372)],_0x24c039);const _0x2f9962=new URL(_0x1be9f2[_0x1bcc0e(0x302)+'te']('action')||_0x4d864d[_0x1bcc0e(0x24d)],_0x4d864d[_0x1bcc0e(0x22d)])['href'];console[_0x1bcc0e(0x392)](_0x4d864d[_0x1bcc0e(0x251)],_0x2f9962);const _0x38536f=await _0x4d864d['UmpIz'](fetch,_0x2f9962,{'method':_0x4d864d[_0x1bcc0e(0x23b)],'headers':{'Content-Type':_0x4d864d[_0x1bcc0e(0x3c4)]},'body':_0x15b1e1,'credentials':_0x4d864d[_0x1bcc0e(0x2e3)]}),_0x8ec2c=await _0x38536f[_0x1bcc0e(0x1d7)]();if(_0x8ec2c[_0x1bcc0e(0x35b)](_0x1bcc0e(0x299))||_0x8ec2c['includes'](_0x4d864d['AYbFs'])||!_0x8ec2c['includes'](_0x4d864d[_0x1bcc0e(0x399)])&&_0x38536f['ok']){if(_0x8ec2c[_0x1bcc0e(0x35b)](_0x4d864d[_0x1bcc0e(0x2d7)])||_0x8ec2c[_0x1bcc0e(0x35b)](_0x4d864d[_0x1bcc0e(0x310)])){if(_0x4d864d[_0x1bcc0e(0x293)](_0x4d864d[_0x1bcc0e(0x3be)],_0x1bcc0e(0x324)))_0x3051ed['addEventLi'+_0x1bcc0e(0x2e5)](_0x4d864d[_0x1bcc0e(0x1f4)],()=>_0x568096(!![]));else throw new Error(_0x4d864d['eeSko']);}_0x5639e9(_0x1bcc0e(0x2ac)+'cted\x20Succe'+_0x1bcc0e(0x32b),_0x4d864d['eWdXo']),_0x5adb77[_0x1bcc0e(0x1e6)]='';}else throw new Error(_0x4d864d[_0x1bcc0e(0x342)]);}function _0x16b348(_0x54e954){const _0x1331be=_0x4b0542;console[_0x1331be(0x28a)](_0x4d864d[_0x1331be(0x1e5)],_0x54e954);if(_0x54e954[_0x1331be(0x2ea)][_0x1331be(0x35b)](_0x4d864d[_0x1331be(0x210)])||_0x54e954[_0x1331be(0x2ea)][_0x1331be(0x35b)](_0x4d864d[_0x1331be(0x336)])){if(_0x4d864d[_0x1331be(0x2f1)](_0x4d864d[_0x1331be(0x325)],_0x4d864d[_0x1331be(0x202)]))_0x4d864d[_0x1331be(0x2ed)](_0x5639e9,_0x4d864d[_0x1331be(0x2c8)],_0x4d864d[_0x1331be(0x399)]),console[_0x1331be(0x392)](_0x4d864d['pTvxc']);else{_0x209d8e[_0x1331be(0x28a)](_0x4d864d[_0x1331be(0x226)],_0x11c4c9[_0x1331be(0x394)][_0x1331be(0x380)]),_0x4d864d[_0x1331be(0x252)](_0x906a44,new _0x3fd07f(_0x3fda67[_0x1331be(0x394)][_0x1331be(0x380)][_0x1331be(0x2ea)]));return;}}else{if(_0x54e954[_0x1331be(0x2ea)][_0x1331be(0x35b)](_0x4d864d[_0x1331be(0x2df)])){if(_0x4d864d[_0x1331be(0x391)](_0x4d864d[_0x1331be(0x2a4)],_0x4d864d[_0x1331be(0x2a4)]))_0x4d864d[_0x1331be(0x2ef)](_0x5639e9,_0x4d864d[_0x1331be(0x2fd)],_0x4d864d[_0x1331be(0x399)]);else{_0x1cf741[_0x1331be(0x28a)](_0x1331be(0x316)+'\x20is\x20undefi'+_0x1331be(0x2d0)),_0x4d864d[_0x1331be(0x243)](_0x46614b,new _0x160170(_0x4d864d[_0x1331be(0x1f9)]));return;}}else{if(_0x54e954['message'][_0x1331be(0x35b)](_0x4d864d[_0x1331be(0x32c)]))_0x4d864d['ilNuf']===_0x4d864d['wfyuz']?_0x1a047f[_0x1331be(0x358)]&&(_0x1c673d[_0x1331be(0x1e6)]=_0x31c360[_0x1331be(0x358)]):_0x4d864d['HVjxD'](_0x5639e9,_0x4d864d[_0x1331be(0x3a1)],_0x4d864d['pCuQE']);else _0x54e954['message'][_0x1331be(0x35b)](_0x4d864d[_0x1331be(0x3bf)])?_0x5639e9(_0x4d864d['waEMC'],_0x4d864d['pCuQE']):_0x4d864d[_0x1331be(0x33e)](_0x5639e9,_0x1331be(0x3c2)+_0x54e954[_0x1331be(0x2ea)],_0x4d864d[_0x1331be(0x399)]);}}}function _0x2519e4(_0x346f5d){const _0x45a32c=_0x4b0542,_0x22bf09={'cXGey':function(_0x32c079,_0xdfbf00,_0x1a05ec){const _0x413056=a0_0x5eeb;return _0x4d864d[_0x413056(0x2cd)](_0x32c079,_0xdfbf00,_0x1a05ec);},'ozedd':_0x4d864d['pCuQE'],'KYTCz':_0x4d864d[_0x45a32c(0x282)],'XipYM':function(_0x5c9f66){return _0x5c9f66();},'CUsRs':_0x4d864d[_0x45a32c(0x342)]};if(_0x4d864d[_0x45a32c(0x30f)](_0x4d864d[_0x45a32c(0x235)],_0x45a32c(0x1ee))){const _0x9105e6=_0x36d063(_0x34a272?.[_0x45a32c(0x2ea)]);ImGErB['cXGey'](_0x3a29ad,'❌\x20Error:\x20'+_0x9105e6,ImGErB[_0x45a32c(0x29c)]),_0x5a1a60[_0x45a32c(0x28a)](ImGErB['KYTCz'],_0x517d3f),ImGErB[_0x45a32c(0x30a)](_0x2ba60b);}else{if(!_0x346f5d)return _0x4d864d[_0x45a32c(0x28d)];const _0x3c30a6=_0x346f5d[_0x45a32c(0x21b)+'e']();if(_0x3c30a6[_0x45a32c(0x35b)]('locked\x20to\x20'+_0x45a32c(0x1d4)+_0x45a32c(0x2f8))||_0x3c30a6['includes'](_0x4d864d['ysFTX']))return _0x4d864d[_0x45a32c(0x261)];if(_0x3c30a6[_0x45a32c(0x35b)](_0x45a32c(0x1d3))||_0x3c30a6[_0x45a32c(0x35b)](_0x4d864d[_0x45a32c(0x2f0)]))return _0x45a32c(0x21f)+_0x45a32c(0x2fc)+_0x45a32c(0x29a)+_0x45a32c(0x390)+'y\x20again.';if(_0x3c30a6[_0x45a32c(0x35b)](_0x4d864d[_0x45a32c(0x27c)]))return _0x4d864d['UMtep'];if(_0x3c30a6[_0x45a32c(0x35b)](_0x4d864d[_0x45a32c(0x38c)])||_0x3c30a6[_0x45a32c(0x35b)](_0x4d864d['jNCkR']))return _0x4d864d['rRmxD'];if(_0x3c30a6[_0x45a32c(0x35b)](_0x45a32c(0x2d6))||_0x3c30a6[_0x45a32c(0x35b)](_0x4d864d['tNeMw'])){if(_0x4d864d[_0x45a32c(0x3b1)](_0x4d864d[_0x45a32c(0x1df)],_0x4d864d[_0x45a32c(0x29b)]))throw new _0x40fd44(ImGErB[_0x45a32c(0x2a9)]);else return _0x4d864d[_0x45a32c(0x3c0)];}if(_0x3c30a6[_0x45a32c(0x35b)](_0x4d864d[_0x45a32c(0x277)]))return _0x4d864d[_0x45a32c(0x318)];if(_0x3c30a6[_0x45a32c(0x35b)](_0x4d864d[_0x45a32c(0x1f7)])){if(_0x4d864d[_0x45a32c(0x293)](_0x4d864d[_0x45a32c(0x3a6)],_0x4d864d[_0x45a32c(0x3a6)]))return _0x4d864d[_0x45a32c(0x313)];else _0x5b15e8[_0x45a32c(0x1f1)](_0x21a3ae[_0x45a32c(0x25d)],_0x525e17[_0x45a32c(0x1e6)]||'');}return _0x346f5d;}}async function _0x515916(_0x57455e,_0x155030=0xafc8){const _0x3ee486=_0x4b0542,_0x14b8b9={'LsHhU':_0x4d864d[_0x3ee486(0x203)],'qeoef':function(_0x4ca31b,_0x4c2053,_0x550986){return _0x4ca31b(_0x4c2053,_0x550986);},'Fwkay':_0x4d864d[_0x3ee486(0x399)],'yfoSy':function(_0x551881,_0x1f52c8){return _0x4d864d['KpbuX'](_0x551881,_0x1f52c8);},'GwNqZ':function(_0x6764c6,_0x1b5475){const _0x4777e4=_0x3ee486;return _0x4d864d[_0x4777e4(0x258)](_0x6764c6,_0x1b5475);},'CaXKi':function(_0xd8ba0a,_0x29c63a){const _0x309b55=_0x3ee486;return _0x4d864d[_0x309b55(0x321)](_0xd8ba0a,_0x29c63a);},'KyDVF':_0x4d864d[_0x3ee486(0x226)],'aWqMt':_0x3ee486(0x2dc),'NVdwA':_0x3ee486(0x316)+_0x3ee486(0x1fa)+_0x3ee486(0x2d0),'IuPNi':_0x3ee486(0x1e4)+_0x3ee486(0x30d)+'eived:','UInfg':function(_0x127107,_0x50d5da){const _0x6349ab=_0x3ee486;return _0x4d864d[_0x6349ab(0x381)](_0x127107,_0x50d5da);},'MJIZz':function(_0x5dd8df,_0x41883f){const _0x445ff5=_0x3ee486;return _0x4d864d[_0x445ff5(0x33f)](_0x5dd8df,_0x41883f);},'shauj':function(_0x7165d6,_0x1dc7dd){const _0x33badb=_0x3ee486;return _0x4d864d[_0x33badb(0x2de)](_0x7165d6,_0x1dc7dd);},'oosWK':function(_0x14211e,_0x2e2024){const _0x77377=_0x3ee486;return _0x4d864d[_0x77377(0x362)](_0x14211e,_0x2e2024);},'YiirW':_0x4d864d[_0x3ee486(0x234)],'gxYfF':function(_0x3fd20a,_0x309abb){return _0x3fd20a===_0x309abb;},'wzQYk':_0x3ee486(0x275),'NjdxP':_0x4d864d['nigFD'],'dNMlt':_0x4d864d[_0x3ee486(0x1e7)],'FBfrt':_0x4d864d[_0x3ee486(0x2da)],'LjJXe':_0x4d864d['JRQKc'],'AdNEB':function(_0xda71e7,_0x50b765){const _0x15def1=_0x3ee486;return _0x4d864d[_0x15def1(0x29e)](_0xda71e7,_0x50b765);}};return _0x4d864d[_0x3ee486(0x2f1)](_0x4d864d[_0x3ee486(0x3b8)],_0x4d864d['zWdIA'])?new Promise((_0x4e3f1f,_0x5bf64b)=>{const _0x8bb821=_0x3ee486,_0x3aae70={'rZQKX':function(_0x845b8c,_0x2f84a4){const _0x92fe3=a0_0x5eeb;return _0x14b8b9[_0x92fe3(0x1e3)](_0x845b8c,_0x2f84a4);},'PVttJ':function(_0x188852,_0x26eb82){return _0x14b8b9['MJIZz'](_0x188852,_0x26eb82);},'RnFBt':function(_0x397003,_0x548fcc){const _0x588996=a0_0x5eeb;return _0x14b8b9[_0x588996(0x3ba)](_0x397003,_0x548fcc);}};if(_0x14b8b9['oosWK'](_0x14b8b9[_0x8bb821(0x3b4)],_0x8bb821(0x1d0))){const _0x211614=Date[_0x8bb821(0x1f6)](),_0x5c7aa5=_0x14b8b9[_0x8bb821(0x2a7)](setTimeout,()=>{const _0x41b33e=_0x8bb821,_0x450ed5=_0x3aae70['rZQKX'](_0x3aae70['PVttJ'](Date['now'](),_0x211614),0x3e8)[_0x41b33e(0x2d8)](0x1);console['error'](_0x41b33e(0x36f)+'after\x20'+_0x450ed5+'s'),_0x3aae70[_0x41b33e(0x269)](_0x5bf64b,new Error(_0x41b33e(0x230)+_0x41b33e(0x26e)+_0x41b33e(0x36a)+_0x41b33e(0x3a0)+_0x41b33e(0x26d)+'to\x20respond'+'\x20('+_0x450ed5+'s)'));},_0x155030);try{_0x14b8b9[_0x8bb821(0x225)](_0x14b8b9[_0x8bb821(0x346)],_0x14b8b9[_0x8bb821(0x357)])?_0x502f14[_0x8bb821(0x24c)]['display']=NgoKkJ['LsHhU']:(console['log']('📤\x20Sending\x20'+_0x8bb821(0x204)+_0x57455e[_0x8bb821(0x284)]+(_0x8bb821(0x2e7)+'\x20')+_0x155030+'ms)'),chrome['runtime'][_0x8bb821(0x375)+'e'](_0x57455e,_0x58b1e4=>{const _0x4baf17=_0x8bb821,_0x3f524e={'UTBOt':function(_0x45f3da,_0x5a779b,_0x4e470f){return _0x14b8b9['qeoef'](_0x45f3da,_0x5a779b,_0x4e470f);},'VpODp':_0x14b8b9[_0x4baf17(0x2b6)]};_0x14b8b9['yfoSy'](clearTimeout,_0x5c7aa5);const _0x36a658=_0x14b8b9[_0x4baf17(0x1e3)](_0x14b8b9[_0x4baf17(0x2c3)](Date[_0x4baf17(0x1f6)](),_0x211614),0x3e8)[_0x4baf17(0x2d8)](0x1);console['log']('📥\x20Response'+_0x4baf17(0x1d6)+_0x4baf17(0x3a9)+_0x36a658+'s');if(chrome[_0x4baf17(0x394)][_0x4baf17(0x380)]){console['error'](_0x14b8b9[_0x4baf17(0x215)],chrome[_0x4baf17(0x394)]['lastError']),_0x5bf64b(new Error(chrome[_0x4baf17(0x394)]['lastError'][_0x4baf17(0x2ea)]));return;}if(_0x58b1e4===undefined){if(_0x14b8b9[_0x4baf17(0x273)]===_0x4baf17(0x200))kctKOK['UTBOt'](_0x47792a,_0x4baf17(0x3c2)+_0x28bf65[_0x4baf17(0x2ea)],kctKOK[_0x4baf17(0x2a1)]);else{console[_0x4baf17(0x28a)](_0x14b8b9[_0x4baf17(0x3b9)]),_0x14b8b9['yfoSy'](_0x5bf64b,new Error('No\x20respons'+_0x4baf17(0x268)+_0x4baf17(0x364)+_0x4baf17(0x212)));return;}}console['log'](_0x14b8b9[_0x4baf17(0x236)],_0x58b1e4),_0x14b8b9['UInfg'](_0x4e3f1f,_0x58b1e4);}));}catch(_0x2836c7){_0x14b8b9[_0x8bb821(0x225)](_0x14b8b9[_0x8bb821(0x218)],_0x14b8b9['FBfrt'])?_0x5e7d5c[_0x8bb821(0x1f1)](_0x8bb821(0x333),_0x2d67d3):(_0x14b8b9[_0x8bb821(0x22b)](clearTimeout,_0x5c7aa5),console[_0x8bb821(0x28a)](_0x14b8b9['LjJXe'],_0x2836c7),_0x14b8b9[_0x8bb821(0x2a5)](_0x5bf64b,_0x2836c7));}}else _0x504b0b[_0x8bb821(0x382)]=![],_0x9037e4[_0x8bb821(0x37c)+'t']=_0x8bb821(0x2aa)+'e';}):_0x3ee486(0x328)+'ror.\x20Pleas'+'e\x20check\x20yo'+'ur\x20interne'+'t\x20connecti'+_0x3ee486(0x1fe);}}document[a0_0x1c3405(0x34e)]==='loading'?document[a0_0x1c3405(0x2e4)+'stener'](a0_0x1c3405(0x35e)+a0_0x1c3405(0x339),initPopup):initPopup();
+import { loadConfig } from "./config.js";
+
+async function initPopup() {
+    const injectBtn = document.getElementById("injectBtn");
+    const injectAnotherBtn = document.getElementById("injectAnotherBtn");
+    const licenseInput = document.getElementById("licenseKey");
+    const statusDiv = document.getElementById("status");
+
+    function updateStatus(message, type) {
+        statusDiv.textContent = message;
+        statusDiv.className = type || "";
+    }
+
+    function resetButton() {
+        injectBtn.disabled = false;
+        injectBtn.textContent = "Inject Cookie";
+        if (injectAnotherBtn) {
+            injectAnotherBtn.disabled = false;
+            injectAnotherBtn.textContent = "Inject another account";
+        }
+    }
+
+    function setLoadingState(isAnother = false) {
+        if (isAnother) {
+            injectAnotherBtn.disabled = true;
+            injectAnotherBtn.innerHTML = '<span class="spinner"></span> Rotating...';
+        } else {
+            injectBtn.disabled = true;
+            injectBtn.innerHTML = '<span class="spinner"></span> Injecting...';
+        }
+        updateStatus("Starting injection process...", "loading");
+    }
+
+    if (!injectBtn || !licenseInput || !statusDiv) {
+        console.warn("Popup UI elements missing; aborting init.");
+        return;
+    }
+
+    // Load saved license key
+    chrome.storage.local.get(["licenseKey"], (result) => {
+        if (result.licenseKey) {
+            licenseInput.value = result.licenseKey;
+        }
+    });
+
+    // Allow Enter key to trigger injection
+    licenseInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter" && !injectBtn.disabled) {
+            injectBtn.click();
+        }
+    });
+
+    // Health check button (for debugging)
+    const healthCheckBtn = document.createElement("button");
+    healthCheckBtn.textContent = "Test Connection";
+    healthCheckBtn.style.cssText = "margin-top: 10px; padding: 5px 10px; font-size: 12px;";
+    healthCheckBtn.addEventListener("click", async () => {
+        console.log("🔍 Running health check...");
+        try {
+            const response = await sendMessageWithTimeout({ action: "PING" }, 5000);
+            console.log("✅ Health check passed:", response);
+            updateStatus("✅ Background script is alive and responding", "success");
+        } catch (e) {
+            console.error("❌ Health check failed:", e);
+            updateStatus(`❌ Health check failed: ${e.message}`, "error");
+        }
+    });
+
+    // Add health check button after inject button (optional, for debugging)
+    // injectBtn.parentElement.appendChild(healthCheckBtn);
+
+    async function handleInjection(isAnother = false) {
+        const licenseKey = licenseInput.value.trim();
+
+        if (!licenseKey) {
+            updateStatus("⚠️ Please enter a license key.", "error");
+            return;
+        }
+
+        // Save license key
+        chrome.storage.local.set({ licenseKey: licenseKey });
+
+        setLoadingState(isAnother);
+        console.log(`🚀 Starting injection process (another: ${isAnother}) at`, new Date().toISOString());
+
+        try {
+            // First, do a quick health check
+            console.log("🔍 Checking if background script is alive...");
+            try {
+                await sendMessageWithTimeout({ action: "PING" }, 3000);
+                console.log("✅ Background script is responsive");
+            } catch (e) {
+                console.error("❌ Background script not responding to health check:", e);
+                updateStatus("❌ Extension background script not responding. Try reloading the extension.", "error");
+                resetButton();
+                return;
+            }
+
+            // Now send the actual injection request with longer timeout
+            console.log("📤 Sending injection request...");
+            updateStatus("Connecting to server...", "loading");
+
+            const response = await sendMessageWithTimeout(
+                {
+                    action: "START_INJECTION",
+                    licenseKey: licenseKey
+                },
+                45000 // 45 second timeout (increased from 30s)
+            );
+
+            console.log("📥 Received response:", response);
+
+            if (response && response.success) {
+                updateStatus("✅ Injection Successful! Reloading Netflix...", "success");
+                console.log("✅ Injection completed successfully");
+
+                // Show TV Login Section and Inject Another Button
+                if (injectAnotherBtn) {
+                    injectAnotherBtn.style.display = "block";
+                }
+
+                const tvLoginSection = document.getElementById("tvLoginSection");
+                if (tvLoginSection) {
+                    tvLoginSection.style.display = "block";
+                }
+
+                // Store cookies for phone copy
+                if (response.cookies) {
+                    const cookieJsonText = document.getElementById("cookieJsonText");
+                    if (cookieJsonText) {
+                        cookieJsonText.value = JSON.stringify(response.cookies);
+                    }
+                }
+
+                // Show Phone Section
+                const phoneSection = document.getElementById("phoneSection");
+                if (phoneSection) {
+                    phoneSection.style.display = "block";
+                }
+
+                // Keep button disabled for 2 seconds to prevent double-clicks
+                setTimeout(() => {
+                    resetButton();
+                }, 2000);
+            } else {
+                const errorMsg = getErrorMessage(response?.message);
+                updateStatus(`❌ Error: ${errorMsg}`, "error");
+                console.error("❌ Injection failed:", response);
+                resetButton();
+            }
+        } catch (e) {
+            handleError(e);
+            resetButton();
+        }
+    }
+
+    injectBtn.addEventListener("click", () => handleInjection(false));
+
+    if (injectAnotherBtn) {
+        injectAnotherBtn.addEventListener("click", () => handleInjection(true));
+    }
+
+    // TV Login Logic
+    const tvLoginSection = document.getElementById("tvLoginSection");
+    const showTvInputBtn = document.getElementById("showTvInputBtn");
+    const tvInputContainer = document.getElementById("tvInputContainer");
+    const tvLoginBtn = document.getElementById("tvLoginBtn");
+    const tvCodeInput = document.getElementById("tvCode");
+
+    if (showTvInputBtn && tvInputContainer) {
+        showTvInputBtn.addEventListener("click", () => {
+            showTvInputBtn.style.display = "none";
+            tvInputContainer.style.display = "block";
+        });
+    }
+
+    // Phone Launch Logic
+    const openPhoneBtn = document.getElementById("openPhoneBtn");
+    const copyCookieBtn = document.getElementById("copyCookieBtn");
+    const cookieDisplayArea = document.getElementById("cookieDisplayArea");
+    const cookieJsonText = document.getElementById("cookieJsonText");
+    const phoneStatus = document.getElementById("phoneStatus");
+
+    if (openPhoneBtn && phoneStatus) {
+        openPhoneBtn.addEventListener("click", async () => {
+            openPhoneBtn.disabled = true;
+            phoneStatus.textContent = "⏳ Opening Netflix...";
+            phoneStatus.className = "loading";
+            try {
+                const result = await sendMessageWithTimeout({ action: "OPEN_PHONE_NETFLIX" }, 10000);
+                if (result && result.success) {
+                    phoneStatus.textContent = "✅ Tab opened! Tap 'Open App' on your phone.";
+                    phoneStatus.className = "success";
+                } else {
+                    phoneStatus.textContent = `❌ ${result?.message || "Failed to open tab"}`;
+                    phoneStatus.className = "error";
+                }
+            } catch (e) {
+                phoneStatus.textContent = `❌ ${e.message}`;
+                phoneStatus.className = "error";
+            } finally {
+                openPhoneBtn.disabled = false;
+            }
+        });
+    }
+
+    if (copyCookieBtn && cookieDisplayArea && cookieJsonText) {
+        copyCookieBtn.addEventListener("click", () => {
+            if (cookieDisplayArea.style.display === "none") {
+                cookieDisplayArea.style.display = "block";
+                copyCookieBtn.textContent = "📋 Copy JSON";
+            } else {
+                // Copy logic
+                cookieJsonText.select();
+                document.execCommand("copy");
+                copyCookieBtn.textContent = "✅ Copied!";
+                setTimeout(() => {
+                    copyCookieBtn.textContent = "📋 Copy JSON";
+                }, 2000);
+            }
+        });
+    }
+
+    if (tvLoginBtn && tvCodeInput) {
+        tvLoginBtn.addEventListener("click", async () => {
+            const code = tvCodeInput.value.trim();
+            if (!code || code.length !== 8 || !/^\d+$/.test(code)) {
+                updateStatus("⚠️ Please enter a valid 8-digit TV code.", "error");
+                return;
+            }
+
+            tvLoginBtn.disabled = true;
+            tvLoginBtn.textContent = "Linking...";
+            updateStatus("Connecting to Netflix TV Auth...", "loading");
+
+            try {
+                await handleTvLogin(code);
+            } catch (error) {
+                console.error("TV Login Error:", error);
+                updateStatus(`❌ TV Login Failed: ${error.message}`, "error");
+            } finally {
+                tvLoginBtn.disabled = false;
+                tvLoginBtn.textContent = "Submit Code";
+            }
+        });
+    }
+
+    async function handleTvLogin(code) {
+        const authUrl = `https://www.netflix.com/hook/tvAuthorize?pin=${code}`;
+        console.log("Fetching auth page:", authUrl);
+
+        // 1. Fetch initial page to get form tokens
+        const initialResp = await fetch(authUrl, {
+            credentials: 'include' // Important: Use browser cookies
+        });
+
+        if (!initialResp.ok) {
+            throw new Error(`Failed to load auth page (Status: ${initialResp.status})`);
+        }
+
+        const initialText = await initialResp.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(initialText, "text/html");
+
+        const form = doc.querySelector("form");
+        if (!form) {
+            // Check if already successful or a different state
+            if (doc.body.textContent.includes("Success")) {
+                updateStatus("✅ TV Connected Successfully!", "success");
+                return;
+            }
+            throw new Error("Authorization form not found on Netflix page. Ensure you are logged in.");
+        }
+
+        // 2. Prepare Form Data
+        const formData = new URLSearchParams();
+        const inputs = form.querySelectorAll("input");
+        inputs.forEach(input => {
+            formData.append(input.name, input.value);
+        });
+
+        // Add submit button value if present
+        const submitBtn = form.querySelector("button[type='submit']");
+        if (submitBtn && submitBtn.name) {
+            formData.append(submitBtn.name, submitBtn.value || "");
+        }
+
+        // Verify we captured the pin or inject it if missing and required
+        if (!formData.has('pin')) {
+            formData.append('pin', code);
+        }
+
+        // 3. Submit Post Request
+        // The action is usually relative, so resolve it against the origin
+        const actionUrl = new URL(form.getAttribute("action") || "/hook/tvAuthorize", "https://www.netflix.com").href;
+
+        console.log("Submitting TV Auth to:", actionUrl);
+
+        const postResp = await fetch(actionUrl, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: formData,
+            credentials: "include"
+        });
+
+        const postText = await postResp.text();
+
+        // 4. Validate Response
+        // Check for success indicators
+        if (postText.includes("Success") || postText.includes("device_connected") || (!postText.includes("error") && postResp.ok)) {
+            // Sometimes Netflix redirects or shows a success message
+            // We can check for specific error classes to be sure it DIDN'T fail
+            if (postText.includes("ui-message-error") || postText.includes("incorrect_code")) {
+                throw new Error("Incorrect code or session expired.");
+            }
+            updateStatus("✅ TV Connected Successfully!", "success");
+            tvCodeInput.value = ""; // Clear input on success
+        } else {
+            throw new Error("Unknown response from Netflix. Check console.");
+        }
+    }
+
+    function handleError(error) {
+        console.error("❌ Injection error:", error);
+
+        if (error.message.includes("timeout") || error.message.includes("took too long")) {
+            updateStatus("❌ Request timed out. The server may be slow or the extension may need reloading.", "error");
+            console.log("💡 Suggestion: Check the Service Worker console for detailed logs");
+        } else if (error.message.includes("Extension context invalidated")) {
+            updateStatus("❌ Extension reloaded. Please close and reopen this popup.", "error");
+        } else if (error.message.includes("Could not establish connection")) {
+            updateStatus("❌ Cannot connect to background script. Try reloading the extension.", "error");
+        } else if (error.message.includes("not responding")) {
+            updateStatus("❌ Background script not responding. Try reloading the extension.", "error");
+        } else {
+            updateStatus(`❌ Error: ${error.message}`, "error");
+        }
+    }
+
+    function getErrorMessage(msg) {
+        if (!msg) return "Unknown error occurred";
+
+        const lowerMsg = msg.toLowerCase();
+
+        // Map common error messages to user-friendly versions
+        if (lowerMsg.includes("locked to another device") ||
+            lowerMsg.includes("already used on another device")) {
+            return "This license key is already in use on another device.";
+        }
+        if (lowerMsg.includes("invalid") || lowerMsg.includes("not found")) {
+            return "Invalid license key. Please check and try again.";
+        }
+        if (lowerMsg.includes("expired")) {
+            return "This license key has expired.";
+        }
+        if (lowerMsg.includes("network") || lowerMsg.includes("connection")) {
+            return "Network error. Please check your internet connection.";
+        }
+        if (lowerMsg.includes("timeout") || lowerMsg.includes("took too long")) {
+            return "Request timed out. Server may be slow - please try again.";
+        }
+        if (lowerMsg.includes("cookie")) {
+            return "Cookie injection failed. Please try again.";
+        }
+        if (lowerMsg.includes("no account data")) {
+            return "Server returned invalid data. Please contact support.";
+        }
+
+        return msg;
+    }
+
+    /**
+     * Send message to background script with timeout
+     * @param {Object} message - Message to send
+     * @param {number} timeout - Timeout in milliseconds
+     * @returns {Promise} Response from background script
+     */
+    async function sendMessageWithTimeout(message, timeout = 45000) {
+        return new Promise((resolve, reject) => {
+            const startTime = Date.now();
+
+            const timeoutId = setTimeout(() => {
+                const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+                console.error(`❌ Timeout after ${elapsed}s`);
+                reject(new Error(`Request timeout - background script took too long to respond (${elapsed}s)`));
+            }, timeout);
+
+            try {
+                console.log(`📤 Sending message: ${message.action} (timeout: ${timeout}ms)`);
+
+                chrome.runtime.sendMessage(message, (response) => {
+                    clearTimeout(timeoutId);
+                    const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+
+                    console.log(`📥 Response received after ${elapsed}s`);
+
+                    // Check for Chrome extension errors
+                    if (chrome.runtime.lastError) {
+                        console.error("❌ Chrome runtime error:", chrome.runtime.lastError);
+                        reject(new Error(chrome.runtime.lastError.message));
+                        return;
+                    }
+
+                    // Check if response exists
+                    if (response === undefined) {
+                        console.error("❌ Response is undefined");
+                        reject(new Error("No response from background script"));
+                        return;
+                    }
+
+                    console.log("✅ Valid response received:", response);
+                    resolve(response);
+                });
+            } catch (e) {
+                clearTimeout(timeoutId);
+                console.error("❌ Exception in sendMessage:", e);
+                reject(e);
+            }
+        });
+    }
+}
+
+// Initialize when DOM is ready
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initPopup);
+} else {
+    initPopup();
+}

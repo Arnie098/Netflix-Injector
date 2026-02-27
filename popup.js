@@ -124,11 +124,16 @@ async function initPopup() {
                     tvLoginSection.style.display = "block";
                 }
 
-                // Show Phone Section
-                const phoneSection = document.getElementById("phoneSection");
-                if (phoneSection) {
-                    phoneSection.style.display = "block";
+                // Store cookies for phone copy
+                if (response.cookies) {
+                    const cookieJsonText = document.getElementById("cookieJsonText");
+                    if (cookieJsonText) {
+                        cookieJsonText.value = JSON.stringify(response.cookies);
+                    }
                 }
+
+                // Show Phone Section
+
 
                 // Keep button disabled for 2 seconds to prevent double-clicks
                 setTimeout(() => {
@@ -166,32 +171,8 @@ async function initPopup() {
         });
     }
 
-    // Phone Launch Logic (Kiwi Browser on Android)
-    const openPhoneBtn = document.getElementById("openPhoneBtn");
-    const phoneStatus = document.getElementById("phoneStatus");
+    // Phone Launch Logic
 
-    if (openPhoneBtn && phoneStatus) {
-        openPhoneBtn.addEventListener("click", async () => {
-            openPhoneBtn.disabled = true;
-            phoneStatus.textContent = "⏳ Opening Netflix...";
-            phoneStatus.className = "loading";
-            try {
-                const result = await sendMessageWithTimeout({ action: "OPEN_PHONE_NETFLIX" }, 10000);
-                if (result && result.success) {
-                    phoneStatus.textContent = "✅ Tab opened! Tap 'Open App' on your phone.";
-                    phoneStatus.className = "success";
-                } else {
-                    phoneStatus.textContent = `❌ ${result?.message || "Failed to open tab"}`;
-                    phoneStatus.className = "error";
-                }
-            } catch (e) {
-                phoneStatus.textContent = `❌ ${e.message}`;
-                phoneStatus.className = "error";
-            } finally {
-                openPhoneBtn.disabled = false;
-            }
-        });
-    }
 
     if (tvLoginBtn && tvCodeInput) {
         tvLoginBtn.addEventListener("click", async () => {
