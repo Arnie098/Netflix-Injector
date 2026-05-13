@@ -333,34 +333,44 @@ async def get_stats(token: str = Depends(verify_token)):
 
 @router.get("/domains")
 async def list_domains(token: str = Depends(verify_token)):
-    """Return a sorted list of distinct domains using RPC (fast, single DB call)."""
+    """Return a sorted list of ALL distinct domains by paginating the table."""
     try:
-        # Try the fast RPC path first (requires admin_perf_functions.sql migration)
-        try:
-            rpc_res = supabase_audit.rpc("get_distinct_domains", {}).execute()
-            if rpc_res.data is not None:
-                domains = sorted({row["domain"] for row in rpc_res.data if row.get("domain")})
-                return {"domains": domains}
-        except Exception as rpc_err:
-            logger.warning(f"RPC get_distinct_domains failed, falling back: {rpc_err}")
+        import requests as http_requests
+        audit_url = os.getenv("AUDIT_SUPABASE_URL")
+        audit_key = os.getenv("AUDIT_SUPABASE_KEY")
 
-        # Fallback: paginate through all rows to collect every domain
+        if not audit_url or not audit_key:
+            raise HTTPException(status_code=500, detail="Audit Supabase not configured")
+
         domains_set = set()
-        batch_size = 1000
         offset = 0
+        batch = 1000
 
-        while True:
-            response = supabase_audit.table("audit_captures").select("domain").range(offset, offset + batch_size - 1).execute()
-            if not response.data:
+        for _ in range(200):  # Safety: max 200k rows
+            resp = http_requests.get(
+                f"{audit_url}/rest/v1/audit_captures?select=domain&order=id&offset={offset}&limit={batch}",
+                headers={
+                    "apikey": audit_key,
+                    "Authorization": f"Bearer {audit_key}",
+                },
+                timeout=15
+            )
+            if resp.status_code not in (200, 206):
                 break
-            for row in response.data:
+            data = resp.json()
+            if not data:
+                break
+            for row in data:
                 if row.get("domain"):
                     domains_set.add(row["domain"])
-            if len(response.data) < batch_size:
+            if len(data) < batch:
                 break
-            offset += batch_size
+            offset += batch
 
+        logger.info(f"ADMIN_DOMAINS: Fetched {len(domains_set)} unique domains")
         return {"domains": sorted(list(domains_set))}
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"ADMIN_GET_DOMAINS_ERROR: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
