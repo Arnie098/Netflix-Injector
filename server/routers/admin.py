@@ -344,8 +344,8 @@ async def list_domains(token: str = Depends(verify_token)):
         except Exception as rpc_err:
             logger.warning(f"RPC get_distinct_domains failed, falling back: {rpc_err}")
 
-        # Fallback: single-page fetch capped at 5000 rows to avoid full-table looping
-        response = supabase_audit.table("audit_captures").select("domain").limit(5000).execute()
+        # Fallback: single-page fetch capped at 10000 rows to avoid full-table looping
+        response = supabase_audit.table("audit_captures").select("domain").limit(10000).execute()
         domains_set = {row["domain"] for row in (response.data or []) if row.get("domain")}
         return {"domains": sorted(list(domains_set))}
     except Exception as e:

@@ -38,11 +38,10 @@ function App() {
     if (savedToken) { setToken(savedToken); setIsAuthenticated(true) }
   }, [])
 
-  useEffect(() => { if (isAuthenticated && token) fetchStats(token) }, [isAuthenticated, token])
+  useEffect(() => { if (isAuthenticated && token) { fetchStats(token); fetchDomains() } }, [isAuthenticated, token])
   useEffect(() => { const t = setTimeout(() => setDebouncedSearch(searchTerm), 500); return () => clearTimeout(t) }, [searchTerm])
   useEffect(() => { setCurrentPage(1) }, [activeTab, typeFilter, debouncedSearch, domainFilter, dateFrom, dateTo, licenseStatusFilter])
   useEffect(() => { if (isAuthenticated) fetchData() }, [activeTab, isAuthenticated, typeFilter, debouncedSearch, domainFilter, currentPage, pageSize, dateFrom, dateTo, licenseStatusFilter])
-  useEffect(() => { if (isAuthenticated && activeTab === 'accounts') fetchDomains() }, [isAuthenticated, activeTab])
 
   const fetchStats = async (authToken) => {
     try {
@@ -74,6 +73,7 @@ function App() {
       if (activeTab === 'captures' || activeTab === 'credentials') {
         queryParams.set('capture_type', typeFilter)
         queryParams.set('search', debouncedSearch)
+        if (domainFilter !== 'ALL') queryParams.set('domain', domainFilter)
       }
       if (activeTab === 'accounts' && domainFilter !== 'ALL') queryParams.set('domain', domainFilter)
       if (activeTab === 'accounts') queryParams.set('search', debouncedSearch)
@@ -276,14 +276,14 @@ function App() {
               activeTab === 'accounts' ? 'Smart Account Correlation' : activeTab === 'licenses' ? 'License Management' : 'Cookie Pool'}
           </h1>
           <div className="header-actions">
+            {(activeTab === 'accounts' || activeTab === 'captures' || activeTab === 'credentials') && (
+              <select className="domain-select" value={domainFilter} onChange={(e) => setDomainFilter(e.target.value)} disabled={domainsLoading}>
+                <option value="ALL">🌐 All Domains</option>
+                {availableDomains.map(d => <option key={d} value={d}>{d}</option>)}
+              </select>
+            )}
             {activeTab === 'accounts' && (
-              <>
-                <select className="domain-select" value={domainFilter} onChange={(e) => setDomainFilter(e.target.value)} disabled={domainsLoading}>
-                  <option value="ALL">🌐 All Domains</option>
-                  {availableDomains.map(d => <option key={d} value={d}>{d}</option>)}
-                </select>
-                <button className="export-btn" onClick={() => handleExportByDomain(domainFilter)}>📥 Export</button>
-              </>
+              <button className="export-btn" onClick={() => handleExportByDomain(domainFilter)}>📥 Export</button>
             )}
             {activeTab === 'licenses' && (
               <button className="export-btn" onClick={() => setShowCreateLicense(!showCreateLicense)}>➕ Create Keys</button>
