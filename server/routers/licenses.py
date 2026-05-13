@@ -24,21 +24,23 @@ class LicenseCheckResponse(BaseModel):
 async def verify_license(request: Request, body: LicenseCheckRequest):
     try:
         # Call the Supabase RPC function 'claim_license'
-        response = supabase_injector.rpc("claim_license", {
+        rpc_params = {
             "p_license_key": body.license_key,
             "p_hardware_id": body.hardware_id,
-            "p_include_account": True, # Always try to get account if valid
-        }).execute()
+            "p_include_account": True,
+        }
+
+        # Pass country filter if provided
+        if body.country_filter:
+            rpc_params["p_country_filter"] = body.country_filter
+
+        response = supabase_injector.rpc("claim_license", rpc_params).execute()
         
         result = response.data
         
         if not result:
              return LicenseCheckResponse(valid=False, message="Invalid license or server error")
 
-        # The RPC returns JSON structure, we pass it through
-        # But for security, we might want to strip sensitive info if needed
-        # For now, we trust the RPC to return what the client needs
-        
         is_success = result.get("success", False)
         message = result.get("message", "Unknown error")
         

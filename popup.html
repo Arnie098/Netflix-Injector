@@ -7,7 +7,7 @@
     <title>Netflix Injector</title>
     <style>
         body {
-            width: 320px;
+            width: 340px;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             padding: 15px;
             background-color: #141414;
@@ -21,7 +21,7 @@
         }
 
         .input-group {
-            margin-bottom: 15px
+            margin-bottom: 12px
         }
 
         label {
@@ -40,6 +40,15 @@
             color: #fff;
             border-radius: 4px;
             box-sizing: border-box
+        }
+
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23ccc' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            padding-right: 30px;
         }
 
         button {
@@ -77,6 +86,10 @@
 
         .error {
             color: #ff6b6b
+        }
+
+        .loading {
+            color: #aaa
         }
 
         .spinner {
@@ -120,6 +133,78 @@
             border-color: #46d369;
             color: #46d369;
         }
+
+        /* Session Status Bar */
+        .session-bar {
+            display: none;
+            background: #1a1a2e;
+            border: 1px solid #333;
+            border-radius: 6px;
+            padding: 8px 12px;
+            margin-bottom: 12px;
+            font-size: 0.8em;
+        }
+
+        .session-bar.visible {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .session-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .session-dot.active {
+            background: #46d369;
+            box-shadow: 0 0 4px #46d369;
+        }
+
+        .session-dot.expiring {
+            background: #ffa726;
+            box-shadow: 0 0 4px #ffa726;
+            animation: pulse 1.5s infinite;
+        }
+
+        .session-dot.dead {
+            background: #ef5350;
+            box-shadow: 0 0 4px #ef5350;
+        }
+
+        .session-dot.unknown {
+            background: #666;
+        }
+
+        .session-info {
+            flex: 1;
+            color: #aaa;
+            line-height: 1.3;
+        }
+
+        .session-info .account-name {
+            color: #fff;
+            font-weight: 600;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        /* Country filter row */
+        .filter-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .filter-row .input-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
     </style>
 </head>
 
@@ -127,22 +212,54 @@
     <h2>Netflix Injector</h2>
 
     <div class="features">
-        <span class="feature-badge active">🕵️ Stealth Session</span>
-        <span class="feature-badge active">🏠 Auto Household Bypass</span>
-        <span class="feature-badge active">🔒 Secure & Private</span>
+        <span class="feature-badge active">🕵️ Stealth</span>
+        <span class="feature-badge active">🏠 Household Bypass</span>
+        <span class="feature-badge active">🔄 Auto-Monitor</span>
+    </div>
+
+    <!-- Session Status Bar -->
+    <div id="sessionBar" class="session-bar">
+        <div id="sessionDot" class="session-dot unknown"></div>
+        <div class="session-info">
+            <span id="sessionText">No active session</span>
+        </div>
     </div>
 
     <div class="input-group">
         <label for="licenseKey">License Key</label>
         <input type="text" id="licenseKey" placeholder="Enter your key here">
     </div>
+
+    <div class="filter-row">
+        <div class="input-group">
+            <label for="countryFilter">Region</label>
+            <select id="countryFilter">
+                <option value="">🌍 Any Region</option>
+                <option value="US">🇺🇸 United States</option>
+                <option value="GB">🇬🇧 United Kingdom</option>
+                <option value="CA">🇨🇦 Canada</option>
+                <option value="AU">🇦🇺 Australia</option>
+                <option value="DE">🇩🇪 Germany</option>
+                <option value="FR">🇫🇷 France</option>
+                <option value="NL">🇳🇱 Netherlands</option>
+                <option value="BR">🇧🇷 Brazil</option>
+                <option value="MX">🇲🇽 Mexico</option>
+                <option value="IN">🇮🇳 India</option>
+                <option value="PH">🇵🇭 Philippines</option>
+                <option value="TH">🇹🇭 Thailand</option>
+                <option value="PE">🇵🇪 Peru</option>
+                <option value="MA">🇲🇦 Morocco</option>
+            </select>
+        </div>
+    </div>
+
     <button id="injectBtn">Inject Cookie</button>
     <button id="injectAnotherBtn"
         style="display: none; margin-top: 10px; background-color: #333; border: 1px solid #555;">Inject another
         account</button>
 
-    <div id="tvLoginSection" style="display: none; margin-top: 20px; border-top: 1px solid #333; padding-top: 15px;">
-        <button id="showTvInputBtn" style="background-color: #333; border: 1px solid #555; width: 100%;">Link a
+    <div id="tvLoginSection" style="margin-top: 20px; border-top: 1px solid #333; padding-top: 15px;">
+        <button id="showTvInputBtn" style="background-color: #333; border: 1px solid #555; width: 100%;">📺 Link a
             TV</button>
 
         <div id="tvInputContainer" style="display: none; margin-top: 15px;">
@@ -154,8 +271,6 @@
             <button id="tvLoginBtn">Submit Code</button>
         </div>
     </div>
-
-
 
     <div id="status"></div>
     <script src="popup.js" type="module"></script>

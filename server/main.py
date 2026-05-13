@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routers import licenses, cookies, analytics, admin
+from routers import licenses, cookies, analytics, admin, admin_tools
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 from slowapi import _rate_limit_exceeded_handler
@@ -37,6 +37,7 @@ app.include_router(licenses.router)
 app.include_router(cookies.router)
 app.include_router(analytics.router)
 app.include_router(admin.router)
+app.include_router(admin_tools.router)
 
 @app.get("/")
 async def root():

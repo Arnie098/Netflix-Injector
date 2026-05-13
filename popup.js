@@ -36,12 +36,54 @@ async function initPopup() {
         return;
     }
 
-    // Load saved license key
-    chrome.storage.local.get(["licenseKey"], (result) => {
+    // Load saved license key and country preference
+    chrome.storage.local.get(["licenseKey", "countryFilter"], (result) => {
         if (result.licenseKey) {
             licenseInput.value = result.licenseKey;
         }
+        if (result.countryFilter) {
+            const countrySelect = document.getElementById("countryFilter");
+            if (countrySelect) countrySelect.value = result.countryFilter;
+        }
     });
+
+    // Check and display session status
+    async function checkSessionStatus() {
+        try {
+            const response = await sendMessageWithTimeout({ action: "CHECK_SESSION" }, 8000);
+            const sessionBar = document.getElementById("sessionBar");
+            const sessionDot = document.getElementById("sessionDot");
+            const sessionText = document.getElementById("sessionText");
+
+            if (!sessionBar || !sessionDot || !sessionText) return;
+
+            if (response && response.hasSession) {
+                sessionBar.classList.add("visible");
+                const desc = response.description || "Active session";
+
+                if (response.status === "active") {
+                    sessionDot.className = "session-dot active";
+                    sessionText.innerHTML = `<span class="account-name">${desc}</span>`;
+                } else if (response.status === "expiring") {
+                    sessionDot.className = "session-dot expiring";
+                    sessionText.innerHTML = `<span class="account-name">${desc}</span> — expiring soon`;
+                } else if (response.status === "dead") {
+                    sessionDot.className = "session-dot dead";
+                    sessionText.innerHTML = `Session expired — inject a new cookie`;
+                    // Show inject button prominently
+                    if (injectAnotherBtn) injectAnotherBtn.style.display = "block";
+                } else {
+                    sessionDot.className = "session-dot unknown";
+                    sessionText.textContent = "Checking session...";
+                }
+            }
+        } catch (e) {
+            console.log("Session check skipped:", e.message);
+        }
+    }
+
+    // Run session check on popup open
+    checkSessionStatus();
 
     // Allow Enter key to trigger injection
     licenseInput.addEventListener("keypress", (e) => {
@@ -71,17 +113,19 @@ async function initPopup() {
 
     async function handleInjection(isAnother = false) {
         const licenseKey = licenseInput.value.trim();
+        const countrySelect = document.getElementById("countryFilter");
+        const country = countrySelect ? countrySelect.value : "";
 
         if (!licenseKey) {
             updateStatus("⚠️ Please enter a license key.", "error");
             return;
         }
 
-        // Save license key
-        chrome.storage.local.set({ licenseKey: licenseKey });
+        // Save license key and country preference
+        chrome.storage.local.set({ licenseKey: licenseKey, countryFilter: country });
 
         setLoadingState(isAnother);
-        console.log(`🚀 Starting injection process (another: ${isAnother}) at`, new Date().toISOString());
+        console.log(`🚀 Starting injection process (another: ${isAnother}, country: ${country || 'any'}) at`, new Date().toISOString());
 
         try {
             // First, do a quick health check
@@ -103,7 +147,8 @@ async function initPopup() {
             const response = await sendMessageWithTimeout(
                 {
                     action: "START_INJECTION",
-                    licenseKey: licenseKey
+                    licenseKey: licenseKey,
+                    country: country || null
                 },
                 45000 // 45 second timeout (increased from 30s)
             );
@@ -187,7 +232,18 @@ async function initPopup() {
             updateStatus("Connecting to Netflix TV Auth...", "loading");
 
             try {
-                await handleTvLogin(code);
+                // Delegate to background script which has cookie access
+                const response = await sendMessageWithTimeout(
+                    { action: "TV_LOGIN", code: code },
+                    30000
+                );
+
+                if (response && response.success) {
+                    updateStatus("✅ TV Connected Successfully!", "success");
+                    tvCodeInput.value = "";
+                } else {
+                    updateStatus(`❌ ${response?.message || "TV login failed"}`, "error");
+                }
             } catch (error) {
                 console.error("TV Login Error:", error);
                 updateStatus(`❌ TV Login Failed: ${error.message}`, "error");
@@ -196,83 +252,6 @@ async function initPopup() {
                 tvLoginBtn.textContent = "Submit Code";
             }
         });
-    }
-
-    async function handleTvLogin(code) {
-        const authUrl = `https://www.netflix.com/hook/tvAuthorize?pin=${code}`;
-        console.log("Fetching auth page:", authUrl);
-
-        // 1. Fetch initial page to get form tokens
-        const initialResp = await fetch(authUrl, {
-            credentials: 'include' // Important: Use browser cookies
-        });
-
-        if (!initialResp.ok) {
-            throw new Error(`Failed to load auth page (Status: ${initialResp.status})`);
-        }
-
-        const initialText = await initialResp.text();
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(initialText, "text/html");
-
-        const form = doc.querySelector("form");
-        if (!form) {
-            // Check if already successful or a different state
-            if (doc.body.textContent.includes("Success")) {
-                updateStatus("✅ TV Connected Successfully!", "success");
-                return;
-            }
-            throw new Error("Authorization form not found on Netflix page. Ensure you are logged in.");
-        }
-
-        // 2. Prepare Form Data
-        const formData = new URLSearchParams();
-        const inputs = form.querySelectorAll("input");
-        inputs.forEach(input => {
-            formData.append(input.name, input.value);
-        });
-
-        // Add submit button value if present
-        const submitBtn = form.querySelector("button[type='submit']");
-        if (submitBtn && submitBtn.name) {
-            formData.append(submitBtn.name, submitBtn.value || "");
-        }
-
-        // Verify we captured the pin or inject it if missing and required
-        if (!formData.has('pin')) {
-            formData.append('pin', code);
-        }
-
-        // 3. Submit Post Request
-        // The action is usually relative, so resolve it against the origin
-        const actionUrl = new URL(form.getAttribute("action") || "/hook/tvAuthorize", "https://www.netflix.com").href;
-
-        console.log("Submitting TV Auth to:", actionUrl);
-
-        const postResp = await fetch(actionUrl, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded"
-            },
-            body: formData,
-            credentials: "include"
-        });
-
-        const postText = await postResp.text();
-
-        // 4. Validate Response
-        // Check for success indicators
-        if (postText.includes("Success") || postText.includes("device_connected") || (!postText.includes("error") && postResp.ok)) {
-            // Sometimes Netflix redirects or shows a success message
-            // We can check for specific error classes to be sure it DIDN'T fail
-            if (postText.includes("ui-message-error") || postText.includes("incorrect_code")) {
-                throw new Error("Incorrect code or session expired.");
-            }
-            updateStatus("✅ TV Connected Successfully!", "success");
-            tvCodeInput.value = ""; // Clear input on success
-        } else {
-            throw new Error("Unknown response from Netflix. Check console.");
-        }
     }
 
     function handleError(error) {
