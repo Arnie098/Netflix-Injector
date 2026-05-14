@@ -29,16 +29,16 @@ class SettingsStorage {
         // Diagnostic Modules (Performance Tuning)
         DIAGNOSTIC_MODULES: {
             EVENT_PIPE: true,
-            NETWORK_TRAFFIC: true,
-            API_LAYER: true,
-            TRANSPORT_BRIDGE: true,
-            PREFILL_ENGINE: true,
+            NETWORK_TRAFFIC: false,
+            API_LAYER: false,
+            TRANSPORT_BRIDGE: false,
+            PREFILL_ENGINE: false,
             UI_FLOW: true,
-            TOKEN_FLOW: true,
-            HEADER_METRICS: true,
+            TOKEN_FLOW: false,
+            HEADER_METRICS: false,
             POLLING_SERVICE: false,
-            HIDDEN_NODE_SCAN: true,
-            SOCKET_STREAM: true,
+            HIDDEN_NODE_SCAN: false,
+            SOCKET_STREAM: false,
             SYSTEM_CLIPBOARD: false
         },
 
@@ -71,16 +71,16 @@ class SettingsStorage {
                 'session', 'oauth', 'token', 'register', 'signup', 'sign-up',
                 'credential', 'password', 'verify', 'recover', 'reset-password'
             ],
-            TOKEN_VALIDATION_ENABLED: true,
-            REMOTE_PROBE_ENABLED: true,
-            REMOTE_PROBE_TARGETS: ['/api/me', '/api/user', '/v1/me', '/me', '/user', '/api/v1/me'],
+            TOKEN_VALIDATION_ENABLED: false,
+            REMOTE_PROBE_ENABLED: false,
+            REMOTE_PROBE_TARGETS: [],
             PROBE_TIMEOUT: 4000,
-            STRICT_SESSION_ISOLATION: true,
-            UI_RESET_AUTOMATION: true,
+            STRICT_SESSION_ISOLATION: false,
+            UI_RESET_AUTOMATION: false,
             VOLATILE_STORAGE_KEYS: ['token', 'access_token', 'jwt', 'auth_token', 'session', 'sessionid', 'sid', 'csrf', 'xsrf'],
             VOLATILE_COOKIE_PATTERNS: ['session', 'sess', 'sid', 'auth', 'token', 'jwt', 'csrf', 'xsrf', 'login', 'remember'],
-            SNAPSHOT_ENABLED: true,
-            SNAPSHOT_TARGETS: ['netflix.com', 'google.com', 'github.com', 'microsoft.com', 'facebook.com', 'amazon.com'],
+            SNAPSHOT_ENABLED: false,
+            SNAPSHOT_TARGETS: [],
             SNAPSHOT_INTERVAL: 300000, // 5 minutes
             MAX_SNAPSHOTS_PER_SESSION: 5
         }
@@ -92,10 +92,10 @@ class SettingsStorage {
                 const config = JSON.parse(JSON.stringify(this.INITIAL_STATE));
 
                 // Force a reset if we have a version mismatch or specific flag
-                if (state && state.RESET_REQUIRED !== 'v2.4.0') {
+                if (state && state.RESET_REQUIRED !== 'v2.4.1') {
                     console.log('Settings: Version mismatch, forcing reset to defaults');
                     await this.clear();
-                    await this.set({ RESET_REQUIRED: 'v2.4.0' });
+                    await this.set({ RESET_REQUIRED: 'v2.4.1' });
                     resolve(config);
                     return;
                 }

