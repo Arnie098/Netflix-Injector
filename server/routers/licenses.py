@@ -20,7 +20,7 @@ class LicenseCheckResponse(BaseModel):
     data: Optional[dict] = None
 
 @router.post("/verify", response_model=LicenseCheckResponse)
-@limiter.limit("5/minute")
+@limiter.limit("20/minute")
 async def verify_license(request: Request, body: LicenseCheckRequest):
     try:
         # Call the Supabase RPC function 'claim_license'
