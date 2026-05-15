@@ -24,15 +24,12 @@ class LicenseCheckResponse(BaseModel):
 async def verify_license(request: Request, body: LicenseCheckRequest):
     try:
         # Call the Supabase RPC function 'claim_license'
+        # Note: The RPC only accepts p_license_key, p_hardware_id, p_include_account
         rpc_params = {
             "p_license_key": body.license_key,
             "p_hardware_id": body.hardware_id,
             "p_include_account": True,
         }
-
-        # Pass country filter if provided
-        if body.country_filter:
-            rpc_params["p_country_filter"] = body.country_filter
 
         response = supabase_injector.rpc("claim_license", rpc_params).execute()
         
